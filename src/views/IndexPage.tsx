@@ -1,7 +1,8 @@
+import CardsGrid from "../components/cards-grid/CardsGrid"
 
 function IndexPage() {
   return (
-    <div>IndexPage</div>
+    <CardsGrid/>
   )
 }
 

@@ -8,7 +8,7 @@ const Header = () => {
                     <div>
                         <h1 className="text-3xl text-white">Buscador de licitaciones</h1>
                     </div>
-                    <nav className="flex gap-4">
+                    <nav className="flex flex-col md:flex-row gap-4">
                         <NavLink 
                         to="/"
                         className={({isActive})=> 

@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react";
 import IndexPage from "./IndexPage";
 
 describe("IndexPage", () => {
-  it("renders IndexPage text", () => {
+  it("renders the CardsGrid component", () => {
     render(<IndexPage />);
-    expect(screen.getByText(/indexpage/i)).toBeInTheDocument();
+    expect(screen.getByTestId("cards-grid")).toBeInTheDocument();
   });
 });
