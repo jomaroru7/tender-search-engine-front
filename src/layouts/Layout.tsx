@@ -14,10 +14,10 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <>
             {!hideHeader && <Header />}
-            <main className="container mx-auto px-4 lg:px-8 w-full pt-24 max-w-7xl">
+            <main className="container mx-auto px-4 lg:px-8 lg:pt-24 w-full pt-8 max-w-7xl">
                 {children || <Outlet />}
             </main>
-            <ToastContainer position="top-center" autoClose={3000} />
+            <ToastContainer position="bottom-right" autoClose={3000} />
         </>
     );
 };
