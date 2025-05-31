@@ -2,25 +2,17 @@ import { useEffect, useState } from "react"
 import type { CardData } from "../../types"
 import TenderCard from "../tender-card/TenderCard"
 
-const CardsGrid = () => {
-  const mockTender: CardData = {
-    tenderName: "La presente licitación tiene por objeto la contratación del Suministro de Dispensadores de Agua, Café y Máquinas Expendedoras para Equipos Nucleares, S.A., S.M.E. (ENSA)",
-    budget: 22000.0,
-    location: "Cantabria",
-    resume: "La presente licitación tiene por objeto la contratación del Suministro de Dispensadores de Agua, Café y Máquinas Expendedoras para Equipos Nucleares, S.A., S.M.E. (ENSA)",
-    CPVCodes: [
-      "42933000",
-      "15894500",
-      "55000000"
-    ],
-    endDate: "2025-05-07 12:37:00"
-  }
+type CardsGridProps = {
+  cardData: CardData[]
+}
+
+const CardsGrid = ({cardData}: CardsGridProps) => {
 
   const [cards, setCards] = useState<CardData[]>([])
 
   useEffect(() => {
-    setCards([mockTender, mockTender])
-  }, [])
+    setCards(cardData)
+  }, [cardData])
 
   return (
     <div className="flex flex-col md:flex-row md:flex-wrap gap-4" data-testid="cards-grid">
