@@ -1,10 +1,24 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
 import IndexPage from "./IndexPage";
+
+const mockStore = configureStore([]);
+const mockCpvs = {
+  "42933000": "Maquinaria para la industria nuclear"
+};
 
 describe("IndexPage", () => {
   it("renders the CardsGrid component", () => {
-    render(<IndexPage />);
+    const store = mockStore({
+      cpv: { cpvs: mockCpvs }
+    });
+    render(
+      <Provider store={store}>
+        <IndexPage />
+      </Provider>
+    );
     expect(screen.getByTestId("cards-grid")).toBeInTheDocument();
   });
 });

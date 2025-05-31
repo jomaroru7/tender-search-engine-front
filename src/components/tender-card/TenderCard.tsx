@@ -2,6 +2,7 @@ import { GrMoney } from "react-icons/gr";
 import InfoPill from "../info-pill/InfoPill"
 import { LuCalendarClock } from "react-icons/lu";
 import { MdLocationPin } from "react-icons/md";
+import CpvPill from "../cpv-pill/CpvPill";
 
 type TenderCardProps = {
     tenderName: string,
@@ -33,12 +34,7 @@ const TenderCard = ({ tenderName, endDate, budget, resume, location, CPVCodes }:
                 <div className="flex flex-wrap gap-2">
                     <p>CPVs:</p>
                     {CPVCodes.map((CPVCode) => (
-                        <span
-                            key={CPVCode}
-                            className="bg-slate-200 text-slate-700 px-2 rounded text-xs font-mono"
-                        >
-                            {CPVCode}
-                        </span>
+                        <CpvPill key={CPVCode} cpvCode={CPVCode} />
                     ))}
                 </div>
             </footer>

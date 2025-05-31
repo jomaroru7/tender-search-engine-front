@@ -1,6 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
 import TenderCard from "./TenderCard";
+
+const mockStore = configureStore([]);
+const mockCpvs = {
+  "42933000": "Maquinaria para la industria nuclear",
+  "15894500": "Café",
+  "55000000": "Servicios de hostelería y restauración"
+};
 
 describe("TenderCard", () => {
   const mockTender = {
@@ -17,15 +26,20 @@ describe("TenderCard", () => {
   };
 
   it("renders the card with its data", () => {
+    const store = mockStore({
+      cpv: { cpvs: mockCpvs }
+    });
     render(
-      <TenderCard
-        tenderName={mockTender.tenderName}
-        endDate={mockTender.endDate}
-        budget={mockTender.budget}
-        resume={mockTender.resume}
-        location={mockTender.location}
-        CPVCodes={mockTender.CPVCodes}
-      />
+      <Provider store={store}>
+        <TenderCard
+          tenderName={mockTender.tenderName}
+          endDate={mockTender.endDate}
+          budget={mockTender.budget}
+          resume={mockTender.resume}
+          location={mockTender.location}
+          CPVCodes={mockTender.CPVCodes}
+        />
+      </Provider>
     );
 
     expect(screen.getByTestId('tender-name').textContent).toBe(mockTender.tenderName);
