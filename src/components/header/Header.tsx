@@ -19,6 +19,11 @@ const Header = () => {
                         className={({isActive})=> 
                             isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                         >Tu empresa</NavLink>
+                        <NavLink 
+                        to="/cpv-list"
+                        className={({isActive})=> 
+                            isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                        >Lista de CPVs</NavLink>
                     </nav>
                 </div>
             </div>

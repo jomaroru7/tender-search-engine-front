@@ -34,4 +34,15 @@ describe("Header", () => {
     expect(empresaLink).toBeInTheDocument();
     expect(empresaLink).toHaveAttribute("href", "/your-company");
   });
+
+  it("renders the 'Lista de Cpvs' link pointing to '/cpv-list'", () => {
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>
+    );
+    const listaCpvsLink = screen.getByRole("link", { name: /lista de cpvs/i });
+    expect(listaCpvsLink).toBeInTheDocument();
+    expect(listaCpvsLink).toHaveAttribute("href", "/cpv-list");
+  });
 });

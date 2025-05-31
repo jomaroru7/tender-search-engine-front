@@ -4,6 +4,7 @@ import IndexPage from "./views/IndexPage"
 import RegisterPage from "./views/RegisterPage"
 import YourCompanyPage from "./views/YourCompanyPage"
 import Layout from "./layouts/Layout"
+import CpvListPage from "./views/CpvListPage"
 
 function AppRouter() {
 
@@ -14,6 +15,7 @@ function AppRouter() {
           <Route path="/" element={<IndexPage />} index />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/your-company" element={<YourCompanyPage />} />
+          <Route path="/cpv-list" element={<CpvListPage />} />
         </Route>
 
       </Routes>
