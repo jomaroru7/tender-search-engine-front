@@ -19,7 +19,7 @@ const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
-    setCompanyData(state, action: PayloadAction<CompanyData>) {
+    setCompanyData(_state, action: PayloadAction<CompanyData>) {
       return action.payload;
     },
   },
