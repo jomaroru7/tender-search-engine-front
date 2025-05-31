@@ -8,18 +8,23 @@ export interface CompanyData {
   cpvs: string[];
 }
 
-const initialState: CompanyData = {
-  name: '',
-  location: '',
-  budget: 0,
-  cpvs: [],
-};
+const initialState: CompanyData = (() => {
+  const stored = localStorage.getItem("companyData");
+  if (stored) return JSON.parse(stored);
+  return {
+    name: '',
+    location: '',
+    budget: 0,
+    cpvs: [],
+  };
+})();
 
 const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
     setCompanyData(_state, action: PayloadAction<CompanyData>) {
+      localStorage.setItem("companyData", JSON.stringify(action.payload));
       return action.payload;
     },
   },
