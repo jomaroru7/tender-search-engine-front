@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <>
             <Header />
-            <main className="container mx-auto py-16">
+            <main className="container mx-auto px-4 lg:px-8 w-full pt-24 max-w-7xl">
                 {children || <Outlet />}
             </main>
         </>

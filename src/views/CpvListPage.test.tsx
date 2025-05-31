@@ -31,7 +31,7 @@ function renderWithStore(cpvs = mockCpvs) {
 describe("CpvListPage", () => {
   it("renders the input and all cpv entries by default", () => {
     renderWithStore();
-    expect(screen.getByPlaceholderText(/search by code or description/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/búsqueda por código o descripción/i)).toBeInTheDocument();
     // Should render all mock cpvs
     Object.entries(mockCpvs).forEach(([code, label]) => {
       expect(screen.getByText(code)).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("CpvListPage", () => {
 
   it("filters by code in real time (debounced)", async () => {
     renderWithStore();
-    const input = screen.getByPlaceholderText(/search by code or description/i);
+    const input = screen.getByPlaceholderText(/búsqueda por código o descripción/i);
     fireEvent.change(input, { target: { value: "03111" } });
 
     await waitFor(() => {
@@ -53,7 +53,7 @@ describe("CpvListPage", () => {
 
   it("filters by label in real time (debounced, insensitive to accents and case)", async () => {
     renderWithStore();
-    const input = screen.getByPlaceholderText(/search by code or description/i);
+    const input = screen.getByPlaceholderText(/búsqueda por código o descripción/i);
     fireEvent.change(input, { target: { value: "cacahuetes" } });
 
     await waitFor(() => {
@@ -65,11 +65,11 @@ describe("CpvListPage", () => {
 
   it("shows 'No results found.' when nothing matches", async () => {
     renderWithStore();
-    const input = screen.getByPlaceholderText(/search by code or description/i);
+    const input = screen.getByPlaceholderText(/búsqueda por código o descripción/i);
     fireEvent.change(input, { target: { value: "zzzzzz" } });
 
     await waitFor(() => {
-      expect(screen.getByText(/no results found/i)).toBeInTheDocument();
+      expect(screen.getByText(/no se han encontrado resultados/i)).toBeInTheDocument();
     });
   });
 });
