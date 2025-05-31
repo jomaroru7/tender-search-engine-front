@@ -8,12 +8,11 @@ type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-    const location = useLocation();
-    const hideHeader = location.pathname === "/register";
+
 
     return (
         <>
-            {!hideHeader && <Header />}
+            <Header />
             <main className="container mx-auto px-4 lg:px-8 lg:pt-24 w-full pt-8 max-w-7xl">
                 {children || <Outlet />}
             </main>

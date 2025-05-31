@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const Header = () => {
+    const location = useLocation();
+    const hideMenu = location.pathname === "/register";
     const [open, setOpen] = useState(false);
 
     return (
@@ -20,8 +22,10 @@ const Header = () => {
                             </svg>
                         </button>
                     </div>
-                    <nav
-                        className={`
+                    {
+                        !hideMenu &&
+                        <nav
+                            className={`
                             flex flex-col gap-2 w-full box-border
                             transition-all duration-300 ease-in-out overflow-hidden
                             ${open ? "mt-4 p-2 max-h-96 opacity-100 pointer-events-auto bg-slate-700 border-t border-slate-600" : "max-h-0 opacity-0 pointer-events-none"}
@@ -29,29 +33,30 @@ const Header = () => {
                             lg:flex lg:flex-row lg:gap-4 lg:mt-0 lg:justify-end
                             lg:bg-transparent lg:border-0
                         `}
-                    >
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) =>
-                                isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                         >
-                            Buscador
-                        </NavLink>
-                        <NavLink
-                            to="/your-company"
-                            className={({ isActive }) =>
-                                isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
-                        >
-                            Tu empresa
-                        </NavLink>
-                        <NavLink
-                            to="/cpv-list"
-                            className={({ isActive }) =>
-                                isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
-                        >
-                            Lista de CPVs
-                        </NavLink>
-                    </nav>
+                            <NavLink
+                                to="/"
+                                className={({ isActive }) =>
+                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                            >
+                                Buscador
+                            </NavLink>
+                            <NavLink
+                                to="/your-company"
+                                className={({ isActive }) =>
+                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                            >
+                                Tu empresa
+                            </NavLink>
+                            <NavLink
+                                to="/cpv-list"
+                                className={({ isActive }) =>
+                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                            >
+                                Lista de CPVs
+                            </NavLink>
+                        </nav>
+                    }
                 </div>
             </div>
         </header>
