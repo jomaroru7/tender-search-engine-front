@@ -1,6 +1,4 @@
-import { useSelector } from "react-redux";
 import { useState } from "react";
-import type { RootState } from "../../store";
 import CpvMultiSelect from "../cpv-multi-select/CpvMultiSelect";
 
 type CompanyFormProps = {
@@ -22,31 +20,10 @@ const CompanyForm = ({
   submitLabel,
   onSubmit,
 }: CompanyFormProps) => {
-  const cpvMap = useSelector((state: RootState) => state.cpv.cpvs);
-  const cpvEntries = Object.entries(cpvMap);
-
   const [name, setName] = useState(initialName);
   const [location, setLocation] = useState(initialLocation);
   const [budget, setBudget] = useState(initialBudget.toString());
-  const [cpvSearch, setCpvSearch] = useState("");
   const [selectedCpvs, setSelectedCpvs] = useState<string[]>(initialCpvs);
-
-  const filteredCpvs = cpvEntries.filter(
-    ([code, desc]) =>
-      code.toLowerCase().includes(cpvSearch.toLowerCase()) ||
-      desc.toLowerCase().includes(cpvSearch.toLowerCase())
-  );
-
-  const handleCpvSelect = (code: string) => {
-    if (!selectedCpvs.includes(code)) {
-      setSelectedCpvs([...selectedCpvs, code]);
-    }
-    setCpvSearch("");
-  };
-
-  const handleCpvRemove = (code: string) => {
-    setSelectedCpvs(selectedCpvs.filter(c => c !== code));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
