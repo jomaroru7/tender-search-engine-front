@@ -7,10 +7,10 @@ function IndexPage() {
   const cardData = useSelector((state: RootState) => state.tender.tenders);
 
   return (
-    <>
+    <main className="pt-12 flex flex-col">
       <TendersSearchForm />
       <CardsGrid cardData={cardData} />
-    </>
+    </main>
   );
 }
 
