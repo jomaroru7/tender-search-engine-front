@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { getTenders } from "./Tenders";
+import { getTenders } from "./tendersService";
 
 const mockUrl = "https://mock-tenders-endpoint.com/api";
 const OLD_ENV = { ...import.meta.env };
@@ -7,7 +7,7 @@ const OLD_ENV = { ...import.meta.env };
 describe("getTenders", () => {
   beforeEach(() => {
     // @ts-ignore
-    import.meta.env.VITE_GET_TENDERS = mockUrl;
+    import.meta.env.VITE_GET_TENDERS_URL = mockUrl;
     vi.resetAllMocks();
   });
 
@@ -17,7 +17,7 @@ describe("getTenders", () => {
   });
 
   it("returns data when fetch is successful", async () => {
-    const mockResponse = { tenders: [{ id: 1, name: "Test" }] };
+    const mockResponse = [{ Contratacion: "Test", Plazo_limite: "2025-01-01", Importe_estimado: 1000, Titulo: "Titulo", Lugar_Ejecucion: "Lugar", Codigo_CPV: ["123"], score: 1 }];
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse),
@@ -25,10 +25,13 @@ describe("getTenders", () => {
 
     const result = await getTenders({ invoicing: 1, place: "ES", activity: "1234" });
     expect(result).toEqual(mockResponse);
-    expect(fetch).toHaveBeenCalledWith(mockUrl, expect.objectContaining({
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }));
+    expect(fetch).toHaveBeenCalledWith(
+      mockUrl + "/search",
+      expect.objectContaining({
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+    );
   });
 
   it("throws error when fetch response is not ok", async () => {

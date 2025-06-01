@@ -12,7 +12,8 @@ const mockCpvs = {
 describe("IndexPage", () => {
   it("renders the CardsGrid component", () => {
     const store = mockStore({
-      cpv: { cpvs: mockCpvs }
+      cpv: { cpvs: mockCpvs },
+      tender: { tenders: [] },
     });
     render(
       <Provider store={store}>

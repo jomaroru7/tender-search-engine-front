@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { CardData } from "../../types"
+import type { CardData } from "../../models/TendersFront"
 import TenderCard from "../tender-card/TenderCard"
 
 type CardsGridProps = {
