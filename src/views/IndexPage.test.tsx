@@ -14,6 +14,7 @@ describe("IndexPage", () => {
     const store = mockStore({
       cpv: { cpvs: mockCpvs },
       tender: { tenders: [] },
+      company: { name: "", location: "", budget: 0, cpvs: [] },
     });
     render(
       <Provider store={store}>
