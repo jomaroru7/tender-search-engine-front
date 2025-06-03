@@ -22,7 +22,8 @@ describe("TenderCard", () => {
       "15894500",
       "55000000"
     ],
-    endDate: "2025-05-07 12:37:00"
+    endDate: "2025-05-07 12:37:00",
+    score: 3.14
   };
 
   it("renders the card with its data", () => {
@@ -38,6 +39,7 @@ describe("TenderCard", () => {
           resume={mockTender.resume}
           location={mockTender.location}
           CPVCodes={mockTender.CPVCodes}
+          score={mockTender.score}
         />
       </Provider>
     );
@@ -49,5 +51,7 @@ describe("TenderCard", () => {
     expect(screen.getByTestId('tender-resume').textContent).toBe(mockTender.resume);
     expect(screen.getByTestId('tender-cpv-codes').textContent).toContain(mockTender.CPVCodes[0]);
     expect(screen.getByTestId('tender-end-date').textContent).toContain(mockTender.endDate);
+    expect(screen.getByTestId('tender-score')).toBeInTheDocument();
+
   });
 });
