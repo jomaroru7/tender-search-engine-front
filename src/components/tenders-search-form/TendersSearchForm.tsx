@@ -23,7 +23,6 @@ const TendersSearchForm = () => {
                 place,
                 activity: description,
             });
-            console.log(tenders)
             dispatch(setTenders(tenders));
             toast.success("Licitaciones actualizadas.");
         } catch (err) {
@@ -39,10 +38,10 @@ const TendersSearchForm = () => {
             {loading && (
                 <SpinnerOverlay message="Estamos ejecutando la búsqueda de licitaciones con sus especificaciones. Esto puede llevar algunos minutos." />
             )}
-            <form onSubmit={handleSubmit} className="mb-8 flex flex-col gap-4 flex-wrap bg-white/80 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
+            <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-wrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
                 <div className="flex flex-col lg:flex-row gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Presupuesto</label>
+                        <label className="block text-sm font-medium  mb-1">Presupuesto</label>
                         <input
                             type="number"
                             value={invoicing}
@@ -51,7 +50,7 @@ const TendersSearchForm = () => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Localización</label>
+                        <label className="block text-sm font-medium mb-1">Localización</label>
                         <input
                             type="text"
                             value={place}
@@ -60,7 +59,7 @@ const TendersSearchForm = () => {
                         />
                     </div>
                     <div className="min-w-[250px] flex-1">
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Descripción de la actividad de la empresa</label>
+                        <label className="block text-sm font-medium mb-1">Descripción de la actividad de la empresa</label>
                         <textarea
                             value={description}
                             onChange={e => setDescription(e.target.value)}

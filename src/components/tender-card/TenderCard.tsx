@@ -17,7 +17,7 @@ const TenderCard = ({ tenderName, endDate, budget, resume, location, CPVCodes }:
     return (
         <article
             data-testid="tender-card"
-            className="bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl"
+            className="bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between"
         >
             <header className="flex flex-col gap-2 pb-4 border-b border-gray-100 mb-4">
                 <h1 data-testid="tender-name" className="text-2xl font-bold text-slate-800">{tenderName}</h1>
@@ -33,7 +33,7 @@ const TenderCard = ({ tenderName, endDate, budget, resume, location, CPVCodes }:
             <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100">
                 <div className="flex flex-wrap gap-2">
                     <p>CPVs:</p>
-                    {CPVCodes.map((CPVCode) => (
+                    {[...new Set(CPVCodes)].map((CPVCode) => (
                         <CpvPill key={CPVCode} cpvCode={CPVCode} />
                     ))}
                 </div>
