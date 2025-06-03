@@ -13,7 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <>
             <Header />
-            <main className="container mx-auto px-4 lg:px-8 lg:pt-24 w-full pt-8 max-w-7xl">
+            <main className="container mx-auto px-4 lg:px-8 mt-24 lg:mt-32 max-w-7xl">
                 {children || <Outlet />}
             </main>
             <ToastContainer position="bottom-right" autoClose={3000} />

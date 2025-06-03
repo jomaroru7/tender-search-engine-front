@@ -22,7 +22,7 @@ const YourCompanyPage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-16">
+    <div className="max-w-2xl mx-auto">
       <CompanyForm
         title="Editar datos de empresa"
         submitLabel="Guardar cambios"

@@ -27,7 +27,7 @@ const CpvListPage = () => {
   );
 
   return (
-    <div>
+    <div className=''>
       <input
         type="text"
         placeholder="Búsqueda por código o descripción..."

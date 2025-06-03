@@ -7,10 +7,10 @@ const Header = () => {
     const [open, setOpen] = useState(false);
 
     return (
-        <header className="bg-slate-800 fixed top-0 left-0 w-full z-50 overflow-x-hidden">
-            <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl">
-                <div className="flex flex-col lg:flex-row items-center">
-                    <div className="flex w-full justify-between items-center">
+        <header className="bg-slate-800 fixed top-0 left-0 w-screen z-50 overflow-x-hidden">
+            <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl flex flex-row items-center">
+                <div className="flex flex-col lg:flex-row w-full justify-between items-center">
+                    <div className="flex flex-row justify-between gap-4">
                         <h1 className="text-3xl text-white">Buscador de licitaciones</h1>
                         <button
                             className="lg:hidden text-white focus:outline-none"
@@ -22,6 +22,8 @@ const Header = () => {
                             </svg>
                         </button>
                     </div>
+
+
                     {
                         !hideMenu &&
                         <nav
