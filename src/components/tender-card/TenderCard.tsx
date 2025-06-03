@@ -40,7 +40,7 @@ const TenderCard = ({ tenderName, endDate, budget, resume, location, CPVCodes, s
                         <CpvPill key={CPVCode} cpvCode={CPVCode} />
                     ))}
                 </div>
-                <div data-testid="tender-score" className="flex items-end gap-1 mt-2 flex-1" title={`Puntuación: ${normalizedScore}/5`}>
+                <div data-testid="tender-score" className="flex items-end gap-1 mt-2 flex-1">
                     <ScoreGraph score={score} max={5} />
                 </div>
             </footer>
