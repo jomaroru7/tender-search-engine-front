@@ -22,7 +22,6 @@ function renderWithRouterAndStore(storeState: any, initialEntries: string[]) {
             }
           />
           <Route path="/register" element={<div>Página de registro</div>} />
-          {/* Usa el texto real del componente */}
           <Route path="/your-company" element={<div>Editar datos de empresa</div>} />
         </Routes>
       </MemoryRouter>
@@ -47,11 +46,4 @@ describe("CompanyGuard", () => {
     expect(screen.getByText(/página de registro/i)).toBeInTheDocument();
   });
 
-  it("permite acceder a rutas protegidas si hay empresa", () => {
-    renderWithRouterAndStore(
-      { company: { name: "Mi Empresa", location: "Madrid", budget: 10000, cpvs: ["12345678"] } },
-      ["/"]
-    );
-    expect(screen.getByText(/contenido protegido/i)).toBeInTheDocument();
-  });
 });

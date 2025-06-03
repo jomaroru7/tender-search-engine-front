@@ -10,7 +10,7 @@ const CompanyGuard = ({ children }: CompanyGuardProps) => {
   const company = useSelector((state: RootState) => state.company);
   const location = useLocation();
 
-  const isRegistered = !!company?.name && !!company?.location && !!company?.budget && company.cpvs?.length > 0;
+  const isRegistered = !!company?.name && !!company?.location && !!company?.budget && !!company?.description;
 
   if (!isRegistered && location.pathname !== "/register") {
     return <Navigate to="/register" replace />;

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import CardsGrid from "./CardsGrid";
-import type { CardData } from "../../types";
+import type { CardData } from "../../models/TendersFront";
 
 const mockStore = configureStore([]);
 const mockTender: CardData[] = [
@@ -17,7 +17,8 @@ const mockTender: CardData[] = [
         "15894500",
         "55000000"
       ],
-      endDate: "2025-05-07 12:37:00"
+      endDate: "2025-05-07 12:37:00",
+      score:1
     }, {
       tenderName: "La presente licitación tiene por objeto la contratación del Suministro de Dispensadores de Agua, Café y Máquinas Expendedoras para Equipos Nucleares, S.A., S.M.E. (ENSA)",
       budget: 22000.0,
@@ -28,7 +29,8 @@ const mockTender: CardData[] = [
         "15894500",
         "55000000"
       ],
-      endDate: "2025-05-07 12:37:00"
+      endDate: "2025-05-07 12:37:00",
+      score: 0.3
     }
   ]
 

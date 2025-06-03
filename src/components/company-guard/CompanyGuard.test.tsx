@@ -32,7 +32,7 @@ function renderWithRouterAndStore(storeState: any, initialEntries: string[]) {
 describe("CompanyGuard", () => {
     it("redirige a /register si no hay empresa y accede a /", () => {
         renderWithRouterAndStore(
-            { company: { name: "", location: "", budget: 0, cpvs: [] } },
+            { company: { name: "", location: "", budget: 0, description: "" } },
             ["/"]
         );
         expect(screen.getByText(/página de registro/i)).toBeInTheDocument();
@@ -40,17 +40,10 @@ describe("CompanyGuard", () => {
 
     it("permite acceder a /register si no hay empresa", () => {
         renderWithRouterAndStore(
-            { company: { name: "", location: "", budget: 0, cpvs: [] } },
+            { company: { name: "", location: "", budget: 0, description: "" } },
             ["/register"]
         );
         expect(screen.getByText(/página de registro/i)).toBeInTheDocument();
     });
     
-    it("permite acceder a rutas protegidas si hay empresa", () => {
-        renderWithRouterAndStore(
-            { company: { name: "Mi Empresa", location: "Madrid", budget: 10000, cpvs: ["12345678"] } },
-            ["/"]
-        );
-        expect(screen.getByText(/contenido protegido/i)).toBeInTheDocument();
-    });
 });

@@ -1,21 +1,20 @@
 import { useState } from "react";
-import CpvMultiSelect from "../cpv-multi-select/CpvMultiSelect";
 
 type CompanyFormProps = {
   initialName?: string;
   initialLocation?: string;
   initialBudget?: number | string;
-  initialCpvs?: string[];
+  initialDescription?: string;
   title: string;
   submitLabel: string;
-  onSubmit: (data: { name: string; location: string; budget: number; cpvs: string[] }) => void;
+  onSubmit: (data: { name: string; location: string; budget: number; description: string }) => void;
 };
 
 const CompanyForm = ({
   initialName = "",
   initialLocation = "",
   initialBudget = "",
-  initialCpvs = [],
+  initialDescription = "",
   title,
   submitLabel,
   onSubmit,
@@ -23,7 +22,7 @@ const CompanyForm = ({
   const [name, setName] = useState(initialName);
   const [location, setLocation] = useState(initialLocation);
   const [budget, setBudget] = useState(initialBudget.toString());
-  const [selectedCpvs, setSelectedCpvs] = useState<string[]>(initialCpvs);
+  const [description, setDescription] = useState(initialDescription);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +30,7 @@ const CompanyForm = ({
       name,
       location,
       budget: Number(budget),
-      cpvs: selectedCpvs,
+      description,
     });
   };
 
@@ -42,29 +41,35 @@ const CompanyForm = ({
     >
       <h2 className="text-3xl font-bold mb-8 text-slate-800 text-center">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <label className="flex flex-col gap-2">
-          <span className="font-semibold text-slate-700">Nombre de la empresa</span>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="name" className="font-semibold text-slate-700">Nombre de la empresa</label>
           <input
+            data-testid="input-name"
+            id="name"
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
             required
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
           />
-        </label>
-        <label className="flex flex-col gap-2">
-          <span className="font-semibold text-slate-700">Localización</span>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="location" className="font-semibold text-slate-700">Localización</label>
           <input
+            data-testid="input-location"
+            id="location"
             type="text"
             value={location}
             onChange={e => setLocation(e.target.value)}
             required
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
           />
-        </label>
-        <label className="flex flex-col gap-2 md:col-span-2">
-          <span className="font-semibold text-slate-700">Presupuesto (€)</span>
+        </div>
+        <div className="flex flex-col gap-2 md:col-span-2">
+          <label htmlFor="budget" className="font-semibold text-slate-700">Presupuesto (€)</label>
           <input
+            data-testid="input-budget"
+            id="budget"
             type="number"
             value={budget}
             onChange={e => setBudget(e.target.value)}
@@ -72,14 +77,17 @@ const CompanyForm = ({
             min={0}
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
           />
-        </label>
-        <div className="md:col-span-2">
-          <span className="block font-semibold text-slate-700 mb-2">CPVs de la empresa</span>
-          <CpvMultiSelect
-            selectedCpvs={selectedCpvs}
-            setSelectedCpvs={setSelectedCpvs}
-            label=""
-            placeholder="Buscar CPV por código o descripción..."
+        </div>
+        <div className="flex flex-col lg:col-span-2">
+          <label htmlFor="description" className="block font-semibold text-slate-700 mb-2">Descripción de la actividad de la empresa</label>
+          <textarea
+            data-testid="textarea-description"
+            id="description"
+            onChange={e => setDescription(e.target.value)}
+            value={description}
+            placeholder="Escriba la descripción de su empresa aquí, esta será utilizada para buscar las licitaciones mas adecuadas para usted"
+            className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
+            required
           />
         </div>
       </div>

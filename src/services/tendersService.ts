@@ -36,7 +36,7 @@ const tenderResponseToCardsData = (tenders: getTendersResponse[]): CardData[] =>
         budget: tender.Importe_estimado,
         resume: tender.Titulo,
         location: tender.Lugar_Ejecucion,
-        CPVCodes: tender.Codigo_CPV.map(String),
+        CPVCodes: tender.Codigo_CPV,
         score: tender.score
     }));
 };

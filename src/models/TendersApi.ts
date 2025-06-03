@@ -5,7 +5,7 @@ export type getTendersRequest = {
 }
 
 export type getTendersResponse = {
-    "Codigo_CPV": number[],
+    "Codigo_CPV": string[],
     "Contratacion": string,
     "Fecha_publicacion": string,
     "ID": string,

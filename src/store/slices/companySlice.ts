@@ -5,7 +5,7 @@ export interface CompanyData {
   name: string;
   location: string;
   budget: number;
-  cpvs: string[];
+  description: string;
 }
 
 const initialState: CompanyData = (() => {
@@ -15,7 +15,7 @@ const initialState: CompanyData = (() => {
     name: '',
     location: '',
     budget: 0,
-    cpvs: [],
+    description: '',
   };
 })();
 
