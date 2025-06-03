@@ -43,6 +43,7 @@ const TendersSearchForm = () => {
                     <div>
                         <label className="block text-sm font-medium  mb-1">Presupuesto</label>
                         <input
+                            data-testid="input-budget"
                             type="number"
                             value={invoicing}
                             onChange={e => setInvoicing(Number(e.target.value))}
@@ -52,6 +53,7 @@ const TendersSearchForm = () => {
                     <div>
                         <label className="block text-sm font-medium mb-1">Localización</label>
                         <input
+                            data-testid="input-location"
                             type="text"
                             value={place}
                             onChange={e => setPlace(e.target.value)}
@@ -61,6 +63,7 @@ const TendersSearchForm = () => {
                     <div className="min-w-[250px] flex-1">
                         <label className="block text-sm font-medium mb-1">Descripción de la actividad de la empresa</label>
                         <textarea
+                            data-testid="textarea-description"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             placeholder="Escriba la descripción de su empresa aquí, esta será utilizada para buscar las licitaciones mas adecuadas para usted"
