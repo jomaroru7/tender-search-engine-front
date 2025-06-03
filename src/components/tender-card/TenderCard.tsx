@@ -16,7 +16,6 @@ type TenderCardProps = {
 }
 
 const TenderCard = ({ tenderName, endDate, budget, resume, location, CPVCodes, score = 0 }: TenderCardProps) => {
-    const normalizedScore = Math.round(score * 5 * 100) / 100;
     return (
         <article
             data-testid="tender-card"
