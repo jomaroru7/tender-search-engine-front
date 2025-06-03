@@ -41,7 +41,7 @@ const TendersSearchForm = () => {
             <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-wrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
                 <div className="flex flex-col lg:flex-row gap-4">
                     <div>
-                        <label className="block text-sm font-medium  mb-1">Presupuesto</label>
+                        <label className="block text-sm font-medium  mb-1">Facturación anual</label>
                         <input
                             data-testid="input-budget"
                             type="number"

@@ -17,7 +17,7 @@ const CompanyGuard = ({ children }: CompanyGuardProps) => {
   }
 
   if (isRegistered && location.pathname === "/register") {
-    return <Navigate to="/your-company" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

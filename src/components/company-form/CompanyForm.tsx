@@ -66,7 +66,7 @@ const CompanyForm = ({
           />
         </div>
         <div className="flex flex-col gap-2 md:col-span-2">
-          <label htmlFor="budget" className="font-semibold text-slate-700">Presupuesto (€)</label>
+          <label htmlFor="budget" className="font-semibold text-slate-700">Facturación anual (€)</label>
           <input
             data-testid="input-budget"
             id="budget"
