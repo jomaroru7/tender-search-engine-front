@@ -5,6 +5,7 @@ import YourCompanyPage from "./views/YourCompanyPage";
 import Layout from "./layouts/Layout";
 import CpvListPage from "./views/CpvListPage";
 import CompanyGuard from "./components/company-guard/CompanyGuard";
+import TenderDetailPage from "./views/TenderDetailPage";
 
 function AppRouter() {
   return (
@@ -16,6 +17,7 @@ function AppRouter() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/your-company" element={<YourCompanyPage />} />
             <Route path="/cpv-list" element={<CpvListPage />} />
+            <Route path="/tender/:id" element={<TenderDetailPage />} />
           </Route>
         </Routes>
       </CompanyGuard>

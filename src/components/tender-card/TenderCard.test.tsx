@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import TenderCard from "./TenderCard";
+import { MemoryRouter } from "react-router-dom";
 
 const mockStore = configureStore([]);
 const mockCpvs = {
@@ -13,6 +14,7 @@ const mockCpvs = {
 
 describe("TenderCard", () => {
   const mockTender = {
+    id: "patata",
     tenderName: "La presente licitación tiene por objeto la contratación del Suministro de Dispensadores de Agua, Café y Máquinas Expendedoras para Equipos Nucleares, S.A., S.M.E. (ENSA)",
     budget: 22000.0,
     location: "Cantabria",
@@ -32,15 +34,18 @@ describe("TenderCard", () => {
     });
     render(
       <Provider store={store}>
-        <TenderCard
-          tenderName={mockTender.tenderName}
-          endDate={mockTender.endDate}
-          budget={mockTender.budget}
-          resume={mockTender.resume}
-          location={mockTender.location}
-          CPVCodes={mockTender.CPVCodes}
-          score={mockTender.score}
-        />
+        <MemoryRouter>
+          <TenderCard
+            id={mockTender.id}
+            tenderName={mockTender.tenderName}
+            endDate={mockTender.endDate}
+            budget={mockTender.budget}
+            resume={mockTender.resume}
+            location={mockTender.location}
+            CPVCodes={mockTender.CPVCodes}
+            score={mockTender.score}
+          />
+        </MemoryRouter>
       </Provider>
     );
 

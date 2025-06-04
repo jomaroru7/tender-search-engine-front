@@ -16,8 +16,8 @@ const CardsGrid = ({cardData}: CardsGridProps) => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" data-testid="cards-grid">
-      {cards.map(({tenderName, budget, location, resume, CPVCodes, endDate, score }, index) => (
-        <TenderCard key={index} tenderName={tenderName} endDate={endDate} budget={budget} resume={resume} location={location} CPVCodes={CPVCodes} score={score}  />
+      {cards.map(({id, tenderName, budget, location, resume, CPVCodes, endDate, score }, index) => (
+        <TenderCard key={index} id={id} tenderName={tenderName} endDate={endDate} budget={budget} resume={resume} location={location} CPVCodes={CPVCodes} score={score}  />
       ))}
     </div>
   )
