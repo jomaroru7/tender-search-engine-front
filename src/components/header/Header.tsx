@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { LuSeparatorHorizontal } from "react-icons/lu";
 import { NavLink, useLocation } from "react-router-dom";
 
 const Header = () => {
@@ -23,14 +24,13 @@ const Header = () => {
                         </button>
                     </div>
 
-
                     {
                         !hideMenu &&
                         <nav
                             className={`
-                            flex flex-col gap-2 w-full box-border
+                            flex flex-col gap-2 box-border rounded-3xl
                             transition-all duration-300 ease-in-out overflow-hidden
-                            ${open ? "mt-4 p-2 max-h-96 opacity-100 pointer-events-auto bg-slate-700 border-t border-slate-600" : "max-h-0 opacity-0 pointer-events-none"}
+                            ${open ? "flex flex-col gap-2 box-border rounded-3xl mt-4 p-4 max-h-96 opacity-100 pointer-events-auto bg-slate-700 border-t border-slate-600" : "max-h-0 opacity-0 pointer-events-none"}
                             lg:opacity-100 lg:pointer-events-auto lg:max-h-none
                             lg:flex lg:flex-row lg:gap-4 lg:mt-0 lg:justify-end
                             lg:bg-transparent lg:border-0
@@ -43,6 +43,7 @@ const Header = () => {
                             >
                                 Buscador
                             </NavLink>
+                            <div className=" w-full border-2 border-white lg:hidden" />
                             <NavLink
                                 to="/your-company"
                                 className={({ isActive }) =>
@@ -50,6 +51,8 @@ const Header = () => {
                             >
                                 Tu empresa
                             </NavLink>
+                            <div className=" w-full border-2 border-white lg:hidden" />
+
                             <NavLink
                                 to="/cpv-list"
                                 className={({ isActive }) =>
