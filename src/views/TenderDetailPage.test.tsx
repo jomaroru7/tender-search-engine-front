@@ -2,9 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import TenderDetailPage from "./TenderDetailPage";
 import * as tendersService from "../services/tendersService";
-import React from "react";
 
-// Mock de datos de licitación
 const mockTender = {
   id: "123",
   tenderName: "Licitación de prueba",
