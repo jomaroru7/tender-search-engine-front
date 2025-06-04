@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { LuSeparatorHorizontal } from "react-icons/lu";
 import { NavLink, useLocation } from "react-router-dom";
 
 const Header = () => {
