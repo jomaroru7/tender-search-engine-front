@@ -51,7 +51,7 @@ describe("TendersSearchForm", () => {
 
   it("muestra el spinner al buscar y llama a getTendersCardsData", async () => {
     const store = mockStore(initialState);
-    const mockTenders = [{ id: 1, tenderName: "Test", budget: 1000, location: "Madrid", resume: "Resumen", CPVCodes: ["123"], endDate: "2025-01-01", score: 0.33 }];
+    const mockTenders = [{ id: "1", tenderName: "Test", budget: 1000, location: "Madrid", resume: "Resumen", CPVCodes: ["123"], endDate: "2025-01-01", score: 0.33 }];
     const getTendersCardsDataSpy = vi.spyOn(tendersService, "getTendersCardsData").mockResolvedValue(mockTenders);
 
     render(
