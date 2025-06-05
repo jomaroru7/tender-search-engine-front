@@ -37,7 +37,7 @@ const CompanyForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-2xl mx-auto mt-16 bg-white/80 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200"
+      className="max-w-2xl mx-auto bg-white/80 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200"
     >
       <h2 className="text-3xl font-bold mb-8 text-slate-800 text-center">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
