@@ -3,14 +3,16 @@ import type { CardData, TenderDetailData } from "../models/TendersFront";
 
 const ENV = import.meta.env;
 
-export const getTenders = ({ invoicing, place, activity }: getTendersRequest): Promise<getTendersResponse[]> => {
+export const getTenders = ({ invoicing, place, activity, page, page_size = 10 }: getTendersRequest): Promise<getTendersResponse> => {
     return fetch(ENV.VITE_GET_TENDERS_URL + "/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             invoicing,
             place,
-            activity
+            activity,
+            page,
+            page_size
         }),
     })
         .then(response => {
@@ -24,9 +26,25 @@ export const getTenders = ({ invoicing, place, activity }: getTendersRequest): P
         });
 };
 
-export const getTendersCardsData = ({ invoicing, place, activity }: getTendersRequest): Promise<CardData[]> => {
-    return getTenders({ invoicing, place, activity })
-        .then(tenders => tendersResponseToCardsData(tenders));
+export const getTendersCardsData = ({
+    invoicing,
+    place,
+    activity,
+    page = 1,
+    page_size = 10,
+}: getTendersRequest): Promise<{
+    tenders: CardData[],
+    page: number,
+    pageSize: number,
+    totalResults: number
+}> => {
+    return getTenders({ invoicing, place, activity, page, page_size })
+        .then(tendersResponse => ({
+            tenders: tendersResponseToCardsData(tendersResponse),
+            page: tendersResponse.page,
+            pageSize: tendersResponse.page_size,
+            totalResults: tendersResponse.total_results
+        }));
 };
 
 export const getTender = ({ ID }: getTenderRequest): Promise<getTenderResponse> => {
@@ -53,8 +71,8 @@ export const getTenderDetailData = ({ ID }: getTenderRequest): Promise<TenderDet
         .then(id => tenderResponseToTenderDetailData(id));
 };
 
-const tendersResponseToCardsData = (tenders: getTendersResponse[]): CardData[] => {
-    return tenders.map(tender => ({
+const tendersResponseToCardsData = (tenders: getTendersResponse): CardData[] => {
+    return tenders.results.map(tender => ({
         id: tender.ID,
         tenderName: tender.Contratacion,
         endDate: tender.Plazo_limite,

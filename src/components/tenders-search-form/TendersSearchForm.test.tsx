@@ -1,9 +1,7 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import TendersSearchForm from "./TendersSearchForm";
-import * as tendersService from "../../services/tendersService";
-import { ToastContainer } from "react-toastify";
 
 const mockStore = configureStore([]);
 const initialState = {
@@ -20,7 +18,7 @@ describe("TendersSearchForm", () => {
     const store = mockStore(initialState);
     render(
       <Provider store={store}>
-        <TendersSearchForm />
+        <TendersSearchForm onSearch={vi.fn()} />
       </Provider>
     );
     expect(screen.getByTestId("input-budget")).toBeInTheDocument();
@@ -33,7 +31,7 @@ describe("TendersSearchForm", () => {
     const store = mockStore(initialState);
     render(
       <Provider store={store}>
-        <TendersSearchForm />
+        <TendersSearchForm onSearch={vi.fn()} />
       </Provider>
     );
     const presupuesto = screen.getByTestId("input-budget");
@@ -49,39 +47,5 @@ describe("TendersSearchForm", () => {
     expect(descripcion).toHaveValue("Obras públicas");
   });
 
-  it("muestra el spinner al buscar y llama a getTendersCardsData", async () => {
-    const store = mockStore(initialState);
-    const mockTenders = [{ id: "1", tenderName: "Test", budget: 1000, location: "Madrid", resume: "Resumen", CPVCodes: ["123"], endDate: "2025-01-01", score: 0.33 }];
-    const getTendersCardsDataSpy = vi.spyOn(tendersService, "getTendersCardsData").mockResolvedValue(mockTenders);
 
-    render(
-      <Provider store={store}>
-        <TendersSearchForm />
-        <ToastContainer />
-      </Provider>
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /buscar licitaciones/i }));
-
-    expect(screen.getByText(/estamos ejecutando la búsqueda/i)).toBeInTheDocument();
-    await waitFor(() => expect(getTendersCardsDataSpy).toHaveBeenCalled());
-    await waitFor(() => expect(screen.queryByText(/estamos ejecutando la búsqueda/i)).not.toBeInTheDocument());
-    await waitFor(() => expect(screen.getByText(/licitaciones actualizadas/i)).toBeInTheDocument());
-  });
-
-  it("muestra un toast de error si la búsqueda falla", async () => {
-    const store = mockStore(initialState);
-    vi.spyOn(tendersService, "getTendersCardsData").mockRejectedValue(new Error("fail"));
-
-    render(
-      <Provider store={store}>
-        <TendersSearchForm />
-        <ToastContainer />
-      </Provider>
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: /buscar licitaciones/i }));
-
-    await waitFor(() => expect(screen.getByText(/no se pudieron obtener las licitaciones/i)).toBeInTheDocument());
-  });
 });
