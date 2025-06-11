@@ -17,6 +17,7 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-400 hover:text-blue-500 transition"
+                                    aria-label="LinkedIn profile of Antonio José Lucena Gutierrez"
                                 >
                                     <FaLinkedin size={24} />
                                 </a>
@@ -31,6 +32,7 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-400 hover:text-blue-500 transition"
+                                    aria-label="LinkedIn profile of Carlos Perales Gonzales"
                                 >
                                     <FaLinkedin size={24} />
                                 </a>
@@ -40,6 +42,7 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-gray-400 hover:text-gray-500 transition"
+                                    aria-label="GitHub profile of Carlos Perales Gonzales"
                                 >
                                     <FaGithub size={24} />
                                 </a>
@@ -50,6 +53,7 @@ const Footer = () => {
                                     rel="noopener noreferrer"
                                     className="text-green-400 hover:text-green-500 transition"
                                     title="Portfolio"
+                                    aria-label="Portfolio of Carlos Perales Gonzales"
                                 >
                                     <FaGlobe size={24} />
                                 </a>
@@ -64,6 +68,7 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-blue-400 hover:text-blue-500 transition"
+                                    aria-label="LinkedIn profile of José María Romero Ruiz"
                                 >
                                     <FaLinkedin size={24} />
                                 </a>
@@ -73,6 +78,7 @@ const Footer = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-gray-400 hover:text-gray-500 transition"
+                                    aria-label="GitHub profile of José María Romero Ruiz"
                                 >
                                     <FaGithub size={24} />
                                 </a>
@@ -83,6 +89,7 @@ const Footer = () => {
                                     rel="noopener noreferrer"
                                     className="text-green-400 hover:text-green-500 transition"
                                     title="Portfolio"
+                                    aria-label="Portfolio of José María Romero Ruiz"
                                 >
                                     <FaGlobe size={24} />
                                 </a>

@@ -31,7 +31,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
     const slug = slugify(tenderName);
     const url = `/tender/${slug}-${hash}-${encodeURIComponent(id)}`;
     return (
-    <Link to={url} className="block h-full cursor-pointer">
+        <Link to={url} className="block h-full cursor-pointer">
             <article
                 data-testid="tender-card"
                 className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between"
@@ -44,9 +44,9 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                         <InfoPill text={`${location}`} icon={<MdLocationPin />} dataTestId="tender-location" backgroundColor="bg-blue-100" textColor="text-blue-700" />
                     </div>
                 </header>
-                <main className="pb-4">
-                    <p data-testid="tender-resume" className="text-slate-700">{resume}</p>
-                </main>
+
+                <p data-testid="tender-resume" className="pb-4 text-slate-700">{resume}</p>
+
                 <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100 flex flex-row justify-between items-end">
                     <div className="flex flex-wrap gap-2 flex-5">
                         <p>CPVs:</p>
