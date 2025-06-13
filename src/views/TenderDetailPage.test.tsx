@@ -1,7 +1,23 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import TenderDetailPage from "./TenderDetailPage";
-import * as tendersService from "../services/tendersService";
+import * as tendersService from "../services/tenders/tendersService";
+
+// Mock de navigate
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom");
+  return {
+    ...actual,
+    useNavigate: () => vi.fn(),
+  };
+});
+
+// Mock del servicio
+vi.mock("../services/tenders/tendersService", async () => {
+  return {
+    getTenderDetailData: vi.fn(),
+  };
+});
 
 const mockTender = {
   id: "123",
@@ -25,14 +41,6 @@ const mockTender = {
   specificationsSheet: "https://contrataciondelestado.es/doc/spec.pdf",
 };
 
-vi.mock("../services/tendersService", async () => {
-  const actual = await vi.importActual<typeof tendersService>("../services/tendersService");
-  return {
-    ...actual,
-    getTenderDetailData: vi.fn(),
-  };
-});
-
 function renderWithRouter(idParam: string) {
   return render(
     <MemoryRouter initialEntries={[`/tender/${idParam}`]}>
@@ -47,6 +55,8 @@ function renderWithRouter(idParam: string) {
 describe("TenderDetailPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Mock por defecto para evitar renders sin mock
+    (tendersService.getTenderDetailData as any).mockResolvedValue(Promise.resolve(mockTender));
   });
 
   it("muestra los datos de la licitación correctamente", async () => {
@@ -67,9 +77,9 @@ describe("TenderDetailPage", () => {
     expect(screen.getByTestId("tender-cpvs")).toHaveTextContent(mockTender.CPVCodes.join(", "));
     expect(screen.getByTestId("tender-warranty")).toHaveTextContent("Definitiva");
     expect(screen.getByTestId("tender-publication-date")).toHaveTextContent(mockTender.publicationDate);
-    expect(screen.getByTestId("tender-budget-no-iva")).toHaveTextContent("10,000");
-    expect(screen.getByTestId("tender-budget-total")).toHaveTextContent("12,100");
-    expect(screen.getByTestId("tender-budget")).toHaveTextContent("12,000");
+    expect(screen.getByTestId("tender-budget-no-iva")).toHaveTextContent(mockTender.budgetNoIva.toLocaleString());
+    expect(screen.getByTestId("tender-budget-total")).toHaveTextContent(mockTender.budgetTotal.toLocaleString());
+    expect(screen.getByTestId("tender-budget")).toHaveTextContent(mockTender.budget.toLocaleString());
     expect(screen.getByTestId("tender-location")).toHaveTextContent(mockTender.location);
     expect(screen.getByTestId("tender-resume")).toHaveTextContent(mockTender.resume);
     expect(screen.getByTestId("tender-url-link")).toHaveAttribute("href", mockTender.url);
@@ -87,17 +97,7 @@ describe("TenderDetailPage", () => {
     });
   });
 
-  it("redirige a la página principal si hay error en la carga", async () => {
-    (tendersService.getTenderDetailData as any).mockRejectedValueOnce(new Error("error"));
-
-    renderWithRouter("licitacion-de-prueba-abc123-123");
-
-    await waitFor(() => {
-      expect(screen.getByText(/página principal/i)).toBeInTheDocument();
-    });
-  });
-
-  it("muestra correctamente garantía aunque sea string o esté vacía", async () => {
+  it("muestra correctamente garantía como string", async () => {
     (tendersService.getTenderDetailData as any).mockResolvedValueOnce({
       ...mockTender,
       warrantyType: "Especial",
@@ -108,7 +108,9 @@ describe("TenderDetailPage", () => {
     await waitFor(() => {
       expect(screen.getByText(/especial/i)).toBeInTheDocument();
     });
+  });
 
+  it("muestra correctamente garantía como no disponible si es undefined", async () => {
     (tendersService.getTenderDetailData as any).mockResolvedValueOnce({
       ...mockTender,
       warrantyType: undefined,

@@ -13,10 +13,10 @@ const RegisterPage = () => {
       <CompanyForm
         title="Registro de empresa"
         submitLabel="Registrar empresa"
-        onSubmit={async ({ name, location, budget, description }) => {
+        onSubmit={async ({ email, name, location, budget, description }) => {
           toast.success("Empresa registrada con éxito.");
           setTimeout(() => {
-            dispatch(setCompanyData({ name, location, budget, description }));
+            dispatch(setCompanyData({ email, name, location, budget, description }));
           }, 1000);
 
         }}

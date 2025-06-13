@@ -1,5 +1,5 @@
 export type setUserRequest = {
-    email: "string";
+    email: string;
 }
 
 export type setUserResponse = {

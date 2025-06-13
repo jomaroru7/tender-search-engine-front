@@ -2,6 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface CompanyData {
+  email: string;
   name: string;
   location: string;
   budget: number;
@@ -12,6 +13,7 @@ const initialState: CompanyData = (() => {
   const stored = localStorage.getItem("companyData");
   if (stored) return JSON.parse(stored);
   return {
+    email: '',
     name: '',
     location: '',
     budget: 0,

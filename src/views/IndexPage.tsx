@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import type { RootState, AppDispatch } from "../store";
 import CardsGrid from "../components/cards-grid/CardsGrid";
 import TendersSearchForm from "../components/tenders-search-form/TendersSearchForm";
@@ -12,8 +12,11 @@ function IndexPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { tenders, totalResults, page, pageSize, filters } = useSelector((state: RootState) => state.tender);
 
+  const [loading, setLoading] = useState(false);
+
   const fetchTenders = useCallback(
     async (filtersToUse: { invoicing: number; place: string; activity: string }, pageToUse: number) => {
+      setLoading(true);
       try {
         const data = await getTendersCardsData({
           ...filtersToUse,
@@ -31,6 +34,8 @@ function IndexPage() {
         );
       } catch {
         toast.error("No se pudieron obtener las licitaciones.");
+      } finally {
+        setLoading(false);
       }
     },
     [dispatch, pageSize]
@@ -55,7 +60,7 @@ function IndexPage() {
 
   return (
     <main className="flex flex-col">
-      <TendersSearchForm onSearch={handleSearch} loading={false} />
+      <TendersSearchForm onSearch={handleSearch} loading={loading} />
       <CardsGrid cardData={tenders} />
       <Pagination
         currentPage={page}
