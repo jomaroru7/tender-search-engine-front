@@ -4,7 +4,7 @@ import type { RootState, AppDispatch } from "../store";
 import CardsGrid from "../components/cards-grid/CardsGrid";
 import TendersSearchForm from "../components/tenders-search-form/TendersSearchForm";
 import Pagination from "../components/pagination/Pagination";
-import { getTendersCardsData } from "../services/tendersService";
+import { getTendersCardsData } from "../services/tenders/tendersService";
 import { setTendersData } from "../store/slices/tenderSlice";
 import { toast } from "react-toastify";
 

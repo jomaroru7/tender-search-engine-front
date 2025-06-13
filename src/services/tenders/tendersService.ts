@@ -1,5 +1,5 @@
-import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse } from "../models/TendersApi";
-import type { CardData, TenderDetailData } from "../models/TendersFront";
+import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse } from "../../models/TendersApi";
+import type { CardData, TenderDetailData } from "../../models/TendersFront";
 
 const ENV = import.meta.env;
 
