@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/tender-search-engine-front-build/' : '/',
+export default defineConfig(({}) => ({
+  base: '/',
   plugins: [react(), tailwindcss()],
   test: {
     globals: true,

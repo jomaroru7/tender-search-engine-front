@@ -36,7 +36,7 @@ The app will be available at [http://localhost:5173](http://localhost:5173) (or 
 
 ## Build
 
-Generate a production build:
+Generate a production build. After that it will try to copy CNAME in the dist folder:
 
 ```bash
 npm run build
