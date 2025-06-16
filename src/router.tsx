@@ -7,9 +7,11 @@ import CpvListPage from "./views/CpvListPage";
 import CompanyGuard from "./components/company-guard/CompanyGuard";
 import TenderDetailPage from "./views/TenderDetailPage";
 
+const BASENAME = import.meta.env.PROD ? "/tender-search-engine-front-build" : "/";
+
 function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={BASENAME}>
       <CompanyGuard>
         <Routes>
           <Route element={<Layout />}>
