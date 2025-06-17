@@ -45,6 +45,29 @@ This will create (or replace) the `dist` folder with the compiled files for prod
 
 ---
 
+## Release
+
+This project includes a release automation script to bump the version, commit, tag, push, build, and update the `dist` folder.
+
+### Usage
+
+```bash
+npm run release [major|minor]
+```
+
+- `major`: Increments the first digit of the version (e.g., 1.2.3 → 2.0.0).
+- `minor`: Increments the last digit of the version (e.g., 1.2.3 → 1.2.4).
+- *(no parameter)*: Increments the middle digit (e.g., 1.2.3 → 1.3.0).
+
+The script will:
+1. Update the version in `package.json` and `package-lock.json`.
+2. Commit the change and create a git tag.
+3. Push the commit and tag to the repository.
+4. Run the production build.
+5. Commit and push the contents of the `dist` folder (if it is a git repo).
+
+---
+
 ## Tests
 
 This project uses [Vitest](https://vitest.dev) for testing.

@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "release": "node release.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
