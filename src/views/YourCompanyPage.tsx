@@ -13,7 +13,7 @@ const YourCompanyPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleDelete = () => {
-    dispatch(setCompanyData({email:"", name: "", location: "", budget: 0, description: "" }));
+    dispatch(setCompanyData({email:"", name: "", location: "", budget: 0, description: "", allowRegister: false}));
     localStorage.removeItem("companyData");
     toast.success("Datos de la empresa eliminados. Serás redirigido a la página de registro.");
     setTimeout(() => {
@@ -31,8 +31,9 @@ const YourCompanyPage = () => {
         initialLocation={company.location}
         initialBudget={company.budget}
         initialDescription={company.description}
-        onSubmit={({ email, name, location, budget, description }) => {
-          dispatch(setCompanyData({ email, name, location, budget, description }));
+        initialAllowRegister={company.allowRegister}
+        onSubmit={({ email, name, location, budget, description, allowRegister }) => {
+          dispatch(setCompanyData({ email, name, location, budget, description, allowRegister }));
           toast.success("Datos de empresa actualizados.");
         }}
       />

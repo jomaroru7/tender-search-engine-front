@@ -7,9 +7,10 @@ type CompanyFormProps = {
   initialLocation?: string;
   initialBudget?: number | string;
   initialDescription?: string;
+  initialAllowRegister?: boolean;
   title: string;
   submitLabel: string;
-  onSubmit: (data: {email:string, name: string; location: string; budget: number; description: string }) => void;
+  onSubmit: (data: {email:string, name: string; location: string; budget: number; description: string, allowRegister:boolean }) => void;
 };
 
 const CompanyForm = ({
@@ -18,6 +19,7 @@ const CompanyForm = ({
   initialLocation = "",
   initialBudget = "",
   initialDescription = "",
+  initialAllowRegister = false,
   title,
   submitLabel,
   onSubmit,
@@ -27,7 +29,7 @@ const CompanyForm = ({
   const [budget, setBudget] = useState(initialBudget.toString());
   const [description, setDescription] = useState(initialDescription);
   const [email, setEmail] = useState(initialEmail);
-  const [allowRegister, setAllowRegister] = useState(false);
+  const [allowRegister, setAllowRegister] = useState(initialAllowRegister);
   const [error, setError] = useState<string | null>(null);
 
   const validateEmail = (email: string) =>
@@ -60,6 +62,7 @@ const CompanyForm = ({
       location,
       budget: Number(budget),
       description,
+      allowRegister
     });
   };
 
@@ -112,7 +115,7 @@ const CompanyForm = ({
           <input
             data-testid="input-email"
             id="email"
-            type="email"
+            type="text"
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
@@ -121,6 +124,7 @@ const CompanyForm = ({
         </div>
         <div className="flex items-center md:col-span-2">
           <input
+            data-testid="checkbox-allowRegister"
             id="allowRegister"
             type="checkbox"
             checked={allowRegister}

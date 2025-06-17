@@ -12,7 +12,7 @@ describe("Layout", () => {
         </Layout>
       </MemoryRouter>
     );
-    expect(screen.getByText(/buscador de licitaciones/i)).toBeInTheDocument();
+    expect(screen.getByTestId("header")).toBeInTheDocument();
     expect(screen.getByText(/test content/i)).toBeInTheDocument();
   });
 });

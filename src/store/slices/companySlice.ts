@@ -7,6 +7,7 @@ export interface CompanyData {
   location: string;
   budget: number;
   description: string;
+  allowRegister: boolean; 
 }
 
 const initialState: CompanyData = (() => {
@@ -18,6 +19,7 @@ const initialState: CompanyData = (() => {
     location: '',
     budget: 0,
     description: '',
+    allowRegister: false,
   };
 })();
 
