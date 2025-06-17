@@ -11,8 +11,8 @@ const Header = () => {
             <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl flex flex-row items-center">
                 <div className="flex flex-col lg:flex-row w-full justify-between items-center">
                     <div className="flex flex-row justify-between gap-4">
-                        <h1 className="text-3xl text-white">Buscador de licitaciones</h1>
-                        <button
+                        <h1 className="text-3xl text-white">Licico</h1>
+                        {!hideMenu && <button
                             className="lg:hidden text-white focus:outline-none"
                             onClick={() => setOpen(!open)}
                             aria-label="Toggle navigation"
@@ -21,6 +21,7 @@ const Header = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d={open ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
                             </svg>
                         </button>
+                        }
                     </div>
 
                     {
