@@ -18,6 +18,8 @@ export const Default: Story = {
     initialLocation: "Madrid",
     initialBudget: 100000,
     initialDescription: "Empresa dedicada a servicios de limpieza y mantenimiento.",
+    initialEmail: "test@test.es",
+    initialAllowRegister: true,
     onSubmit: (data) => {
       alert(`Datos enviados:\n${JSON.stringify(data, null, 2)}`);
     },
