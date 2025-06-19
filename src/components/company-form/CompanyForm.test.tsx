@@ -40,35 +40,35 @@ describe("CompanyForm", () => {
     fireEvent.change(screen.getByTestId("input-name"), { target: { value: "Empresa" } });
     fireEvent.change(screen.getByTestId("input-location"), { target: { value: "Madrid" } });
     fireEvent.change(screen.getByTestId("input-budget"), { target: { value: "10000" } });
-    fireEvent.change(screen.getByTestId("textarea-description"), { target: { value: "Descripción" } });
     fireEvent.change(screen.getByTestId("input-email"), { target: { value: "no-es-email" } });
+    fireEvent.change(screen.getByTestId("textarea-description"), { target: { value: "Descripción" } });
     fireEvent.click(screen.getByTestId("checkbox-allowRegister"));
     fireEvent.click(screen.getByText("Enviar"));
 
     expect(
-      await screen.findByText((content) =>
-        /Introduce un email válido/i.test(content)
-      )
+      await screen.findByText(/Introduce un email válido/i)
     ).toBeInTheDocument();
   });
 
   it("muestra error si el checkbox no está marcado", async () => {
     renderForm();
+
     fireEvent.change(screen.getByTestId("input-name"), { target: { value: "Empresa" } });
     fireEvent.change(screen.getByTestId("input-location"), { target: { value: "Madrid" } });
     fireEvent.change(screen.getByTestId("input-budget"), { target: { value: "10000" } });
-    fireEvent.change(screen.getByTestId("textarea-description"), { target: { value: "Descripción" } });
     fireEvent.change(screen.getByTestId("input-email"), { target: { value: "test@email.com" } });
+    fireEvent.change(screen.getByTestId("textarea-description"), { target: { value: "Descripción" } });
+
+    // Si el checkbox está marcado, lo desmarcamos
     const checkbox = screen.getByTestId("checkbox-allowRegister") as HTMLInputElement;
     if (checkbox.checked) {
       fireEvent.click(checkbox);
     }
+
     fireEvent.click(screen.getByText("Enviar"));
 
     expect(
-      await screen.findByText((content) =>
-        content.includes("Debes permitir el registro del email")
-      )
+      await screen.findByText(/Debes permitir el registro del email para continuar/i)
     ).toBeInTheDocument();
   });
 
@@ -81,16 +81,22 @@ describe("CompanyForm", () => {
     fireEvent.change(screen.getByTestId("input-name"), { target: { value: "Empresa" } });
     fireEvent.change(screen.getByTestId("input-location"), { target: { value: "Madrid" } });
     fireEvent.change(screen.getByTestId("input-budget"), { target: { value: "10000" } });
-    fireEvent.change(screen.getByTestId("input-email"), { target: { value: "test@email.com" } });
+    fireEvent.change(screen.getByTestId("input-email"), { target: { value: "empresa@email.com" } });
     fireEvent.change(screen.getByTestId("textarea-description"), { target: { value: "Descripción" } });
     fireEvent.click(screen.getByTestId("checkbox-allowRegister"));
 
     fireEvent.click(screen.getByText("Enviar"));
 
     await waitFor(() => {
-      expect(setUser).toHaveBeenCalledWith({ email: "test@email.com" });
+      expect(setUser).toHaveBeenCalledWith({
+        email: "empresa@email.com",
+        companyName: "Empresa",
+        companyLocation: "Madrid",
+        companyBudget: "10000",
+        companyDescription: "Descripción",
+      });
       expect(onSubmit).toHaveBeenCalledWith({
-        email: "test@email.com",
+        email: "empresa@email.com",
         name: "Empresa",
         location: "Madrid",
         budget: 10000,
@@ -102,6 +108,7 @@ describe("CompanyForm", () => {
 
   it("el checkbox refleja el valor inicial", () => {
     renderForm({ initialAllowRegister: true });
-    expect(screen.getByTestId("checkbox-allowRegister")).toBeChecked();
+    const checkbox = screen.getByTestId("checkbox-allowRegister") as HTMLInputElement;
+    expect(checkbox).toBeChecked();
   });
 });

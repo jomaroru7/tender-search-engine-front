@@ -50,7 +50,7 @@ const CompanyForm = ({
     }
 
     try {
-      await setUser({ email });
+      await setUser({ email, companyName: name, companyLocation: location, companyBudget: budget, companyDescription: description });
     } catch {
       setError("Error al registrar el email.");
       return;

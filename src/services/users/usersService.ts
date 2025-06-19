@@ -2,12 +2,16 @@ import type { setUserRequest, setUserResponse } from "../../models/UsersApi";
 
 const ENV = import.meta.env;
 
-export const setUser = ({ email }: setUserRequest): Promise<setUserResponse> => {
+export const setUser = ({ email, companyName, companyBudget, companyDescription, companyLocation }: setUserRequest): Promise<setUserResponse> => {
     return fetch(ENV.VITE_SET_USER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            email
+            email,
+            companyName,
+            companyBudget,
+            companyDescription,
+            companyLocation,
         }),
     })
         .then(response => {
