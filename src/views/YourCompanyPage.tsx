@@ -15,9 +15,9 @@ const YourCompanyPage = () => {
   const handleDelete = () => {
     dispatch(setCompanyData({email:"", name: "", location: "", budget: 0, description: "", allowRegister: false}));
     localStorage.removeItem("companyData");
-    toast.success("Datos de la empresa eliminados. Serás redirigido a la página de registro.");
+    toast.success("Datos de la empresa eliminados. Serás redirigido a la página principal.");
     setTimeout(() => {
-      navigate("/register");
+      navigate("/");
     }, 1000);
   };
 
