@@ -11,7 +11,15 @@ const Header = () => {
             <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl flex flex-row items-center">
                 <div className="flex flex-col lg:flex-row w-full justify-between items-center">
                     <div className="flex flex-row justify-between gap-4">
-                        <h1 className="text-3xl text-white">Licico</h1>
+                        <NavLink to="/" className="flex items-center">
+                            <div data-testid="logo" className="h-10 w-auto overflow-hidden flex items-center justify-center rounded">
+                                <img
+                                    src="/logo_licico_blanco.png"
+                                    alt="Logo licico"
+                                    className="h-25 w-auto object-cover object-center block"
+                                />
+                            </div>
+                        </NavLink>
                         {!hideMenu && <button
                             className="lg:hidden text-white focus:outline-none"
                             onClick={() => setOpen(!open)}

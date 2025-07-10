@@ -14,7 +14,7 @@ function renderHeader(path = "/") {
 describe("Header", () => {
   it("muestra el título Licico", () => {
     renderHeader();
-    expect(screen.getByText("Licico")).toBeInTheDocument();
+    expect(screen.getByTestId("logo")).toBeInTheDocument();
   });
 
   it("oculta el menú en la ruta /register", () => {
@@ -36,7 +36,6 @@ describe("Header", () => {
   it("abre y cierra el menú móvil al pulsar el botón", () => {
     renderHeader("/");
     const button = screen.getByLabelText(/toggle navigation/i);
-    // Menú cerrado por defecto en móvil
     expect(screen.getByRole("navigation")).toHaveClass("opacity-0");
     fireEvent.click(button);
     expect(screen.getByRole("navigation")).toHaveClass("opacity-100");
