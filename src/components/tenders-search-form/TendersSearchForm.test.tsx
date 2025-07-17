@@ -10,6 +10,12 @@ const initialState = {
     location: "Madrid",
     description: "Servicios de limpieza",
   },
+  cpv: {
+    cpvs: {
+      "12345678": "Servicios de limpieza",
+      "87654321": "Obras públicas",
+    },
+  },
   tenders: [],
 };
 
@@ -25,6 +31,7 @@ describe("TendersSearchForm", () => {
     expect(screen.getByTestId("input-location")).toBeInTheDocument();
     expect(screen.getByTestId("textarea-description")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /buscar licitaciones/i })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Buscar CPV por código/i)).toBeInTheDocument();
   });
 
   it("permite escribir en los campos", () => {
@@ -46,6 +53,4 @@ describe("TendersSearchForm", () => {
     expect(localizacion).toHaveValue("Barcelona");
     expect(descripcion).toHaveValue("Obras públicas");
   });
-
-
 });

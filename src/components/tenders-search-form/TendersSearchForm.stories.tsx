@@ -9,9 +9,16 @@ const mockCompany = {
   description: "Servicios de limpieza",
 };
 
+const mockCpvs = {
+  "12345678": "Servicios de limpieza",
+  "87654321": "Obras públicas",
+  "11223344": "Material de oficina",
+};
+
 const store = configureStore({
   reducer: {
     company: (state = mockCompany) => state,
+    cpv: (state = { cpvs: mockCpvs }) => state,
   },
 });
 

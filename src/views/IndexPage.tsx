@@ -15,13 +15,17 @@ function IndexPage() {
   const [loading, setLoading] = useState(false);
 
   const fetchTenders = useCallback(
-    async (filtersToUse: { invoicing: number; place: string; activity: string }, pageToUse: number) => {
+    async (
+      filtersToUse: { invoicing: number; place: string; activity: string; cpv_list?: string[] },
+      pageToUse: number
+    ) => {
       setLoading(true);
       try {
         const data = await getTendersCardsData({
           ...filtersToUse,
           page: pageToUse,
           page_size: pageSize,
+          cpv_list: filtersToUse.cpv_list || [],
         });
         dispatch(
           setTendersData({
@@ -42,7 +46,7 @@ function IndexPage() {
   );
 
   const handleSearch = useCallback(
-    async (newFilters: { invoicing: number; place: string; activity: string }) => {
+    async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[] }) => {
       await fetchTenders(newFilters, 1);
       toast.success("Licitaciones actualizadas.");
     },

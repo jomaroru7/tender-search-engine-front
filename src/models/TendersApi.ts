@@ -3,7 +3,8 @@ export type getTendersRequest = {
     place: string,
     activity: string,
     page?: number,
-    page_size?: number
+    page_size?: number,
+    cpv_list?: string[] | number[]
 }
 
 export type tendersResults = {

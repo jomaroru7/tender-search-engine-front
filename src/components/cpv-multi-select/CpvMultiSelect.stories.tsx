@@ -35,11 +35,17 @@ type Story = StoryObj<typeof CpvMultiSelect>;
 const Template = (args: any) => {
   const [selectedCpvs, setSelectedCpvs] = useState<string[]>([]);
   return (
-    <CpvMultiSelect
-      {...args}
-      selectedCpvs={selectedCpvs}
-      setSelectedCpvs={setSelectedCpvs}
-    />
+    <div className="min-w-[250px] flex-1 flex flex-col">
+      <label className="block text-sm font-medium mb-1" htmlFor="cpv-multiselect">
+        {args.label}
+      </label>
+      <CpvMultiSelect
+        {...args}
+        selectedCpvs={selectedCpvs}
+        setSelectedCpvs={setSelectedCpvs}
+        id="cpv-multiselect"
+      />
+    </div>
   );
 };
 

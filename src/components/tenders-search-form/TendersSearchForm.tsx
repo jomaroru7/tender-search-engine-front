@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import SpinnerOverlay from "../spinner-overlay/SpinnerOverlay";
+import CpvMultiSelect from "../cpv-multi-select/CpvMultiSelect";
 
 type Props = {
-  onSearch: (filters: { invoicing: number; place: string; activity: string }) => void;
+  onSearch: (filters: { invoicing: number; place: string; activity: string; cpv_list: string[] }) => void;
   loading?: boolean;
 };
 
@@ -13,10 +14,11 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
   const [invoicing, setInvoicing] = useState(company.budget);
   const [place, setPlace] = useState(company.location);
   const [description, setDescription] = useState(company.description);
+  const [selectedCpvs, setSelectedCpvs] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSearch({ invoicing, place, activity: description });
+    await onSearch({ invoicing, place, activity: description, cpv_list: selectedCpvs });
   };
 
   return (
@@ -48,6 +50,12 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
             />
           </div>
+            <CpvMultiSelect
+              selectedCpvs={selectedCpvs}
+              setSelectedCpvs={setSelectedCpvs}
+              label="CPVs"
+              placeholder="Buscar CPV por código o descripción..."
+            />
           <div className="min-w-[250px] flex-1">
             <label className="block text-sm font-medium mb-1">Descripción de la actividad de la empresa</label>
             <textarea

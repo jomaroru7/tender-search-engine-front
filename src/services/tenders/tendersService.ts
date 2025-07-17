@@ -3,7 +3,7 @@ import type { CardData, TenderDetailData } from "../../models/TendersFront";
 
 const ENV = import.meta.env;
 
-export const getTenders = ({ invoicing, place, activity, page, page_size = 10 }: getTendersRequest): Promise<getTendersResponse> => {
+export const getTenders = ({ invoicing, place, activity, page, page_size = 10, cpv_list }: getTendersRequest): Promise<getTendersResponse> => {
     return fetch(ENV.VITE_GET_TENDERS_URL + "/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -12,7 +12,8 @@ export const getTenders = ({ invoicing, place, activity, page, page_size = 10 }:
             place,
             activity,
             page,
-            page_size
+            page_size,
+            cpv_list,
         }),
     })
         .then(response => {
@@ -32,13 +33,14 @@ export const getTendersCardsData = ({
     activity,
     page = 1,
     page_size = 10,
+    cpv_list
 }: getTendersRequest): Promise<{
     tenders: CardData[],
     page: number,
     pageSize: number,
     totalResults: number
 }> => {
-    return getTenders({ invoicing, place, activity, page, page_size })
+    return getTenders({ invoicing, place, activity, page, page_size, cpv_list })
         .then(tendersResponse => ({
             tenders: tendersResponseToCardsData(tendersResponse),
             page: tendersResponse.page,

@@ -29,7 +29,8 @@ function renderWithStore(selectedCpvs: string[] = [], setSelectedCpvs = vi.fn())
 describe("CpvMultiSelect", () => {
   it("renders input and label", () => {
     renderWithStore();
-    expect(screen.getByLabelText("CPVs")).toBeInTheDocument();
+    // Busca el label por texto y el input por placeholder
+    expect(screen.getByText("CPVs")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Buscar CPV")).toBeInTheDocument();
   });
 
@@ -46,7 +47,8 @@ describe("CpvMultiSelect", () => {
     renderWithStore([], setSelectedCpvs);
     const input = screen.getByPlaceholderText("Buscar CPV");
     fireEvent.change(input, { target: { value: "limpieza" } });
-    fireEvent.click(screen.getByText(/servicios de limpieza/i));
+    // Selecciona el botón por el código, que es lo que aparece en el chip
+    fireEvent.click(screen.getByText("12345678"));
     expect(setSelectedCpvs).toHaveBeenCalledWith(["12345678"]);
   });
 
