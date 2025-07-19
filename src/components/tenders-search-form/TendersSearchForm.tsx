@@ -29,18 +29,24 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
       <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-wrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
         <div className="flex flex-col lg:flex-row gap-4">
           <div>
-            <label htmlFor="input-budget" className="block text-sm font-medium  mb-1">Facturación anual</label>
+            <label htmlFor="input-budget" className="block text-sm font-medium mb-1">Mayor facturación anual en los últimos tres años (€)</label>
             <input
               id="input-budget"
               data-testid="input-budget"
-              type="number"
-              value={invoicing}
-              onChange={e => setInvoicing(Number(e.target.value))}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={invoicing === 0 ? "" : invoicing}
+              onChange={e => {
+                const val = e.target.value.replace(/\D/g, "");
+                setInvoicing(val ? Number(val) : 0);
+              }}
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
+              placeholder="Ej: 450000"
             />
           </div>
           <div>
-            <label htmlFor="input-location" className="block text-sm font-medium mb-1">Localización</label>
+            <label htmlFor="input-location" className="block text-sm font-medium mb-1">Ámbito geográfico de actuación</label>
             <input
               id="input-location"
               data-testid="input-location"
@@ -48,21 +54,22 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               value={place}
               onChange={e => setPlace(e.target.value)}
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
+              placeholder="Provincia donde presta sus servicios"
             />
           </div>
-            <CpvMultiSelect
-              selectedCpvs={selectedCpvs}
-              setSelectedCpvs={setSelectedCpvs}
-              label="CPVs"
-              placeholder="Buscar CPV por código o descripción..."
-            />
+          <CpvMultiSelect
+            selectedCpvs={selectedCpvs}
+            setSelectedCpvs={setSelectedCpvs}
+            label="CPVs"
+            placeholder="Buscar CPV por código o descripción..."
+          />
           <div className="min-w-[250px] flex-1">
             <label className="block text-sm font-medium mb-1">Descripción de la actividad de la empresa</label>
             <textarea
               data-testid="textarea-description"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="Escriba la descripción de su empresa aquí, esta será utilizada para buscar las licitaciones mas adecuadas para usted"
+              placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil."
               className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
             />
           </div>
