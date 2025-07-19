@@ -6,7 +6,7 @@ import TendersSearchForm from "./TendersSearchForm";
 const mockStore = configureStore([]);
 const initialState = {
   company: {
-    budget: 10000,
+    budget: "10000",
     location: "Madrid",
     description: "Servicios de limpieza",
   },
@@ -49,7 +49,7 @@ describe("TendersSearchForm", () => {
     fireEvent.change(localizacion, { target: { value: "Barcelona" } });
     fireEvent.change(descripcion, { target: { value: "Obras públicas" } });
 
-    expect(presupuesto).toHaveValue(20000);
+    expect(presupuesto).toHaveValue("20000");
     expect(localizacion).toHaveValue("Barcelona");
     expect(descripcion).toHaveValue("Obras públicas");
   });

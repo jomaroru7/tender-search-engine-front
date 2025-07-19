@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { setUser } from "../../services/users/usersService";
+import InfoTooltip from "../info-tooltip/InfoTooltip";
 
 type CompanyFormProps = {
   initialEmail?: string;
@@ -10,7 +11,7 @@ type CompanyFormProps = {
   initialAllowRegister?: boolean;
   title: string;
   submitLabel: string;
-  onSubmit: (data: {email:string, name: string; location: string; budget: number; description: string, allowRegister:boolean }) => void;
+  onSubmit: (data: { email: string, name: string; location: string; budget: number; description: string, allowRegister: boolean }) => void;
 };
 
 const CompanyForm = ({
@@ -74,7 +75,7 @@ const CompanyForm = ({
       <h2 className="text-3xl font-bold mb-8 text-slate-800 text-center">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex flex-col gap-2">
-          <label htmlFor="name" className="font-semibold text-slate-700">Nombre de la empresa</label>
+          <label htmlFor="name" className="font-semibold text-slate-700">Denominación social</label>
           <input
             data-testid="input-name"
             id="name"
@@ -83,10 +84,11 @@ const CompanyForm = ({
             onChange={e => setName(e.target.value)}
             required
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
+            placeholder="Nombre legal de la empresa"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="location" className="font-semibold text-slate-700">Localización</label>
+          <label htmlFor="location" className="font-semibold text-slate-700">Ámbito geográfico de actuación</label>
           <input
             data-testid="input-location"
             id="location"
@@ -95,19 +97,28 @@ const CompanyForm = ({
             onChange={e => setLocation(e.target.value)}
             required
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
+            placeholder="Provincia donde presta sus servicios"
           />
         </div>
         <div className="flex flex-col gap-2 md:col-span-2">
-          <label htmlFor="budget" className="font-semibold text-slate-700">Facturación anual (€)</label>
+          <label htmlFor="budget" className="font-semibold text-slate-700 flex items-center">
+            Mayor facturación anual en los últimos tres años (€)
+            <InfoTooltip text="Indique el importe más alto facturado en un solo año durante los últimos tres ejercicios." />
+          </label>
           <input
             data-testid="input-budget"
             id="budget"
-            type="number"
-            value={budget}
-            onChange={e => setBudget(e.target.value)}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={budget === "0" ? "" : budget}
+            onChange={e => {
+              const val = e.target.value.replace(/\D/g, "");
+              setBudget(val);
+            }}
             required
-            min={0}
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
+            placeholder="Ej: 450000"
           />
         </div>
         <div className="flex flex-col gap-2 md:col-span-2">
@@ -120,6 +131,7 @@ const CompanyForm = ({
             onChange={e => setEmail(e.target.value)}
             required
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition"
+            placeholder="Usaremos este email únicamente para enviarte información sobre la aplicación"
           />
         </div>
         <div className="flex items-center md:col-span-2">
@@ -132,8 +144,7 @@ const CompanyForm = ({
             className="mr-2"
           />
           <label htmlFor="allowRegister" className="text-slate-700">
-            Permite el registro de su email en nuestra base de datos. Este dato solo se utilizará para comunicaciones sobre nuestra aplicación.
-          </label>
+            <b>Autorizo el uso de mi correo electrónico</b> exclusivamente para el envío de comunicaciones relacionadas con la plataforma.</label>
         </div>
         <div className="flex flex-col lg:col-span-2">
           <label htmlFor="description" className="block font-semibold text-slate-700 mb-2">Descripción de la actividad de la empresa</label>
@@ -142,7 +153,7 @@ const CompanyForm = ({
             id="description"
             onChange={e => setDescription(e.target.value)}
             value={description}
-            placeholder="Escriba la descripción de su empresa aquí, esta será utilizada para buscar las licitaciones mas adecuadas para usted"
+            placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil."
             className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
             required
           />
