@@ -20,10 +20,14 @@ const CpvMultiSelect = ({
   const [cpvSearch, setCpvSearch] = useState("");
   const inputId = useId();
 
-  const filteredCpvs = cpvEntries.filter(
-    ([code, desc]) =>
-      code.toLowerCase().includes(cpvSearch.toLowerCase()) ||
-      desc.toLowerCase().includes(cpvSearch.toLowerCase())
+  const normalize = (value: string) =>
+    value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const normalizedSearch = normalize(cpvSearch);
+
+  const filteredCpvs = cpvEntries.filter(([code, desc]) =>
+    normalize(code).includes(normalizedSearch) ||
+    normalize(desc).includes(normalizedSearch)
   );
 
   const handleCpvSelect = (code: string) => {
