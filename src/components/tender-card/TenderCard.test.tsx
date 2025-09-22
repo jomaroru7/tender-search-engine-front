@@ -50,7 +50,7 @@ describe("TenderCard", () => {
     );
 
     expect(screen.getByTestId('tender-name').textContent).toBe(mockTender.tenderName);
-    expect(screen.getByTestId('tender-budget').textContent).toContain("22,000");
+    expect(screen.getByTestId('tender-budget').textContent).toContain("22.000");
     expect(screen.getByTestId('tender-budget').textContent).toContain("€");
     expect(screen.getByTestId('tender-location').textContent).toContain(mockTender.location);
     expect(screen.getByTestId('tender-resume').textContent).toBe(mockTender.resume);
