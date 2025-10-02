@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import RegisterPage from "./RegisterPage";
+import LoginPage from "./LoginPage";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { MemoryRouter } from "react-router-dom";
@@ -11,16 +11,15 @@ const store = mockStore({
   company: { name: "", location: "", budget: 0, cpvs: [] }
 });
 
-describe("RegisterPage", () => {
-  it("renders the register form", () => {
+describe("LoginPage", () => {
+  it("renders the redirect message", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
-          <RegisterPage />
+          <LoginPage />
         </MemoryRouter>
       </Provider>
     );
-    expect(screen.getByText(/registro de empresa/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /registrar empresa/i })).toBeInTheDocument();
+    expect(screen.getByText(/redirigiendo al login seguro/i)).toBeInTheDocument();
   });
 });

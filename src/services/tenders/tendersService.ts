@@ -1,12 +1,25 @@
 import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse } from "../../models/TendersApi";
 import type { CardData, TenderDetailData } from "../../models/TendersFront";
+import { COGNITO_CODE_STORAGE_KEY } from "../../constants/auth";
 
 const ENV = import.meta.env;
 
 export const getTenders = ({ invoicing, place, activity, page, page_size = 10, cpv_list }: getTendersRequest): Promise<getTendersResponse> => {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json"
+    };
+
+    if (typeof window !== "undefined") {
+        const authCode = window.sessionStorage.getItem(COGNITO_CODE_STORAGE_KEY);
+
+        if (authCode) {
+            headers.Authorization = authCode;
+        }
+    }
+
     return fetch(ENV.VITE_GET_TENDERS_URL + "/search", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
             invoicing,
             place,
@@ -50,9 +63,21 @@ export const getTendersCardsData = ({
 };
 
 export const getTender = ({ ID }: getTenderRequest): Promise<getTenderResponse> => {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json"
+    };
+
+    if (typeof window !== "undefined") {
+        const authCode = window.sessionStorage.getItem(COGNITO_CODE_STORAGE_KEY);
+
+        if (authCode) {
+            headers.Authorization = authCode;
+        }
+    }
+
     return fetch(ENV.VITE_GET_TENDERS_URL + "/get-tender", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
             ID
         }),

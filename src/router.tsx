@@ -4,6 +4,7 @@ import YourCompanyPage from "./views/YourCompanyPage";
 import Layout from "./layouts/Layout";
 import CpvListPage from "./views/CpvListPage";
 import TenderDetailPage from "./views/TenderDetailPage";
+import LoginPage from "./views/LoginPage";
 
 function AppRouter() {
   return (
@@ -14,6 +15,7 @@ function AppRouter() {
             <Route path="/your-company" element={<YourCompanyPage />} />
             <Route path="/cpv-list" element={<CpvListPage />} />
             <Route path="/tender/:id" element={<TenderDetailPage />} />
+            <Route path="/login/" element={<LoginPage />} />
           </Route>
         </Routes>
     </BrowserRouter>
