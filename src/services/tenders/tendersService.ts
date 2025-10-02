@@ -5,7 +5,10 @@ import { COGNITO_CODE_STORAGE_KEY } from "../../constants/auth";
 const ENV = import.meta.env;
 
 export const getTenders = ({ invoicing, place, activity, page, page_size = 10, cpv_list }: getTendersRequest): Promise<getTendersResponse> => {
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+    };
 
     if (typeof window !== "undefined") {
         const authCode = window.sessionStorage.getItem(COGNITO_CODE_STORAGE_KEY);
