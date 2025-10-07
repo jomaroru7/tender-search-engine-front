@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Header from "./Header";
 import { MemoryRouter } from "react-router-dom";
+import { Authenticator } from '@aws-amplify/ui-react';
 
 const meta: Meta<typeof Header> = {
   title: "Components/Header",
@@ -15,7 +16,9 @@ export const Default: Story = {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={["/"]}>
-        <Story />
+        <Authenticator.Provider>
+          <Story />
+        </Authenticator.Provider>
       </MemoryRouter>
     ),
   ],
@@ -25,7 +28,9 @@ export const OnRegisterPage: Story = {
   decorators: [
     (Story) => (
       <MemoryRouter initialEntries={["/register"]}>
-        <Story />
+        <Authenticator.Provider>
+          <Story />
+        </Authenticator.Provider>
       </MemoryRouter>
     ),
   ],

@@ -12,7 +12,7 @@ const store = mockStore({
 });
 
 describe("LoginPage", () => {
-  it("renders the redirect message", () => {
+  it("renders the login page with Authenticator", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
@@ -20,6 +20,7 @@ describe("LoginPage", () => {
         </MemoryRouter>
       </Provider>
     );
-    expect(screen.getByText(/redirigiendo al login seguro/i)).toBeInTheDocument();
+    expect(screen.getByText(/bienvenido a licico/i)).toBeInTheDocument();
+    expect(screen.getByText(/inicia sesión o crea una cuenta para continuar/i)).toBeInTheDocument();
   });
 });
