@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { Authenticator } from '@aws-amplify/ui-react';
 import Header from "./Header";
 
-function renderHeader(path = "/", user = null) {
+function renderHeader(path = "/") {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <Authenticator.Provider>
