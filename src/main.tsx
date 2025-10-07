@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './config/aws-config';
 import AppRouter from './router';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -9,19 +11,6 @@ import { setCpvs } from './store/slices/cpvSlice';
 
 import Papa from 'papaparse';
 import listadoCpvRaw from './data/listado-cpv.csv?raw';
-import { COGNITO_CODE_STORAGE_KEY } from './constants/auth';
-
-
-const url = new URL(window.location.href);
-const redirectCode = url.searchParams.get('code');
-
-if (redirectCode) {
-  sessionStorage.setItem(COGNITO_CODE_STORAGE_KEY, redirectCode);
-  url.searchParams.delete('code');
-  const remainingSearch = url.searchParams.toString();
-  const cleanUrl = `${url.pathname}${remainingSearch ? `?${remainingSearch}` : ''}${url.hash}`;
-  window.history.replaceState(window.history.state, '', cleanUrl);
-}
 
 
 Papa.parse(listadoCpvRaw, {
@@ -39,8 +28,10 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
+    <Authenticator.Provider>
+      <Provider store={store}>
+        <AppRouter />
+      </Provider>
+    </Authenticator.Provider>
   </StrictMode>
 );

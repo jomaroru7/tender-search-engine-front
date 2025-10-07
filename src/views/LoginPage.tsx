@@ -1,20 +1,68 @@
-import { useEffect } from "react";
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import { Navigate } from 'react-router-dom';
 
-const cognitoUrl =
-  "https://eu-west-3tfi6ftnzt.auth.eu-west-3.amazoncognito.com/login?client_id=6qmcc7fk4n5a354qpf6gk9cf0d&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdevelop.ddr66khzzxhxt.amplifyapp.com";
+function LoginPage() {
+  const { user } = useAuthenticator((context) => [context.user]);
 
-const LoginPage = () => {
-  useEffect(() => {
-    window.location.href = cognitoUrl;
-  }, []);
+  // If already authenticated, redirect to home
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
-      <h1 className="text-2xl font-bold mb-6 text-slate-700">
-        Redirigiendo al login seguro...
-      </h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-md p-8">
+        <div className="text-center mb-8">
+          <img
+            src="/logo_licico_blanco.png"
+            alt="Licico"
+            className="mx-auto h-16 mb-4"
+          />
+          <h1 className="text-2xl font-bold text-gray-900">
+            Bienvenido a Licico
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Inicia sesión o crea una cuenta para continuar
+          </p>
+        </div>
+
+        <Authenticator
+          signUpAttributes={['email']}
+          socialProviders={[]}
+          loginMechanisms={['email']}
+          formFields={{
+            signUp: {
+              email: {
+                label: 'Correo electrónico',
+                placeholder: 'Introduce tu correo',
+                isRequired: true,
+              },
+              password: {
+                label: 'Contraseña',
+                placeholder: 'Introduce tu contraseña',
+                isRequired: true,
+              },
+              confirm_password: {
+                label: 'Confirmar contraseña',
+                placeholder: 'Confirma tu contraseña',
+              },
+            },
+            signIn: {
+              username: {
+                label: 'Correo electrónico',
+                placeholder: 'Introduce tu correo',
+              },
+              password: {
+                label: 'Contraseña',
+                placeholder: 'Introduce tu contraseña',
+              },
+            },
+          }}
+        />
+      </div>
     </div>
   );
-};
+}
 
 export default LoginPage;
