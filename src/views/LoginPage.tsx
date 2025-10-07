@@ -1,10 +1,14 @@
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 
 function LoginPage() {
-  const navigate = useNavigate();
+  const { user } = useAuthenticator((context) => [context.user]);
+
+  // If already authenticated, redirect to home
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -55,17 +59,7 @@ function LoginPage() {
               },
             },
           }}
-        >
-          {({ user }) => {
-            useEffect(() => {
-              if (user) {
-                navigate('/');
-              }
-            }, [user]);
-
-            return null;
-          }}
-        </Authenticator>
+        />
       </div>
     </div>
   );
