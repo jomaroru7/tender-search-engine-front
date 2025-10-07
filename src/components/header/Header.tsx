@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { signOut } from 'aws-amplify/auth';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const Header = () => {
     const location = useLocation();
-    const hideMenu = location.pathname === "/register";
+    const hideMenu = location.pathname === "/register" || location.pathname === "/login";
     const [open, setOpen] = useState(false);
+    const { user } = useAuthenticator((context) => [context.user]);
 
     return (
         <header data-testid="header" className="bg-slate-800 fixed top-0 left-0 w-screen z-50 overflow-x-hidden">
@@ -68,6 +71,17 @@ const Header = () => {
                             >
                                 Lista de CPVs
                             </NavLink>
+                            {user && (
+                                <>
+                                    <div className=" w-full border-2 border-white lg:hidden" />
+                                    <button
+                                        onClick={async () => await signOut()}
+                                        className="text-white uppercase font-bold hover:text-orange-500"
+                                    >
+                                        Cerrar sesión
+                                    </button>
+                                </>
+                            )}
                         </nav>
                     }
                 </div>
