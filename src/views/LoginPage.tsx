@@ -5,14 +5,13 @@ import { Navigate } from 'react-router-dom';
 function LoginPage() {
   const { user } = useAuthenticator((context) => [context.user]);
 
-  // If already authenticated, redirect to home
   if (user) {
     return <Navigate to="/" replace />;
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8">
+      <div className="w-full p-8">
         <div className="text-center mb-8">
           <img
             src="/logo_licico_blanco.png"
