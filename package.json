@@ -15,9 +15,11 @@
     "release": "node release.cjs"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.13.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.8",
     "@tippyjs/react": "^4.2.6",
+    "aws-amplify": "^6.15.7",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

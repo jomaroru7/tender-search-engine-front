@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './config/aws-config';
 import AppRouter from './router';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -26,8 +28,10 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
+    <Authenticator.Provider>
+      <Provider store={store}>
+        <AppRouter />
+      </Provider>
+    </Authenticator.Provider>
   </StrictMode>
 );

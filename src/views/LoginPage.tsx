@@ -1,0 +1,67 @@
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import { Navigate } from 'react-router-dom';
+
+function LoginPage() {
+  const { user } = useAuthenticator((context) => [context.user]);
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full p-8">
+        <div className="text-center mb-8">
+          <img
+            src="/logo_licico_blanco.png"
+            alt="Licico"
+            className="mx-auto h-16 mb-4"
+          />
+          <h1 className="text-2xl font-bold text-gray-900">
+            Bienvenido a Licico
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Inicia sesión o crea una cuenta para continuar
+          </p>
+        </div>
+
+        <Authenticator
+          signUpAttributes={['email']}
+          socialProviders={[]}
+          loginMechanisms={['email']}
+          formFields={{
+            signUp: {
+              email: {
+                label: 'Correo electrónico',
+                placeholder: 'Introduce tu correo',
+                isRequired: true,
+              },
+              password: {
+                label: 'Contraseña',
+                placeholder: 'Introduce tu contraseña',
+                isRequired: true,
+              },
+              confirm_password: {
+                label: 'Confirmar contraseña',
+                placeholder: 'Confirma tu contraseña',
+              },
+            },
+            signIn: {
+              username: {
+                label: 'Correo electrónico',
+                placeholder: 'Introduce tu correo',
+              },
+              password: {
+                label: 'Contraseña',
+                placeholder: 'Introduce tu contraseña',
+              },
+            },
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default LoginPage;

@@ -40,7 +40,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                     <h1 data-testid="tender-name" className="text-2xl font-bold text-slate-800">{tenderName}</h1>
                     <div className="flex flex-wrap gap-4 text-sm text-slate-600">
                         <InfoPill text={`${endDate}`} icon={<LuCalendarClock />} dataTestId="tender-end-date" backgroundColor="bg-orange-100" textColor="text-orange-700" />
-                        <InfoPill text={`${budget.toLocaleString()}€`} icon={<GrMoney />} dataTestId="tender-budget" backgroundColor="bg-green-100" textColor="text-green-700" />
+                        <InfoPill text={`${new Intl.NumberFormat("es-ES").format(budget)}€`} icon={<GrMoney />} dataTestId="tender-budget" backgroundColor="bg-green-100" textColor="text-green-700" />
                         <InfoPill text={`${location}`} icon={<MdLocationPin />} dataTestId="tender-location" backgroundColor="bg-blue-100" textColor="text-blue-700" />
                     </div>
                 </header>

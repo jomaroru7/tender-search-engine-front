@@ -1,12 +1,15 @@
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { Authenticator } from '@aws-amplify/ui-react';
 import Header from "./Header";
 
 function renderHeader(path = "/") {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <Header />
+      <Authenticator.Provider>
+        <Header />
+      </Authenticator.Provider>
     </MemoryRouter>
   );
 }
