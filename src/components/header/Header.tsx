@@ -42,8 +42,8 @@ const Header = () => {
                             flex flex-col gap-2 box-border rounded-3xl
                             transition-all duration-300 ease-in-out overflow-hidden
                             ${open ? "flex flex-col gap-2 box-border rounded-3xl mt-4 p-4 max-h-96 opacity-100 pointer-events-auto bg-slate-700 border-t border-slate-600" : "max-h-0 opacity-0 pointer-events-none"}
-                            lg:opacity-100 lg:pointer-events-auto lg:max-h-none
-                            lg:flex lg:flex-row lg:gap-4 lg:mt-0 lg:justify-end
+                            lg:opacity-100 lg:pointer-events-auto lg:max-h-none lg:rounded-none
+                            lg:flex lg:flex-row lg:gap-4 lg:mt-0 lg:justify-end lg:items-center
                             lg:bg-transparent lg:border-0
                         `}
                         >
@@ -74,12 +74,27 @@ const Header = () => {
                             {user && (
                                 <>
                                     <div className=" w-full border-2 border-white lg:hidden" />
-                                    <button
+                                    <a
                                         onClick={async () => await signOut()}
-                                        className="text-white uppercase font-bold hover:text-orange-500"
+                                        className="text-white uppercase font-bold hover:text-orange-500 flex items-center gap-2 cursor-pointer
+                                            lg:border lg:border-orange-400 lg:rounded-lg lg:px-3 lg:py-1
+                                            lg:text-orange-500 lg:bg-white/10 lg:shadow-sm
+                                            lg:transition-colors lg:hover:bg-orange-100/20"
+                                        style={{ fontWeight: 900 }}
                                     >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5 text-orange-400"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth={2}
+                                            aria-hidden="true"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+                                        </svg>
                                         Cerrar sesión
-                                    </button>
+                                    </a>
                                 </>
                             )}
                         </nav>
