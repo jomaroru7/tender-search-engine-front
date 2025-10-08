@@ -1,8 +1,41 @@
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { Navigate } from 'react-router-dom';
+import { I18n } from '@aws-amplify/core';
 
 function LoginPage() {
+  I18n.putVocabularies({
+    es: {
+      'Sign In': 'Iniciar sesión',
+      'Sign in': 'Iniciar sesión',
+      'Sign Up': 'Crear cuenta',
+      'Sign up': 'Crear cuenta',
+      'Create Account': 'Crear cuenta',
+      'Forgot your password?': '¿Olvidaste tu contraseña?',
+      'Reset your password': 'Restablecer tu contraseña',
+      'Send code': 'Enviar código',
+      'Back to Sign In': 'Volver a iniciar sesión',
+      'Confirm': 'Confirmar',
+      'Confirmation Code': 'Código de confirmación',
+      'New password': 'Nueva contraseña',
+      'Confirm Password': 'Confirmar contraseña',
+      'Password': 'Contraseña',
+      'Email': 'Correo electrónico',
+      'Resend Code': 'Reenviar código',
+      'Submit': 'Enviar',
+      'Change Password': 'Cambiar contraseña',
+      'Sign Out': 'Cerrar sesión',
+      'Have an account? Sign In': '¿Ya tienes cuenta? Inicia sesión',
+      'No account? Create account': '¿No tienes cuenta? Crea una cuenta',
+      'Reset Password': 'Restablecer contraseña',
+      'Enter your email': 'Introduce tu correo electrónico',
+      'Enter your password': 'Introduce tu contraseña',
+      'Enter your new password': 'Introduce tu nueva contraseña',
+      'Enter your confirmation code': 'Introduce tu código de confirmación',
+    }
+  });
+  I18n.setLanguage('es');
+
   const { user } = useAuthenticator((context) => [context.user]);
 
   if (user) {
