@@ -10,8 +10,8 @@ Amplify.configure({
         oauth: {
           domain: import.meta.env.VITE_COGNITO_DOMAIN,
           scopes: ['email', 'openid', 'profile'],
-          redirectSignIn: [import.meta.env.VITE_COGNITO_REDIRECT_URI || 'https://d84l1y8p4kdic.cloudfront.net'],
-          redirectSignOut: [import.meta.env.VITE_COGNITO_REDIRECT_URI || 'https://d84l1y8p4kdic.cloudfront.net'],
+          redirectSignIn: [import.meta.env.VITE_COGNITO_REDIRECT_URI],
+          redirectSignOut: [import.meta.env.VITE_COGNITO_REDIRECT_URI],
           responseType: 'code'
         }
       }
