@@ -43,7 +43,7 @@ const CpvMultiSelect = ({
 
   return (
     <div className="min-w-[250px] flex-1">
-      <label htmlFor={inputId} className="block text-sm font-medium  mb-1">{label}</label>
+      <label htmlFor={inputId} className="block text-sm font-medium  mb-1 min-h-[40px]">{label}</label>
       <input
         id={inputId}
         type="text"
