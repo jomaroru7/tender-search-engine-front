@@ -69,25 +69,30 @@ function LoginPage() {
                 label: 'Correo electrónico',
                 placeholder: 'Introduce tu correo',
                 isRequired: true,
+                autocomplete: 'email',
               },
               password: {
                 label: 'Contraseña',
                 placeholder: 'Introduce tu contraseña',
                 isRequired: true,
+                autocomplete: 'new-password',
               },
               confirm_password: {
                 label: 'Confirmar contraseña',
                 placeholder: 'Confirma tu contraseña',
+                autocomplete: 'new-password',
               },
             },
             signIn: {
               username: {
                 label: 'Correo electrónico',
                 placeholder: 'Introduce tu correo',
+                autocomplete: 'email',
               },
               password: {
                 label: 'Contraseña',
                 placeholder: 'Introduce tu contraseña',
+                autocomplete: 'current-password',
               },
             },
           }}
