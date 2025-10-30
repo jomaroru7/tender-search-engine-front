@@ -55,14 +55,7 @@ const Header = () => {
                                 Buscador
                             </NavLink>
                             <div className=" w-full border-2 border-white lg:hidden" />
-                            <NavLink
-                                to="/your-company"
-                                className={({ isActive }) =>
-                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
-                            >
-                                Tu empresa
-                            </NavLink>
-                            <div className=" w-full border-2 border-white lg:hidden" />
+
 
                             <NavLink
                                 to="/cpv-list"

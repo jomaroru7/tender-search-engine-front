@@ -33,14 +33,6 @@ function AppRouter() {
               index
             />
             <Route
-              path="/your-company"
-              element={
-                <ProtectedRoute>
-                  <YourCompanyPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/cpv-list"
               element={
                 <ProtectedRoute>
