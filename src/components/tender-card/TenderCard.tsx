@@ -34,7 +34,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
         <Link to={url} className="block h-full cursor-pointer">
             <article
                 data-testid="tender-card"
-                className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between"
+                className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between overflow-visible"
             >
                 <header className="flex flex-col gap-2 pb-4 border-b border-gray-100 mb-4">
                     <h1 data-testid="tender-name" className="text-2xl font-bold text-slate-800">{tenderName}</h1>
@@ -47,14 +47,20 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
 
                 <p data-testid="tender-resume" className="pb-4 text-slate-700">{resume}</p>
 
-                <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100 flex flex-row justify-between items-end">
-                    <div className="flex flex-wrap gap-2 flex-5">
-                        <p>CPVs:</p>
-                        {[...new Set(CPVCodes)].map((CPVCode) => (
-                            <CpvPill key={CPVCode} cpvCode={CPVCode} />
-                        ))}
+                <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100 flex gap-4 items-center">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <p className="whitespace-nowrap flex-shrink-0">CPVs:</p>
+                        <div
+                            className="flex gap-2 overflow-x-auto overflow-y-visible min-w-0 pr-2"
+                            aria-label="Lista de CPVs"
+                            data-testid="cpv-list-scroll"
+                        >
+                            {[...new Set(CPVCodes)].map((CPVCode) => (
+                                <CpvPill key={CPVCode} cpvCode={CPVCode} />
+                            ))}
+                        </div>
                     </div>
-                    <div data-testid="tender-score" className="flex items-end gap-1 mt-2 flex-1">
+                    <div data-testid="tender-score" className="flex items-center gap-1 ml-4 flex-shrink-0 min-w-[72px]">
                         <ScoreGraph score={score} max={5} />
                     </div>
                 </footer>
