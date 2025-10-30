@@ -4,7 +4,8 @@ export type getTendersRequest = {
     activity: string,
     page?: number,
     page_size?: number,
-    cpv_list?: string[] | number[]
+    cpv_list?: string[] | number[],
+    exact_place?: boolean
 }
 
 export type tendersResults = {

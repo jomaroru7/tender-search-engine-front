@@ -16,7 +16,7 @@ function IndexPage() {
 
   const fetchTenders = useCallback(
     async (
-      filtersToUse: { invoicing: number; place: string; activity: string; cpv_list?: string[] },
+      filtersToUse: { invoicing: number; place: string; activity: string; cpv_list?: string[]; exact_place?: boolean },
       pageToUse: number
     ) => {
       setLoading(true);
@@ -26,6 +26,7 @@ function IndexPage() {
           page: pageToUse,
           page_size: pageSize,
           cpv_list: filtersToUse.cpv_list || [],
+          exact_place: !!filtersToUse.exact_place,
         });
         dispatch(
           setTendersData({
@@ -36,8 +37,9 @@ function IndexPage() {
             filters: filtersToUse,
           })
         );
-      } catch {
-        toast.error("No se pudieron obtener las licitaciones.");
+      } catch (error: any) {
+        console.error("fetchTenders failed", { error, filters: filtersToUse, page: pageToUse });
+        toast.error(error?.message || "No se pudieron obtener las licitaciones.");
       } finally {
         setLoading(false);
       }
@@ -46,7 +48,7 @@ function IndexPage() {
   );
 
   const handleSearch = useCallback(
-    async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[] }) => {
+    async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => {
       await fetchTenders(newFilters, 1);
       toast.success("Licitaciones actualizadas.");
     },

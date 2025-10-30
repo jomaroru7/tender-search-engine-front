@@ -5,20 +5,21 @@ import SpinnerOverlay from "../spinner-overlay/SpinnerOverlay";
 import CpvMultiSelect from "../cpv-multi-select/CpvMultiSelect";
 
 type Props = {
-  onSearch: (filters: { invoicing: number; place: string; activity: string; cpv_list: string[] }) => void;
+  onSearch: (filters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => void;
   loading?: boolean;
 };
 
 const TendersSearchForm = ({ onSearch, loading }: Props) => {
   const company = useSelector((state: RootState) => state.company);
-  const [invoicing, setInvoicing] = useState(company.budget);
-  const [place, setPlace] = useState(company.location);
-  const [description, setDescription] = useState(company.description);
+  const [invoicing, setInvoicing] = useState<number>(Number(company.budget) || 0);
+  const [place, setPlace] = useState<string>(company.location || "");
+  const [description, setDescription] = useState<string>(company.description || "");
   const [selectedCpvs, setSelectedCpvs] = useState<string[]>([]);
+  const [exactPlace, setExactPlace] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSearch({ invoicing, place, activity: description, cpv_list: selectedCpvs });
+    await onSearch({ invoicing, place, activity: description, cpv_list: selectedCpvs, exact_place: exactPlace });
   };
 
   return (
@@ -36,7 +37,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              value={invoicing === 0 ? "" : invoicing}
+              value={invoicing === 0 ? "" : String(invoicing)}
               onChange={e => {
                 const val = e.target.value.replace(/\D/g, "");
                 setInvoicing(val ? Number(val) : 0);
@@ -56,6 +57,17 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
               placeholder="Provincia donde presta sus servicios"
             />
+
+            <label className="inline-flex items-center gap-2 mt-2 text-sm text-slate-200">
+              <input
+                type="checkbox"
+                data-testid="checkbox-exact-place"
+                checked={exactPlace}
+                onChange={e => setExactPlace(e.target.checked)}
+                className="rounded"
+              />
+              <span>Búsqueda exacta</span>
+            </label>
           </div>
           <CpvMultiSelect
             selectedCpvs={selectedCpvs}
