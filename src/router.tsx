@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import IndexPage from "./views/IndexPage";
-import YourCompanyPage from "./views/YourCompanyPage";
 import Layout from "./layouts/Layout";
 import CpvListPage from "./views/CpvListPage";
 import TenderDetailPage from "./views/TenderDetailPage";
