@@ -26,13 +26,8 @@ function LoginPage() {
       "Enter your new password": "Introduce tu nueva contraseña",
       "Enter your confirmation code": "Introduce tu código de confirmación",
       "We Emailed You": "Te hemos enviado un correo",
-      "Your code is on the way. To log in, enter the code we emailed to {username}. It may take a minute to arrive.":
-        "Tu código está en camino. Para iniciar sesión, introduce el código que te hemos enviado a {username}. Puede tardar un minuto en llegar.",
-      "Your code is on the way. To log in, enter the code we emailed to { username }. It may take a minute to arrive.":
-        "Tu código está en camino. Para iniciar sesión, introduce el código que te hemos enviado a { username }. Puede tardar un minuto en llegar.",
-      "Your code is on the way. To log in, enter the code we emailed to {{ username }}. It may take a minute to arrive.":
-        "Tu código está en camino. Para iniciar sesión, introduce el código que te hemos enviado a {{ username }}. Puede tardar un minuto en llegar.",
-      "Your code is on the way. To log in, enter the code we emailed to ": "Tu código está en camino. Para iniciar sesión, introduce el código que te hemos enviado a ",
+      "Your code is on the way. To log in, enter the code we emailed to": "Tu código está en camino. Para iniciar sesión, introduce el código que te hemos enviado a",
+      ". It may take a minute to arrive.": ". Puede tardar un minuto en llegar.",
       "It may take a minute to arrive.": "Puede tardar un minuto en llegar.",
       "We sent a code to": "Hemos enviado un código a",
       "Confirmation Code": "Código de confirmación",
