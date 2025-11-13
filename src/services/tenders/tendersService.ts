@@ -276,3 +276,59 @@ export const saveSearch = async (search: saveSearchRequest): Promise<{ status: n
         return { status: 0, errors: String(err?.message || err) };
     }
 };
+
+/**
+ * Retrieve the authenticated user's saved searches.
+ *
+ * Returns an object describing result:
+ *  - { status: 200, data } on success
+ *  - { status: 422, errors } on validation error (if applicable)
+ *  - { status: <code>, errors } for other server errors
+ *  - { status: 0, errors } for network/unexpected errors
+ *
+ * Implementation:
+ *  - Uses getAuthHeaders() for headers (same behavior as saveSearch/getTenders).
+ *  - GET to ENV.VITE_GET_TENDERS_URL + "/user/search".
+ *  - Attempts to parse response body as JSON (falls back to text) and logs for debugging.
+ */
+export const getSavedSearches = async (): Promise<{ status: number; data?: any; errors?: any }> => {
+    const headers = await getAuthHeaders();
+    const url = ENV.VITE_GET_TENDERS_URL + "/user/search";
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers,
+        });
+
+        // robust parsing: try json, fallback to text
+        const rawText = await response.text().catch(() => "");
+        let parsed: any = null;
+        try {
+            parsed = rawText ? JSON.parse(rawText) : null;
+        } catch {
+            parsed = rawText;
+        }
+
+        // eslint-disable-next-line no-console
+        console.log("getSavedSearches - response:", { url, status: response.status, parsed });
+
+        if (response.status === 200) {
+            return { status: 200, data: parsed };
+        }
+
+        if (response.status === 422) {
+            return { status: 422, errors: parsed };
+        }
+
+        if (!response.ok) {
+            return { status: response.status, errors: parsed || `Server error: ${response.status}` };
+        }
+
+        return { status: response.status, data: parsed };
+    } catch (err: any) {
+        // eslint-disable-next-line no-console
+        console.error("getSavedSearches exception", err);
+        return { status: 0, errors: String(err?.message || err) };
+    }
+};
