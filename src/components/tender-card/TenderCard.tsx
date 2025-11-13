@@ -51,7 +51,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                         <p className="whitespace-nowrap flex-shrink-0">CPVs:</p>
                         <div
-                            className="flex gap-2 overflow-x-auto overflow-y-visible min-w-0 pr-2"
+                            className="flex gap-2 overflow-x-auto overflow-y-hidden min-w-0 pr-2"
                             aria-label="Lista de CPVs"
                             data-testid="cpv-list-scroll"
                         >
