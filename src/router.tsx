@@ -6,6 +6,7 @@ import CpvListPage from "./views/CpvListPage";
 import TenderDetailPage from "./views/TenderDetailPage";
 import LoginPage from "./views/LoginPage";
 import ApiDocsPage from "./views/ApiDocsPage";
+import UserPage from "./views/UserPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -46,6 +47,14 @@ function AppRouter() {
               element={
                 <ProtectedRoute>
                   <TenderDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user"
+              element={
+                <ProtectedRoute>
+                  <UserPage />
                 </ProtectedRoute>
               }
             />

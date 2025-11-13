@@ -64,8 +64,17 @@ const Header = () => {
                             >
                                 Lista de CPVs
                             </NavLink>
+
                             {user && (
                                 <>
+                                    <div className=" w-full border-2 border-white lg:hidden" />
+                                    <NavLink
+                                        to="/user"
+                                        className={({ isActive }) =>
+                                            isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                                    >
+                                        Tu cuenta
+                                    </NavLink>
                                     <div className=" w-full border-2 border-white lg:hidden" />
                                     <a
                                         onClick={async () => await signOut()}
