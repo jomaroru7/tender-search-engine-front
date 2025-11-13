@@ -1,11 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { getSavedSearches } from "../services/tenders/tendersService";
 import SearchCard from "../components/search-card/SearchCard";
 import type { SavedSearch } from "../components/search-card/SearchCard";
+import { setTendersData } from "../store/slices/tenderSlice";
+import type { AppDispatch } from "../store";
 
 const UserPage = () => {
   const { user } = useAuthenticator((ctx) => [ctx.user]);
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState<SavedSearch[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -50,12 +56,52 @@ const UserPage = () => {
     };
   }, []);
 
-  const handleRestore = useCallback((s: SavedSearch) => {
-    // future: implement restore behaviour (apply filters and fetch)
-    // eslint-disable-next-line no-console
-    console.log("Restore saved search (not implemented).", s);
-    alert("Restaurar búsqueda guardada no implementado aún.");
-  }, []);
+  const handleRestore = useCallback(
+    (s: SavedSearch) => {
+      const invoicing = s.invoicing ?? s.filters?.invoicing ?? 0;
+      const place = s.place ?? s.filters?.place ?? "";
+      const activity = s.activity ?? s.filters?.activity ?? "";
+      const exact_place = typeof s.exact_place !== "undefined" ? s.exact_place : s.filters?.exact_place ?? false;
+      const cpv_list = s.cpv_list ?? s.filters?.cpv_list ?? [];
+
+      // prepare filters object for the store
+      const restoredFilters = {
+        invoicing,
+        place,
+        activity,
+        cpv_list,
+        exact_place,
+      };
+
+      // populate redux so IndexPage can read filters immediately
+      dispatch(
+        setTendersData({
+          tenders: [],
+          totalResults: 0,
+          page: 1,
+          pageSize: 10,
+          filters: restoredFilters,
+        })
+      );
+
+      // navigate to search page with query params so IndexPage triggers fetch logic
+      const params = new URLSearchParams();
+      if (invoicing) params.set("invoicing", String(invoicing));
+      if (place) params.set("place", String(place));
+      if (activity) params.set("activity", String(activity));
+      params.set("exact_place", String(Boolean(exact_place)));
+      if (Array.isArray(cpv_list) && cpv_list.length > 0) {
+        params.set("cpv_list", encodeURIComponent(JSON.stringify(cpv_list)));
+      }
+      params.set("page", "1");
+
+      navigate({
+        pathname: "/",
+        search: `?${params.toString()}`,
+      });
+    },
+    [dispatch, navigate]
+  );
 
   return (
     <main className="p-6">
@@ -67,8 +113,8 @@ const UserPage = () => {
           {email
             ? `Sesión iniciada como ${email}`
             : user
-              ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
-              : "No ha iniciado sesión"}
+            ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
+            : "No ha iniciado sesión"}
         </p>
         <div className="mt-3">
           <button
