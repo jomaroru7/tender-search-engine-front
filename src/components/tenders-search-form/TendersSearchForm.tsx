@@ -44,6 +44,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               }}
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
               placeholder="Ej: 450000"
+              required
             />
           </div>
           <div>
@@ -56,6 +57,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               onChange={e => setPlace(e.target.value)}
               className="border border-slate-300 rounded-lg px-4 py-2 w-full"
               placeholder="Provincia donde presta sus servicios"
+              required
             />
 
             <label className="inline-flex items-center gap-2 mt-2 text-sm text-slate-200">
