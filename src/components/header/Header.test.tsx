@@ -1,48 +1,62 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { Authenticator } from '@aws-amplify/ui-react';
+
+// Mock useAuthenticator from @aws-amplify/ui-react before importing the component
+vi.mock("@aws-amplify/ui-react", () => ({
+  useAuthenticator: () => ({ user: null }),
+}));
+
 import Header from "./Header";
 
 function renderHeader(path = "/") {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <Authenticator.Provider>
-        <Header />
-      </Authenticator.Provider>
+      <Header />
     </MemoryRouter>
   );
 }
 
 describe("Header", () => {
-  it("muestra el título Licico", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it("shows the logo", () => {
     renderHeader();
     expect(screen.getByTestId("logo")).toBeInTheDocument();
   });
 
-  it("oculta el menú en la ruta /register", () => {
+  it("hides the menu on the /register route", () => {
     renderHeader("/register");
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
   });
 
-  it("muestra el menú en otras rutas", () => {
+  it("shows the menu on other routes", () => {
     renderHeader("/");
     expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 
-  it("resalta el enlace activo", () => {
-    renderHeader("/your-company");
-    const activeLink = screen.getByText(/tu empresa/i);
+  it("highlights the active link (cpv list) when route matches", () => {
+    renderHeader("/cpv-list");
+    const activeLink = screen.getByText(/lista de cpvs/i);
     expect(activeLink).toHaveClass("text-orange-500");
   });
 
-  it("abre y cierra el menú móvil al pulsar el botón", () => {
+  it("toggles the mobile menu when clicking the button", () => {
     renderHeader("/");
     const button = screen.getByLabelText(/toggle navigation/i);
-    expect(screen.getByRole("navigation")).toHaveClass("opacity-0");
+    const nav = screen.getByRole("navigation");
+
+    // initial state: hidden on mobile (class includes opacity-0)
+    expect(nav.className).toEqual(expect.stringContaining("opacity-0"));
+
+    // open
     fireEvent.click(button);
-    expect(screen.getByRole("navigation")).toHaveClass("opacity-100");
+    expect(nav.className).toEqual(expect.stringContaining("opacity-100"));
+
+    // close
     fireEvent.click(button);
-    expect(screen.getByRole("navigation")).toHaveClass("opacity-0");
+    expect(nav.className).toEqual(expect.stringContaining("opacity-0"));
   });
 });
