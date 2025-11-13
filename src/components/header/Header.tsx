@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { signOut } from 'aws-amplify/auth';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const Header = () => {
@@ -76,27 +75,8 @@ const Header = () => {
                                         Tu cuenta
                                     </NavLink>
                                     <div className=" w-full border-2 border-white lg:hidden" />
-                                    <a
-                                        onClick={async () => await signOut()}
-                                        className="text-white uppercase font-bold hover:text-orange-500 flex items-center gap-2 cursor-pointer
-                                            lg:border lg:border-orange-400 lg:rounded-lg lg:px-3 lg:py-1
-                                            lg:text-orange-500 lg:bg-white/10 lg:shadow-sm
-                                            lg:transition-colors lg:hover:bg-orange-100/20"
-                                        style={{ fontWeight: 900 }}
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-5 w-5 text-orange-400"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            strokeWidth={2}
-                                            aria-hidden="true"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
-                                        </svg>
-                                        Cerrar sesión
-                                    </a>
+                                    {/* Removed the extra account button — navigation to user page is available via the NavLink above.
+                                        The session / account actions are now on the User page itself. */}
                                 </>
                             )}
                         </nav>

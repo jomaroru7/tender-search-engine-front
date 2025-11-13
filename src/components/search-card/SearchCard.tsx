@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteAlert } from "../../services/tenders/tendersService";
+import { deleteSearch } from "../../services/tenders/alertsService";
 
 export type SavedSearch = {
   invoicing?: number;
@@ -40,7 +40,7 @@ const SearchCard = ({ search, onRestore, onDeleted }: SearchCardProps) => {
         cpv_list: search.cpv_list ?? [],
         exact_place: !!search.exact_place,
       };
-      const res = await deleteAlert(payload);
+      const res = await deleteSearch(payload);
       if (res.status === 200) {
         toast.success("Búsqueda eliminada.");
         onDeleted?.(search);

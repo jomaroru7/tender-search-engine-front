@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getTenderDetailData } from "../services/tenders/tendersService";
+import { getTenderDetailData } from "../services/tenders/tenderService";
 import type { TenderDetailData } from "../models/TendersFront";
 
 const TenderDetailPage = () => {

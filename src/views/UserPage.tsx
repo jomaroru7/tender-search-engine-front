@@ -2,14 +2,14 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getSavedAlerts } from "../services/tenders/tendersService";
+import { getSavedSearches } from "../services/tenders/alertsService";
 import SearchCard from "../components/search-card/SearchCard";
 import type { SavedSearch } from "../components/search-card/SearchCard";
 import { setTendersData } from "../store/slices/tenderSlice";
 import type { AppDispatch } from "../store";
 
 const UserPage = () => {
-  const { user } = useAuthenticator((ctx) => [ctx.user]);
+  const { user, signOut } = useAuthenticator((ctx) => [ctx.user, ctx.signOut]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const UserPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await getSavedAlerts();
+        const res = await getSavedSearches();
         if (!mounted) return;
         if (res.status === 200) {
           const data = res.data;
@@ -113,46 +113,74 @@ const UserPage = () => {
           {email
             ? `Sesión iniciada como ${email}`
             : user
-            ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
-            : "No ha iniciado sesión"}
+              ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
+              : "No ha iniciado sesión"}
         </p>
         <div className="mt-3">
-          <button
-            type="button"
-            className="bg-red-600 text-white px-3 py-1 rounded disabled:opacity-50"
-            onClick={() => {
-              // delete account action will be implemented later
-              // eslint-disable-next-line no-console
-              console.log("Delete account clicked (not implemented)");
-              alert("Delete account functionality not implemented yet.");
-            }}
-          >
-            Borrar cuenta
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              className="bg-slate-700 text-white px-3 py-1 rounded disabled:opacity-50 border border-slate-600 hover:bg-slate-800"
+              onClick={async () => {
+                try {
+                  await signOut();
+                } catch (err) {
+                  // eslint-disable-next-line no-console
+                  console.error("signOut failed", err);
+                } finally {
+                  navigate("/login");
+                }
+              }}
+            >
+              Cerrar sesión
+            </button>
+            <button
+              type="button"
+              className="bg-red-600 text-white px-3 py-1 rounded disabled:opacity-50"
+              onClick={() => {
+                // delete account action will be implemented later
+                // eslint-disable-next-line no-console
+                console.log("Delete account clicked (not implemented)");
+                alert("Delete account functionality not implemented yet.");
+              }}
+            >
+              Borrar cuenta
+            </button>
+          </div>
         </div>
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">Alertas guardadas</h2>
+        <h2 className="text-lg font-semibold mb-2">Búsquedas guardadas</h2>
 
-        {loading && <div>Cargando alertas guardadas...</div>}
+        {loading && <div>Cargando búsquedas guardadas...</div>}
         {error && <div className="text-red-600">Error: {error}</div>}
 
         {!loading && !error && (!saved || saved.length === 0) && (
-          <div className="text-slate-600">No se han encontrado alertas guardadas.</div>
+          <div className="text-slate-600">No se han encontrado búsquedas guardadas.</div>
         )}
 
         {!loading && saved && saved.length > 0 && (
-          <ul className="space-y-3">
-            {saved.map((s, idx) => {
-              const key = s.timestamp ?? s.ttl ?? idx;
-              return (
-                <li key={key}>
-                  <SearchCard search={s} onRestore={handleRestore} />
-                </li>
-              );
-            })}
-          </ul>
+          <div className="max-h-128 overflow-y-auto pr-2">
+            <ul className="space-y-3">
+              {saved.map((s, idx) => {
+                const key = s.timestamp ?? s.ttl ?? idx;
+                return (
+                  <li key={key}>
+                    <SearchCard
+                      search={s}
+                      onRestore={handleRestore}
+                      onDeleted={(deleted) =>
+                        setSaved((prev) =>
+                          prev ? prev.filter((x) => (x.timestamp ?? x.ttl) !== (deleted.timestamp ?? deleted.ttl)) : null
+                        )
+                      }
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
       </section>
     </main>

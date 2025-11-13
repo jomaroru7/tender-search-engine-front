@@ -5,7 +5,8 @@ import type { RootState, AppDispatch } from "../store";
 import CardsGrid from "../components/cards-grid/CardsGrid";
 import TendersSearchForm from "../components/tenders-search-form/TendersSearchForm";
 import Pagination from "../components/pagination/Pagination";
-import { getTendersCardsData, saveAlert } from "../services/tenders/tendersService";
+import { getTendersCardsData } from "../services/tenders/searchService";
+import { saveSearch } from "../services/tenders/alertsService";
 import { setTendersData } from "../store/slices/tenderSlice";
 import { toast } from "react-toastify";
 
@@ -126,7 +127,7 @@ function IndexPage() {
         exact_place: !!(filters as any).exact_place,
       };
 
-      const res = await saveAlert(payload);
+      const res = await saveSearch(payload);
       if (res.status === 200) {
         toast.success("Búsqueda guardada correctamente.");
       } else if (res.status === 422) {
