@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { getSavedSearches } from "../services/tenders/tendersService";
+import SearchCard from "../components/search-card/SearchCard";
+import type { SavedSearch } from "../components/search-card/SearchCard";
 
 const UserPage = () => {
   const { user } = useAuthenticator((ctx) => [ctx.user]);
   const [loading, setLoading] = useState(false);
-  const [saved, setSaved] = useState<any[] | null>(null);
+  const [saved, setSaved] = useState<SavedSearch[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
 
@@ -18,14 +20,12 @@ const UserPage = () => {
         const res = await getSavedSearches();
         if (!mounted) return;
         if (res.status === 200) {
-          // If backend returns the user object with alerts, use alerts array
           const data = res.data;
           if (data) {
             if (data.email) setEmail(String(data.email));
             if (Array.isArray(data.alerts)) {
               setSaved(data.alerts);
             } else if (Array.isArray(data)) {
-              // fallback: if API returned array directly
               setSaved(data);
             } else {
               setSaved([]);
@@ -50,6 +50,13 @@ const UserPage = () => {
     };
   }, []);
 
+  const handleRestore = useCallback((s: SavedSearch) => {
+    // future: implement restore behaviour (apply filters and fetch)
+    // eslint-disable-next-line no-console
+    console.log("Restore saved search (not implemented).", s);
+    alert("Restaurar búsqueda guardada no implementado aún.");
+  }, []);
+
   return (
     <main className="p-6">
       <h1 className="text-2xl font-bold mb-4">Usuario</h1>
@@ -60,8 +67,8 @@ const UserPage = () => {
           {email
             ? `Sesión iniciada como ${email}`
             : user
-            ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
-            : "No ha iniciado sesión"}
+              ? `Sesión iniciada como ${(user as any).attributes?.email ?? "unknown"}`
+              : "No ha iniciado sesión"}
         </p>
         <div className="mt-3">
           <button
@@ -94,39 +101,8 @@ const UserPage = () => {
             {saved.map((s, idx) => {
               const key = s.timestamp ?? s.ttl ?? idx;
               return (
-                <li key={key} className="p-3 border rounded bg-white">
-                  <div className="flex justify-between items-start">
-                    <div className="text-sm text-slate-700">
-                      <div>
-                        <strong>Facturación:</strong>{" "}
-                        {String(s.invoicing ?? (s.filters && s.filters.invoicing) ?? "")}
-                      </div>
-                      <div>
-                        <strong>Ámbito geográfico:</strong>{" "}
-                        {String(s.place ?? (s.filters && s.filters.place) ?? "")}
-                      </div>
-                      <div>
-                        <strong>Actividad de la empresa:</strong>{" "}
-                        {String(s.activity ?? (s.filters && s.filters.activity) ?? "")}
-                      </div>
-                      
-                    </div>
-
-                    <div className="ml-4">
-                      <button
-                        type="button"
-                        className="text-sm px-2 py-1 border rounded"
-                        onClick={() => {
-                          // future: implement edit / restore search
-                          // eslint-disable-next-line no-console
-                          console.log("Restaurar búsqueda guardada (no implementado).", s);
-                          alert("Restaurar búsqueda guardada no implementado aún.");
-                        }}
-                      >
-                        Restaurar
-                      </button>
-                    </div>
-                  </div>
+                <li key={key}>
+                  <SearchCard search={s} onRestore={handleRestore} />
                 </li>
               );
             })}
