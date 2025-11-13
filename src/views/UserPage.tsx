@@ -8,6 +8,9 @@ import type { SavedSearch } from "../components/search-card/SearchCard";
 import { setTendersData } from "../store/slices/tenderSlice";
 import type { AppDispatch } from "../store";
 
+// add import for reusable modal
+import ConfirmationModal from "../components/confirmation-modal/ConfirmationModal";
+
 const UserPage = () => {
   const { user, signOut } = useAuthenticator((ctx) => [ctx.user, ctx.signOut]);
   const navigate = useNavigate();
@@ -16,6 +19,7 @@ const UserPage = () => {
   const [saved, setSaved] = useState<SavedSearch[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -103,12 +107,24 @@ const UserPage = () => {
     [dispatch, navigate]
   );
 
+  // handler passed to modal
+  const handleConfirmLogout = async () => {
+    // close modal first (modal UI will show processing)
+    setConfirmLogoutOpen(false);
+    try {
+      await signOut();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("signOut failed", err);
+    } finally {
+      navigate("/login");
+    }
+  };
+
   return (
     <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Usuario</h1>
-
       <section className="mb-6">
-        <h2 className="text-lg font-semibold">Cuenta</h2>
+        <h2 className="text-lg font-semibold">Usuario</h2>
         <p className="text-sm text-slate-600">
           {email
             ? `Sesión iniciada como ${email}`
@@ -121,16 +137,8 @@ const UserPage = () => {
             <button
               type="button"
               className="bg-slate-700 text-white px-3 py-1 rounded disabled:opacity-50 border border-slate-600 hover:bg-slate-800"
-              onClick={async () => {
-                try {
-                  await signOut();
-                } catch (err) {
-                  // eslint-disable-next-line no-console
-                  console.error("signOut failed", err);
-                } finally {
-                  navigate("/login");
-                }
-              }}
+              onClick={() => setConfirmLogoutOpen(true)}
+              aria-haspopup="dialog"
             >
               Cerrar sesión
             </button>
@@ -150,6 +158,17 @@ const UserPage = () => {
         </div>
       </section>
 
+      {/* reusable confirmation modal */}
+      <ConfirmationModal
+        open={confirmLogoutOpen}
+        title="Cerrar sesión"
+        description="¿Estás seguro de que quieres cerrar la sesión? Serás redirigido a la pantalla de inicio de sesión."
+        confirmLabel="Cerrar sesión"
+        cancelLabel="Cancelar"
+        onConfirm={handleConfirmLogout}
+        onCancel={() => setConfirmLogoutOpen(false)}
+      />
+
       <section>
         <h2 className="text-lg font-semibold mb-2">Búsquedas guardadas</h2>
 
@@ -161,25 +180,29 @@ const UserPage = () => {
         )}
 
         {!loading && saved && saved.length > 0 && (
-          <div className="max-h-128 overflow-y-auto pr-2">
-            <ul className="space-y-3">
-              {saved.map((s, idx) => {
-                const key = s.timestamp ?? s.ttl ?? idx;
-                return (
-                  <li key={key}>
-                    <SearchCard
-                      search={s}
-                      onRestore={handleRestore}
-                      onDeleted={(deleted) =>
-                        setSaved((prev) =>
-                          prev ? prev.filter((x) => (x.timestamp ?? x.ttl) !== (deleted.timestamp ?? deleted.ttl)) : null
-                        )
-                      }
-                    />
-                  </li>
-                );
-              })}
-            </ul>
+          <div className="relative">
+            <div className="bg-white/60 border border-slate-200 rounded-lg shadow-sm p-2">
+              <div className="overflow-x-auto pr-2">
+                <ul className="space-y-3 flex flex-row gap-2">
+                  {saved.map((s, idx) => {
+                    const key = s.timestamp ?? s.ttl ?? idx;
+                    return (
+                      <li key={key}>
+                        <SearchCard
+                          search={s}
+                          onRestore={handleRestore}
+                          onDeleted={(deleted) =>
+                            setSaved((prev) =>
+                              prev ? prev.filter((x) => (x.timestamp ?? x.ttl) !== (deleted.timestamp ?? deleted.ttl)) : null
+                            )
+                          }
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
           </div>
         )}
       </section>
