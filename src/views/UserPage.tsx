@@ -158,7 +158,6 @@ const UserPage = () => {
         </div>
       </section>
 
-      {/* reusable confirmation modal */}
       <ConfirmationModal
         open={confirmLogoutOpen}
         title="Cerrar sesión"
