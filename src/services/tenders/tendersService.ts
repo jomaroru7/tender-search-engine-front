@@ -1,9 +1,17 @@
-import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse } from "../../models/TendersApi";
+import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse, saveSearchRequest } from "../../models/TendersApi";
 import type { CardData, TenderDetailData } from "../../models/TendersFront";
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const ENV = import.meta.env;
 
+/**
+ * Get authentication headers for requests.
+ * Tries to retrieve the Amplify session (Cognito) and extract the idToken.
+ * Returns an object with "Content-Type: application/json" and, if available,
+ * "Authorization: Bearer <token>".
+ *
+ * NOTE: errors are caught and, on failure, only Content-Type is returned.
+ */
 async function getAuthHeaders() {
     try {
         const session = await fetchAuthSession();
@@ -20,6 +28,24 @@ async function getAuthHeaders() {
     }
 }
 
+/**
+ * Execute tenders search against the /search endpoint.
+ *
+ * Parameters:
+ *  - object matching getTendersRequest (invoicing, place, activity, page, page_size, cpv_list, exact_place)
+ *
+ * Behavior:
+ *  - Builds headers via getAuthHeaders.
+ *  - POSTs to ENV.VITE_GET_TENDERS_URL + "/search" with JSON body.
+ *  - Handles specific HTTP statuses:
+ *      - 401 -> throws authentication error
+ *      - 503 -> throws service unavailable error
+ *      - any other !response.ok -> tries to parse JSON error and throws with detail
+ *  - On success returns parsed response.json() typed as getTendersResponse.
+ *
+ * Throws:
+ *  - Error for 401/503/other non-OK statuses.
+ */
 export const getTenders = async ({ invoicing, place, activity, page, page_size = 10, cpv_list, exact_place }: getTendersRequest & { exact_place?: boolean }): Promise<getTendersResponse> => {
     const headers = await getAuthHeaders();
 
@@ -54,6 +80,17 @@ export const getTenders = async ({ invoicing, place, activity, page, page_size =
         });
 };
 
+/**
+ * Convenience function to obtain the UI-friendly cards data.
+ *
+ * Parameters:
+ *  - object matching getTendersRequest (page and page_size optional)
+ *
+ * Behavior:
+ *  - Calls getTenders with the provided params and transforms the response
+ *    to the structure used by the UI: CardData[], page, pageSize, totalResults.
+ *  - Does not catch errors; lets the caller handle them.
+ */
 export const getTendersCardsData = ({
     invoicing,
     place,
@@ -77,6 +114,18 @@ export const getTendersCardsData = ({
         }));
 };
 
+/**
+ * Fetch detailed tender data from /get-tender.
+ *
+ * Parameters:
+ *  - { ID } as defined in getTenderRequest
+ *
+ * Behavior:
+ *  - Builds headers with getAuthHeaders().
+ *  - POSTs to ENV.VITE_GET_TENDERS_URL + "/get-tender" with { ID }.
+ *  - Handles 401, 503 and other non-OK statuses similarly to getTenders by throwing Error.
+ *  - Returns parsed response JSON typed as getTenderResponse.
+ */
 export const getTender = async ({ ID }: getTenderRequest): Promise<getTenderResponse> => {
     const headers = await getAuthHeaders();
 
@@ -105,11 +154,27 @@ export const getTender = async ({ ID }: getTenderRequest): Promise<getTenderResp
         });
 };
 
+/**
+ * Convenience that transforms the getTender response into TenderDetailData
+ * used by the UI.
+ *
+ * Parameters:
+ *  - { ID } same as getTender
+ *
+ * Behavior:
+ *  - Calls getTender and maps the returned object into TenderDetailData using tenderResponseToTenderDetailData.
+ */
 export const getTenderDetailData = ({ ID }: getTenderRequest): Promise<TenderDetailData> => {
     return getTender({ ID })
         .then(id => tenderResponseToTenderDetailData(id));
 };
 
+/**
+ * Map the API response (getTendersResponse) to an array of CardData
+ * consumable by the UI components (cards grid).
+ *
+ * Note: assumes tenders.results exists and has the expected shape.
+ */
 const tendersResponseToCardsData = (tenders: getTendersResponse): CardData[] => {
     return tenders.results.map(tender => ({
         id: tender.ID,
@@ -123,6 +188,13 @@ const tendersResponseToCardsData = (tenders: getTendersResponse): CardData[] => 
     }));
 };
 
+/**
+ * Map an individual tender response to TenderDetailData.
+ * Renames fields from the payload to the format used by the UI.
+ *
+ * Warning: some fields may be missing in the payload; this implementation
+ * assumes the API returns the exact mapped names.
+ */
 const tenderResponseToTenderDetailData = (tender: getTenderResponse): TenderDetailData => {
     return {
         id: tender.ID,
@@ -145,4 +217,62 @@ const tenderResponseToTenderDetailData = (tender: getTenderResponse): TenderDeta
         administrativeDocumexnt: tender.Pliego_admvo,
         specificationsSheet: tender.Pliego_prescripciones
     };
+};
+
+/**
+ * Save a user's search filters on the backend.
+ * Returns an object describing result:
+ *  - { status: 200, data } on success
+ *  - { status: 422, errors } on validation error
+ *  - { status: <code>, errors } for other server errors
+ *  - { status: 0, errors } for network/unexpected errors
+ *
+ * Implementation:
+ *  - Uses getAuthHeaders() for headers (same behavior as getTenders).
+ *  - POSTs to ENV.VITE_GET_TENDERS_URL + "/user/search" with JSON body.
+ *  - Attempts to parse response.json() and logs to console for debugging.
+ *  - Returns objects with status and data/errors instead of throwing exceptions,
+ *    allowing callers to handle results without try/catch if desired.
+ */
+export const saveSearch = async (search: saveSearchRequest): Promise<{ status: number; data?: any; errors?: any }> => {
+    const headers = await getAuthHeaders();
+    const url = ENV.VITE_GET_TENDERS_URL + "/user/search";
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+                invoicing: search.invoicing,
+                place: search.place,
+                activity: search.activity,
+                page: search.page,
+                page_size: search.page_size,
+                cpv_list: search.cpv_list,
+                exact_place: !!search.exact_place,
+            }),
+        });
+
+        const parsed = await response.json().catch(() => null);
+        // eslint-disable-next-line no-console
+        console.log("saveSearch - response.json:", parsed, "status:", response.status, "url:", url);
+
+        if (response.status === 200) {
+            return { status: 200, data: parsed };
+        }
+
+        if (response.status === 422) {
+            return { status: 422, errors: parsed };
+        }
+
+        if (!response.ok) {
+            return { status: response.status, errors: parsed || `Server error: ${response.status}` };
+        }
+
+        return { status: response.status, data: parsed };
+    } catch (err: any) {
+        // eslint-disable-next-line no-console
+        console.error("saveSearch exception", err);
+        return { status: 0, errors: String(err?.message || err) };
+    }
 };

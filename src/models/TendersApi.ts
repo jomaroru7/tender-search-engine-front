@@ -8,6 +8,16 @@ export type getTendersRequest = {
     exact_place?: boolean
 }
 
+export type saveSearchRequest = {
+    invoicing: number,
+    place: string,
+    activity: string,
+    page?: number,
+    page_size?: number,
+    cpv_list?: string[] | number[],
+    exact_place?: boolean
+}
+
 export type tendersResults = {
     Codigo_CPV: string[],
     Contratacion: string,
