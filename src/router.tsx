@@ -5,6 +5,7 @@ import Layout from "./layouts/Layout";
 import CpvListPage from "./views/CpvListPage";
 import TenderDetailPage from "./views/TenderDetailPage";
 import LoginPage from "./views/LoginPage";
+import ApiDocsPage from "./views/ApiDocsPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -21,6 +22,7 @@ function AppRouter() {
     <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/api-docs" element={<ApiDocsPage />} />
           <Route element={<Layout />}>
             <Route
               path="/"
