@@ -1,4 +1,4 @@
-import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse, saveSearchRequest } from "../../models/TendersApi";
+import type { getTenderRequest, getTenderResponse, getTendersRequest, getTendersResponse, saveSearchRequest as saveAlertRequest } from "../../models/TendersApi";
 import type { CardData, TenderDetailData } from "../../models/TendersFront";
 import { fetchAuthSession } from 'aws-amplify/auth';
 
@@ -220,7 +220,7 @@ const tenderResponseToTenderDetailData = (tender: getTenderResponse): TenderDeta
 };
 
 /**
- * Save a user's search filters on the backend.
+ * Save a user's search filters on the backend as alert.
  * Returns an object describing result:
  *  - { status: 200, data } on success
  *  - { status: 422, errors } on validation error
@@ -234,7 +234,7 @@ const tenderResponseToTenderDetailData = (tender: getTenderResponse): TenderDeta
  *  - Returns objects with status and data/errors instead of throwing exceptions,
  *    allowing callers to handle results without try/catch if desired.
  */
-export const saveSearch = async (search: saveSearchRequest): Promise<{ status: number; data?: any; errors?: any }> => {
+export const saveAlert = async (search: saveAlertRequest): Promise<{ status: number; data?: any; errors?: any }> => {
     const headers = await getAuthHeaders();
     const url = ENV.VITE_GET_TENDERS_URL + "/user/search";
 
@@ -278,7 +278,7 @@ export const saveSearch = async (search: saveSearchRequest): Promise<{ status: n
 };
 
 /**
- * Retrieve the authenticated user's saved searches.
+ * Retrieve the authenticated user's saved alerts.
  *
  * Returns an object describing result:
  *  - { status: 200, data } on success
@@ -291,7 +291,7 @@ export const saveSearch = async (search: saveSearchRequest): Promise<{ status: n
  *  - GET to ENV.VITE_GET_TENDERS_URL + "/user/search".
  *  - Attempts to parse response body as JSON (falls back to text) and logs for debugging.
  */
-export const getSavedSearches = async (): Promise<{ status: number; data?: any; errors?: any }> => {
+export const getSavedAlerts = async (): Promise<{ status: number; data?: any; errors?: any }> => {
     const headers = await getAuthHeaders();
     const url = ENV.VITE_GET_TENDERS_URL + "/user/search";
 
@@ -329,6 +329,71 @@ export const getSavedSearches = async (): Promise<{ status: number; data?: any; 
     } catch (err: any) {
         // eslint-disable-next-line no-console
         console.error("getSavedSearches exception", err);
+        return { status: 0, errors: String(err?.message || err) };
+    }
+};
+
+/**
+ * Delete a saved user search (alert) on the backend.
+ *
+ * Returns an object describing result:
+ *  - { status: 200, data } on success
+ *  - { status: 422, errors } on validation error
+ *  - { status: <code>, errors } for other server errors
+ *  - { status: 0, errors } for network/unexpected errors
+ *
+ * Implementation notes:
+ *  - Uses getAuthHeaders() for headers (same as saveSearch/getSavedSearches).
+ *  - Sends DELETE to ENV.VITE_GET_TENDERS_URL + "/user/search" with the search payload in the body.
+ *  - Parses response body robustly (JSON preferred, fallback to text) and logs for debugging.
+ */
+export const deleteAlert = async (search: saveAlertRequest): Promise<{ status: number; data?: any; errors?: any }> => {
+    const headers = await getAuthHeaders();
+    const url = ENV.VITE_GET_TENDERS_URL + "/user/search";
+
+    try {
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers,
+            body: JSON.stringify({
+                invoicing: search.invoicing,
+                place: search.place,
+                activity: search.activity,
+                page: search.page,
+                page_size: search.page_size,
+                cpv_list: search.cpv_list,
+                exact_place: !!search.exact_place,
+            }),
+        });
+
+        // robust parsing: try json, fallback to text
+        const rawText = await response.text().catch(() => "");
+        let parsed: any = null;
+        try {
+            parsed = rawText ? JSON.parse(rawText) : null;
+        } catch {
+            parsed = rawText;
+        }
+
+        // eslint-disable-next-line no-console
+        console.log("deleteSearch - response:", { url, status: response.status, parsed });
+
+        if (response.status === 200) {
+            return { status: 200, data: parsed };
+        }
+
+        if (response.status === 422) {
+            return { status: 422, errors: parsed };
+        }
+
+        if (!response.ok) {
+            return { status: response.status, errors: parsed || `Failed to delete search: server returned ${response.status}` };
+        }
+
+        return { status: response.status, data: parsed };
+    } catch (err: any) {
+        // eslint-disable-next-line no-console
+        console.error("deleteSearch exception", err);
         return { status: 0, errors: String(err?.message || err) };
     }
 };

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getSavedSearches } from "../services/tenders/tendersService";
+import { getSavedAlerts } from "../services/tenders/tendersService";
 import SearchCard from "../components/search-card/SearchCard";
 import type { SavedSearch } from "../components/search-card/SearchCard";
 import { setTendersData } from "../store/slices/tenderSlice";
@@ -23,7 +23,7 @@ const UserPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await getSavedSearches();
+        const res = await getSavedAlerts();
         if (!mounted) return;
         if (res.status === 200) {
           const data = res.data;
@@ -133,13 +133,13 @@ const UserPage = () => {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold mb-2">Búsquedas guardadas</h2>
+        <h2 className="text-lg font-semibold mb-2">Alertas guardadas</h2>
 
-        {loading && <div>Cargando búsquedas guardadas...</div>}
+        {loading && <div>Cargando alertas guardadas...</div>}
         {error && <div className="text-red-600">Error: {error}</div>}
 
         {!loading && !error && (!saved || saved.length === 0) && (
-          <div className="text-slate-600">No se han encontrado búsquedas guardadas.</div>
+          <div className="text-slate-600">No se han encontrado alertas guardadas.</div>
         )}
 
         {!loading && saved && saved.length > 0 && (

@@ -3,7 +3,7 @@ import {
   getTendersCardsData,
   getTender,
   getTenderDetailData,
-  saveSearch,
+  saveAlert,
 } from "./tendersService";
 
 const mockUrl = "https://mock-tenders-endpoint.com/api";
@@ -184,7 +184,7 @@ describe("tendersService extra", () => {
         json: () => Promise.resolve("string"),
       } as any);
 
-      const res = await saveSearch({
+      const res = await saveAlert({
         invoicing: 0,
         place: "x",
         activity: "a",
@@ -209,7 +209,7 @@ describe("tendersService extra", () => {
         json: () => Promise.resolve(errorBody),
       } as any);
 
-      const res = await saveSearch({
+      const res = await saveAlert({
         invoicing: 0,
         place: "",
         activity: "a",
@@ -225,7 +225,7 @@ describe("tendersService extra", () => {
     it("returns status 0 on network error", async () => {
       global.fetch = vi.fn().mockRejectedValue(new Error("Network failure"));
 
-      const res = await saveSearch({
+      const res = await saveAlert({
         invoicing: 0,
         place: "x",
         activity: "a",
