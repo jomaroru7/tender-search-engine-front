@@ -4,15 +4,15 @@ import { requestWithAuth, getAuthHeaders } from "../_http";
 const ENV = import.meta.env;
 
 /**
- * Actualiza la información del usuario en el backend.
+ * Updates the user's information in the backend.
  *
- * - Envía un `POST` a `VITE_SET_USER_URL` con los campos del formulario.
- * - Añade los encabezados de autenticación obtenidos desde `getAuthHeaders`.
- * - Lanza errores legibles para estados 401/503 y para respuestas no-ok.
+ * - Sends a `POST` to `VITE_SET_USER_URL` with the provided form fields.
+ * - Adds authentication headers obtained from `getAuthHeaders`.
+ * - Throws readable errors for 401/503 responses and for non-ok responses.
  *
- * @param payload - Objeto con los datos del usuario y la empresa.
- * @returns La respuesta JSON del endpoint `setUser` (tipada como `setUserResponse`).
- * @throws Error con mensaje claro en caso de error de autenticación o error del servidor.
+ * @param payload - Object containing the user's and company's data.
+ * @returns The JSON response from the `setUser` endpoint (typed as `setUserResponse`).
+ * @throws Error with a clear message in case of authentication issues or server errors.
  */
 export const setUser = async ({
   email,
@@ -52,16 +52,16 @@ export const setUser = async ({
 };
 
 /**
- * Elimina la cuenta del usuario autenticado.
+ * Deletes the authenticated user's account.
  *
- * - Llama a `DELETE /user/delete` utilizando el helper `requestWithAuth`
- *   (que ya añade la URL base y los encabezados de auth).
- * - Devuelve el JSON del backend cuando el servidor responde con 200,
- *   por ejemplo `{ message: string, deleted: true }`.
- * - Lanza errores claros para 401 y otros códigos de error.
+ * - Calls `DELETE /user/delete` using the `requestWithAuth` helper
+ *   (which already adds the base URL and auth headers).
+ * - Returns the backend JSON when the server responds with 200,
+ *   for example `{ message: string, deleted: true }`.
+ * - Throws clear errors for 401 and other error codes.
  *
- * @returns Objeto con `message` y `deleted` si la eliminación fue correcta.
- * @throws Error si la petición no es autorizada o hay otro error del servidor.
+ * @returns Object containing `message` and `deleted` if the deletion succeeded.
+ * @throws Error if the request is unauthorized or there is another server error.
  */
 export const deleteUser = async (): Promise<{ message?: string; deleted?: boolean }> => {
   const res = await requestWithAuth<{ message?: string; deleted?: boolean }>("/user/delete", {

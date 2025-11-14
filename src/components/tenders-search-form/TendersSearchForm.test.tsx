@@ -49,7 +49,7 @@ describe("TendersSearchForm", () => {
     fireEvent.change(localizacion, { target: { value: "Barcelona" } });
     fireEvent.change(descripcion, { target: { value: "Obras públicas" } });
 
-    expect(presupuesto).toHaveValue("20000");
+    expect(presupuesto).toHaveValue("20.000");
     expect(localizacion).toHaveValue("Barcelona");
     expect(descripcion).toHaveValue("Obras públicas");
   });
