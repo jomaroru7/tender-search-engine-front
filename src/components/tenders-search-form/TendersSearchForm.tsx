@@ -10,6 +10,9 @@ type Props = {
   loading?: boolean;
 };
 
+const formatNumberWithDots = (num: number) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
 const TendersSearchForm = ({ onSearch, loading }: Props) => {
   const company = useSelector((state: RootState) => state.company);
   const [invoicing, setInvoicing] = useState<number>(Number(company.budget) || 0);
@@ -47,7 +50,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              value={invoicing === 0 ? "" : String(invoicing)}
+              value={invoicing === 0 ? "" : formatNumberWithDots(invoicing)}
               onChange={e => {
                 const val = e.target.value.replace(/\D/g, "");
                 setInvoicing(val ? Number(val) : 0);
