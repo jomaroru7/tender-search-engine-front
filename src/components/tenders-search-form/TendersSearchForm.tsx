@@ -49,7 +49,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               data-testid="input-budget"
               type="text"
               inputMode="numeric"
-              pattern="[0-9]*"
+              pattern="[0-9.]*"
               value={invoicing === 0 ? "" : formatNumberWithDots(invoicing)}
               onChange={e => {
                 const val = e.target.value.replace(/\D/g, "");
