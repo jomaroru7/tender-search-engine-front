@@ -11,6 +11,12 @@ import type { AppDispatch } from "../store";
 // add import for reusable modal
 import ConfirmationModal from "../components/confirmation-modal/ConfirmationModal";
 
+// import deleteUser service
+import { deleteUser } from "../services/users/usersService";
+
+// toast
+import { toast } from "react-toastify";
+
 const UserPage = () => {
   const { user, signOut } = useAuthenticator((ctx) => [ctx.user, ctx.signOut]);
   const navigate = useNavigate();
@@ -20,6 +26,10 @@ const UserPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
+
+  // new state for delete account modal / processing
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -116,8 +126,43 @@ const UserPage = () => {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("signOut failed", err);
+      toast.error("No se pudo cerrar sesión correctamente.");
     } finally {
       navigate("/login");
+    }
+  };
+
+  // handler to delete account (called after user confirms)
+  const handleConfirmDelete = async () => {
+    // close modal
+    setConfirmDeleteOpen(false);
+    setDeletingAccount(true);
+    try {
+      const result = await deleteUser();
+      // show toast instead of alert
+      if (result && result.deleted) {
+        toast.success(result.message || "La cuenta ha sido eliminada correctamente.");
+      } else {
+        toast.info(result.message || "Respuesta recibida del servidor.");
+      }
+
+      // try to sign out the user and redirect to login
+      try {
+        await signOut();
+      } catch (err) {
+        // ignore signOut error but log it
+        // eslint-disable-next-line no-console
+        console.warn("signOut after delete failed", err);
+      } finally {
+        navigate("/login");
+      }
+    } catch (err: any) {
+      // show error to user with toast
+      // eslint-disable-next-line no-console
+      console.error("deleteUser failed", err);
+      toast.error(`No se pudo eliminar la cuenta: ${String(err?.message || err)}`);
+    } finally {
+      setDeletingAccount(false);
     }
   };
 
@@ -145,12 +190,7 @@ const UserPage = () => {
             <button
               type="button"
               className="bg-red-600 text-white px-3 py-1 rounded disabled:opacity-50"
-              onClick={() => {
-                // delete account action will be implemented later
-                // eslint-disable-next-line no-console
-                console.log("Delete account clicked (not implemented)");
-                alert("Delete account functionality not implemented yet.");
-              }}
+              onClick={() => setConfirmDeleteOpen(true)}
             >
               Borrar cuenta
             </button>
@@ -166,6 +206,16 @@ const UserPage = () => {
         cancelLabel="Cancelar"
         onConfirm={handleConfirmLogout}
         onCancel={() => setConfirmLogoutOpen(false)}
+      />
+
+      <ConfirmationModal
+        open={confirmDeleteOpen}
+        title="Borrar cuenta"
+        description="¿Estás seguro de que quieres eliminar tu cuenta? Esta acción es irreversible y eliminará tu perfil en el sistema."
+        confirmLabel={deletingAccount ? "Borrando..." : "Borrar cuenta"}
+        cancelLabel="Cancelar"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmDeleteOpen(false)}
       />
 
       <section>
