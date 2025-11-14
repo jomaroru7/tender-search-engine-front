@@ -33,8 +33,7 @@ const InfoTooltip = ({ text, className = "", iconColor= "currentColor", iconBgCo
       </button>
       {visible && (
         <div
-          className={`absolute left-1/2 -translate-x-1/2 mt-2 z-50 ${tooltipBgColor} ${tooltipTextColor} text-sm rounded px-3 py-2 shadow-lg whitespace-pre-line`}
-          style={{ minWidth: "220px", maxWidth: "300px" }}
+          className={`absolute left-1/2 -translate-x-1/2 mt-2 z-50 ${tooltipBgColor} ${tooltipTextColor} text-sm rounded px-3 py-2 shadow-lg whitespace-pre-line w-[150px] lg:w-auto lg:min-w-[220px] lg: max-w-[300px]`}
           role="tooltip"
         >
           {text}
