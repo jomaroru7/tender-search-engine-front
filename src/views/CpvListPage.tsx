@@ -35,7 +35,7 @@ const CpvListPage = () => {
         onChange={e => setSearch(e.target.value)}
         className="mb-6 p-2 border rounded w-full"
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-110 overflow-y-scroll border border-slate-600 dark:border-slate-700 rounded-lg p-2">
         {filteredEntries.map(([value, label], idx) => (
           <div key={value + idx} className="flex flex-row gap-2 p-2 border-b">
             <span className="font-mono text-blue-700">{value}</span>
