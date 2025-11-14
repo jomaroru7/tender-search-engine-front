@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import SpinnerOverlay from "../spinner-overlay/SpinnerOverlay";
 import CpvMultiSelect from "../cpv-multi-select/CpvMultiSelect";
+import InfoTooltip from "../info-tooltip/InfoTooltip";
 
 type Props = {
   onSearch: (filters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => void;
@@ -27,10 +28,19 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
       {loading && (
         <SpinnerOverlay message="Estamos ejecutando la búsqueda de licitaciones con sus especificaciones. Esto puede llevar algunos minutos." />
       )}
-      <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-wrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
+      <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-nowrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
         <div className="flex flex-col lg:flex-row gap-4">
           <div>
-            <label htmlFor="input-budget" className="block text-sm font-medium mb-1 min-h-[40px]">Mayor facturación anual en los últimos tres años (€)</label>
+            <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
+              <label htmlFor="input-budget" className="block text-sm font-medium ">Mayor facturación anual en los últimos tres años (€)</label>
+              <InfoTooltip 
+                text="Introduce la cifra más alta de facturación anual que ha tenido tu empresa en los últimos tres años."
+                iconColor="text-orange-500"
+                iconBgColor="fill-white"
+                tooltipTextColor="text-black"
+                tooltipBgColor="bg-white"
+               />
+            </div>
             <input
               id="input-budget"
               data-testid="input-budget"
@@ -48,7 +58,16 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
             />
           </div>
           <div>
-            <label htmlFor="input-location" className="block text-sm font-medium mb-1 min-h-[40px]">Ámbito geográfico de actuación</label>
+            <div className=" ml-1 flex flex-row min-h-[40px] items-baseline">
+              <label htmlFor="input-location" className="block text-sm font-medium ">Ámbito geográfico de actuación</label>
+              <InfoTooltip
+                text="Introduce la provincia donde tu empresa presta sus servicios."
+                iconColor="text-orange-500"
+                iconBgColor="fill-white"
+                tooltipTextColor="text-black"
+                tooltipBgColor="bg-white"
+              />
+            </div>
             <input
               id="input-location"
               data-testid="input-location"
@@ -76,18 +95,27 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
             setSelectedCpvs={setSelectedCpvs}
             label="CPVs"
             placeholder="Buscar CPV por código o descripción..."
+            infoTooltip={{
+              text: "Códigos CPV de las actividades de tu empresa. IMPORTANTE: Seleccionar uno o varios CPVs hacen que la búsqueda sea exclusiva, haciendo que solo muestre licitaciones en las que aparezcan estos códigos.",
+              iconColor: "text-orange-500",
+              iconBgColor: "fill-white",
+              tooltipTextColor: "text-black",
+              tooltipBgColor: "bg-white",
+            }}
           />
+        <div>
+        </div>
+        </div>
           <div className="min-w-[250px] flex-1">
             <label className="block text-sm font-medium mb-1 min-h-[40px]">Descripción de la actividad de la empresa</label>
             <textarea
               data-testid="textarea-description"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil."
+              placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil. Este será el campo más importante para identificar licitaciones relevantes."
               className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
             />
           </div>
-        </div>
         <div className="flex lg:justify-end">
           <button
             type="submit"

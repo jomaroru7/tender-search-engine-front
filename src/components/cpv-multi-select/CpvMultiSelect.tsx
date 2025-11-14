@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux";
 import { useState, useId } from "react";
 import type { RootState } from "../../store";
+import type { InfoTooltipProps } from "../info-tooltip/InfoTooltip";
+import InfoTooltip from "../info-tooltip/InfoTooltip";
 
 type CpvMultiSelectProps = {
   selectedCpvs: string[];
   setSelectedCpvs: (cpvs: string[]) => void;
   label?: string;
   placeholder?: string;
+  infoTooltip?: InfoTooltipProps;
 };
 
 const CpvMultiSelect = ({
@@ -14,6 +17,7 @@ const CpvMultiSelect = ({
   setSelectedCpvs,
   label = "CPVs",
   placeholder = "Buscar CPV por código o descripción...",
+  infoTooltip,
 }: CpvMultiSelectProps) => {
   const cpvMap = useSelector((state: RootState) => state.cpv.cpvs);
   const cpvEntries = Object.entries(cpvMap);
@@ -43,7 +47,12 @@ const CpvMultiSelect = ({
 
   return (
     <div className="min-w-[250px] flex-1">
-      <label htmlFor={inputId} className="block text-sm font-medium  mb-1 min-h-[40px]">{label}</label>
+      <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
+        <label htmlFor={inputId} className="block text-sm font-medium ">{label}</label>
+        {infoTooltip && (
+          <InfoTooltip text={infoTooltip.text} iconColor={infoTooltip.iconColor} iconBgColor={infoTooltip.iconBgColor} tooltipTextColor={infoTooltip.tooltipTextColor} tooltipBgColor={infoTooltip.tooltipBgColor} />
+        )}
+      </div>
       <input
         id={inputId}
         type="text"
