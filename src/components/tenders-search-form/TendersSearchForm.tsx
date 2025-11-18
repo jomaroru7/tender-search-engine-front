@@ -8,12 +8,13 @@ import InfoTooltip from "../info-tooltip/InfoTooltip";
 type Props = {
   onSearch: (filters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => void;
   loading?: boolean;
+  loadingMessage?: string;
 };
 
 const formatNumberWithDots = (num: number) =>
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
-const TendersSearchForm = ({ onSearch, loading }: Props) => {
+const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
   const company = useSelector((state: RootState) => state.company);
   const [invoicing, setInvoicing] = useState<number>(Number(company.budget) || 0);
   const [place, setPlace] = useState<string>(company.location || "");
@@ -29,7 +30,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
   return (
     <>
       {loading && (
-        <SpinnerOverlay message="Estamos ejecutando la búsqueda de licitaciones con sus especificaciones. Esto puede llevar algunos minutos." />
+        <SpinnerOverlay message={loadingMessage} />
       )}
       <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-nowrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
         <div className="flex flex-col lg:flex-row gap-4">

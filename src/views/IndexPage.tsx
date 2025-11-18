@@ -19,6 +19,7 @@ function IndexPage() {
   const { tenders, totalResults, page, pageSize, filters } = useSelector((state: RootState) => state.tender);
 
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
 
   // Tour functionality
@@ -46,9 +47,11 @@ function IndexPage() {
   const fetchTenders = useCallback(
     async (
       filtersToUse: { invoicing: number; place: string; activity: string; cpv_list?: string[]; exact_place?: boolean },
-      pageToUse: number
+      pageToUse: number,
+      message?: string
     ) => {
       setLoading(true);
+      setLoadingMessage(message);
       try {
         const data = await getTendersCardsData({
           ...filtersToUse,
@@ -71,6 +74,7 @@ function IndexPage() {
         toast.error(error?.message || "No se pudieron obtener las licitaciones.");
       } finally {
         setLoading(false);
+        setLoadingMessage(undefined);
       }
     },
     [dispatch, pageSize]
@@ -115,7 +119,11 @@ function IndexPage() {
 
   const handleSearch = useCallback(
     async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => {
-      await fetchTenders(newFilters, 1);
+      await fetchTenders(
+        newFilters, 
+        1, 
+        "Estamos ejecutando la búsqueda de licitaciones con sus especificaciones. Esto puede llevar algunos minutos."
+      );
       toast.success("Licitaciones actualizadas.");
     },
     [fetchTenders]
@@ -123,6 +131,7 @@ function IndexPage() {
 
   const handlePageChange = useCallback(
     async (newPage: number) => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       await fetchTenders(filters, newPage);
     },
     [fetchTenders, filters]
@@ -184,7 +193,11 @@ function IndexPage() {
         buttonText="Ver tutorial"
       />
 
-      <TendersSearchForm onSearch={handleSearch} loading={loading} />
+      <TendersSearchForm 
+        onSearch={handleSearch} 
+        loading={loading}
+        loadingMessage={loadingMessage}
+      />
 
       <div className="flex items-center justify-between mb-4 px-2">
         <div />
