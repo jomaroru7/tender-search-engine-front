@@ -1,10 +1,11 @@
 import type { CallBackProps, Step } from 'react-joyride';
 import Joyride from 'react-joyride';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import type { ReactNode } from 'react';
 
 export interface TourStep {
   target: string;
-  content: string;
+  content: string | ReactNode;
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'center' | 'auto';
   disableBeacon?: boolean;
 }
