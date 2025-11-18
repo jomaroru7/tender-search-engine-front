@@ -9,6 +9,8 @@ import { getTendersCardsData } from "../services/tenders/searchService";
 import { saveSearch } from "../services/tenders/alertsService";
 import { setTendersData } from "../store/slices/tenderSlice";
 import { toast } from "react-toastify";
+import TourGuide from '../components/tour-guide/TourGuide';
+import { useTendersTour } from '../hooks/useTendersTour';
 
 function IndexPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +20,28 @@ function IndexPage() {
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Tour functionality
+  const { run, steps, stepIndex, startTour, handleJoyrideCallback } = useTendersTour();
+
+  // Check localStorage to see if tour has been shown
+  useEffect(() => {
+    const tourShown = localStorage.getItem('tendersTourShown');
+    if (!tourShown) {
+      const timer = setTimeout(() => {
+        startTour();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [startTour]);
+
+  // Mark tour as shown when it finishes
+  const handleTourCallback = useCallback((data: any) => {
+    handleJoyrideCallback(data);
+    if (data.status === 'finished' || data.status === 'skipped') {
+      localStorage.setItem('tendersTourShown', 'true');
+    }
+  }, [handleJoyrideCallback]);
 
   const fetchTenders = useCallback(
     async (
@@ -149,6 +173,17 @@ function IndexPage() {
 
   return (
     <main className="flex flex-col">
+      <TourGuide
+        steps={steps}
+        run={run}
+        stepIndex={stepIndex}
+        onCallback={handleTourCallback}
+        onStartTour={startTour}
+        showButton={true}
+        buttonPosition="bottom-right"
+        buttonText="Ver tutorial"
+      />
+
       <TendersSearchForm onSearch={handleSearch} loading={loading} />
 
       <div className="flex items-center justify-between mb-4 px-2">
