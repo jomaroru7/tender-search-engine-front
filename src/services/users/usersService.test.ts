@@ -1,19 +1,23 @@
-import { describe, it, expect, vi, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { setUser } from "./usersService";
 
-const OLD_ENV = { ...import.meta.env };
 const API_URL = "http://fake-api/set-user";
 
 describe("setUser", () => {
+  let originalEnv: any;
+
   beforeEach(() => {
+    // Guarda el valor original
+    originalEnv = import.meta.env.VITE_SET_USER_URL;
     // @ts-ignore
     import.meta.env.VITE_SET_USER_URL = API_URL;
     vi.resetAllMocks();
   });
 
-  afterAll(() => {
+  afterEach(() => {
+    // Restaura el valor original
     // @ts-ignore
-    import.meta.env = OLD_ENV;
+    import.meta.env.VITE_SET_USER_URL = originalEnv;
   });
 
   it("devuelve la respuesta esperada en caso de éxito", async () => {

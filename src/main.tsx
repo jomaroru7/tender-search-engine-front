@@ -13,12 +13,18 @@ import Papa from 'papaparse';
 import listadoCpvRaw from './data/listado-cpv.csv?raw';
 
 
-Papa.parse(listadoCpvRaw, {
+interface CpvParseResult {
+  data: [string, string][];
+  errors: any[];
+  meta: Papa.ParseMeta;
+}
+
+Papa.parse<[string, string]>(listadoCpvRaw, {
   header: false,
   delimiter: ";",
   skipEmptyLines: true,
-  complete: (results) => {
-    const cpvObj = Object.fromEntries(results.data as [string, string][]);
+  complete: (results: CpvParseResult) => {
+    const cpvObj: Record<string, string> = Object.fromEntries(results.data);
     store.dispatch(setCpvs(cpvObj));
   }
 });

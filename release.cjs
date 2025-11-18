@@ -34,15 +34,4 @@ execSync("git push --tags");
 
 execSync("npm run build", { stdio: "inherit" });
 
-if (fs.existsSync("dist/.git")) {
-  process.chdir("dist");
-  execSync("git add .");
-  try {
-    execSync(`git commit -m "Version ${newVersion}"`);
-  } catch (e) {
-    console.log("No hay cambios en dist para commitear");
-  }
-  execSync("git push");
-}
-
 console.log(`Release ${newVersion} completado.`);

@@ -64,7 +64,6 @@ The script will:
 2. Commit the change and create a git tag.
 3. Push the commit and tag to the repository.
 4. Run the production build.
-5. Commit and push the contents of the `dist` folder (if it is a git repo).
 
 ---
 

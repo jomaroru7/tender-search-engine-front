@@ -9,6 +9,8 @@ import { getTendersCardsData } from "../services/tenders/searchService";
 import { saveSearch } from "../services/tenders/alertsService";
 import { setTendersData } from "../store/slices/tenderSlice";
 import { toast } from "react-toastify";
+import TourGuide from '../components/tour-guide/TourGuide';
+import { useTendersTour } from '../hooks/useTendersTour';
 
 function IndexPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,14 +19,39 @@ function IndexPage() {
   const { tenders, totalResults, page, pageSize, filters } = useSelector((state: RootState) => state.tender);
 
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
+
+  // Tour functionality
+  const { run, steps, stepIndex, startTour, handleJoyrideCallback } = useTendersTour();
+
+  // Check localStorage to see if tour has been shown
+  useEffect(() => {
+    const tourShown = localStorage.getItem('tendersTourShown');
+    if (!tourShown) {
+      const timer = setTimeout(() => {
+        startTour();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [startTour]);
+
+  // Mark tour as shown when it finishes
+  const handleTourCallback = useCallback((data: any) => {
+    handleJoyrideCallback(data);
+    if (data.status === 'finished' || data.status === 'skipped') {
+      localStorage.setItem('tendersTourShown', 'true');
+    }
+  }, [handleJoyrideCallback]);
 
   const fetchTenders = useCallback(
     async (
       filtersToUse: { invoicing: number; place: string; activity: string; cpv_list?: string[]; exact_place?: boolean },
-      pageToUse: number
+      pageToUse: number,
+      message?: string
     ) => {
       setLoading(true);
+      setLoadingMessage(message);
       try {
         const data = await getTendersCardsData({
           ...filtersToUse,
@@ -47,6 +74,7 @@ function IndexPage() {
         toast.error(error?.message || "No se pudieron obtener las licitaciones.");
       } finally {
         setLoading(false);
+        setLoadingMessage(undefined);
       }
     },
     [dispatch, pageSize]
@@ -91,7 +119,11 @@ function IndexPage() {
 
   const handleSearch = useCallback(
     async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => {
-      await fetchTenders(newFilters, 1);
+      await fetchTenders(
+        newFilters, 
+        1, 
+        "Estamos ejecutando la búsqueda de licitaciones con sus especificaciones. Esto puede llevar algunos minutos."
+      );
       toast.success("Licitaciones actualizadas.");
     },
     [fetchTenders]
@@ -99,6 +131,7 @@ function IndexPage() {
 
   const handlePageChange = useCallback(
     async (newPage: number) => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       await fetchTenders(filters, newPage);
     },
     [fetchTenders, filters]
@@ -149,7 +182,22 @@ function IndexPage() {
 
   return (
     <main className="flex flex-col">
-      <TendersSearchForm onSearch={handleSearch} loading={loading} />
+      <TourGuide
+        steps={steps}
+        run={run}
+        stepIndex={stepIndex}
+        onCallback={handleTourCallback}
+        onStartTour={startTour}
+        showButton={true}
+        buttonPosition="bottom-right"
+        buttonText="Ver tutorial"
+      />
+
+      <TendersSearchForm 
+        onSearch={handleSearch} 
+        loading={loading}
+        loadingMessage={loadingMessage}
+      />
 
       <div className="flex items-center justify-between mb-4 px-2">
         <div />

@@ -8,6 +8,10 @@ const Header = () => {
     const [open, setOpen] = useState(false);
     const { user } = useAuthenticator((context) => [context.user]);
 
+    const handleLinkClick = () => {
+        setOpen(false);
+    };
+
     return (
         <header data-testid="header" className="bg-slate-800 fixed top-0 left-0 w-screen z-50 overflow-x-hidden">
             <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl flex flex-row items-center">
@@ -48,6 +52,7 @@ const Header = () => {
                         >
                             <NavLink
                                 to="/"
+                                onClick={handleLinkClick}
                                 className={({ isActive }) =>
                                     isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                             >
@@ -58,6 +63,7 @@ const Header = () => {
 
                             <NavLink
                                 to="/cpv-list"
+                                onClick={handleLinkClick}
                                 className={({ isActive }) =>
                                     isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                             >
@@ -69,6 +75,7 @@ const Header = () => {
                                     <div className=" w-full border-2 border-white lg:hidden" />
                                     <NavLink
                                         to="/user"
+                                        onClick={handleLinkClick}
                                         className={({ isActive }) =>
                                             isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                                     >
