@@ -33,17 +33,17 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
         <SpinnerOverlay message={loadingMessage} />
       )}
       <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-nowrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="tour-step-budget">
-            <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
+        <div className="flex flex-col lg:flex-row gap-4 ">
+          <div className="tour-step-budget flex-2/6">
+            <div className="ml-1 flex flex-row min-h-[40px] items-baseline ">
               <label htmlFor="input-budget" className="block text-sm font-medium ">Mayor facturación anual en los últimos tres años (€)</label>
-              <InfoTooltip 
+              <InfoTooltip
                 text="Introduce la cifra más alta de facturación anual que ha tenido tu empresa en los últimos tres años."
                 iconColor="text-orange-500"
                 iconBgColor="fill-white"
                 tooltipTextColor="text-black"
                 tooltipBgColor="bg-white"
-               />
+              />
             </div>
             <input
               id="input-budget"
@@ -61,7 +61,7 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
               required
             />
           </div>
-          <div className="tour-step-location">
+          <div className="tour-step-location flex-2/6">
             <div className=" ml-1 flex flex-row min-h-[40px] items-baseline">
               <label htmlFor="input-location" className="block text-sm font-medium ">Ámbito geográfico de actuación</label>
               <InfoTooltip
@@ -94,7 +94,7 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
               <span>Búsqueda exacta</span>
             </label>
           </div>
-          <div className="tour-step-cpv">
+          <div className="tour-step-cpv flex-2/6">
             <CpvMultiSelect
               selectedCpvs={selectedCpvs}
               setSelectedCpvs={setSelectedCpvs}
@@ -109,19 +109,17 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
               }}
             />
           </div>
-        <div>
         </div>
+        <div className="min-w-[250px] flex-1 tour-step-description">
+          <label className="block text-sm font-medium mb-1 min-h-[40px]">Descripción de la actividad de la empresa</label>
+          <textarea
+            data-testid="textarea-description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil. Este será el campo más importante para identificar licitaciones relevantes."
+            className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
+          />
         </div>
-          <div className="min-w-[250px] flex-1 tour-step-description">
-            <label className="block text-sm font-medium mb-1 min-h-[40px]">Descripción de la actividad de la empresa</label>
-            <textarea
-              data-testid="textarea-description"
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil. Este será el campo más importante para identificar licitaciones relevantes."
-              className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
-            />
-          </div>
         <div className="flex lg:justify-end ">
           <button
             type="submit"
