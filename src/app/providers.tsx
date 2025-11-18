@@ -8,7 +8,7 @@ import { store } from '@/store';
 import { setCpvs } from '@/store/slices/cpvSlice';
 import { Amplify } from 'aws-amplify';
 import Papa from 'papaparse';
-import listadoCpvRaw from '@/data/listado-cpv.csv';  // Sin ?raw
+import listadoCpvRaw from '@/data/listado-cpv.csv';
 import { configureI18n } from '@/config/i18n-config';
 
 // Configurar Amplify
