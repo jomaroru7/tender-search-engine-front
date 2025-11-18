@@ -1,7 +1,8 @@
 'use client';
 
 import { useSelector, useDispatch } from "react-redux";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import type { RootState, AppDispatch } from "@/store";
 import CardsGrid from "@/components/cards-grid/CardsGrid";
 import TendersSearchForm from "@/components/tenders-search-form/TendersSearchForm";
@@ -16,6 +17,7 @@ import Layout from "@/layouts/Layout";
 
 export default function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
+  const searchParams = useSearchParams();
   const { tenders, totalResults, page, pageSize, filters } = useSelector((state: RootState) => state.tender);
 
   const [loading, setLoading] = useState(false);
@@ -24,8 +26,6 @@ export default function HomePage() {
 
   useTendersTour();
   const tourSteps = getTourSteps();
-
-  console.log('📋 HomePage: Tour steps generados', { stepsLength: tourSteps.length });
 
   const fetchTenders = useCallback(
     async (
@@ -62,6 +62,42 @@ export default function HomePage() {
     },
     [dispatch, pageSize]
   );
+
+  // Leer query params y ejecutar búsqueda automáticamente al cargar
+  useEffect(() => {
+    const invoicingParam = searchParams.get('invoicing');
+    const placeParam = searchParams.get('place');
+    const activityParam = searchParams.get('activity');
+    const exactPlaceParam = searchParams.get('exact_place');
+    const cpvListParam = searchParams.get('cpv_list');
+    const pageParam = searchParams.get('page');
+
+    // Solo ejecutar si hay parámetros en la URL
+    if (invoicingParam || placeParam || activityParam) {
+      console.log('🔍 HomePage: Query params detectados, ejecutando búsqueda automática');
+      
+      let cpvList: string[] = [];
+      if (cpvListParam) {
+        try {
+          cpvList = JSON.parse(decodeURIComponent(cpvListParam));
+        } catch (e) {
+          console.error('Error parsing cpv_list from URL', e);
+        }
+      }
+
+      const filtersFromUrl = {
+        invoicing: invoicingParam ? Number(invoicingParam) : 0,
+        place: placeParam || '',
+        activity: activityParam || '',
+        cpv_list: cpvList,
+        exact_place: exactPlaceParam === 'true',
+      };
+
+      const pageFromUrl = pageParam ? Number(pageParam) : 1;
+
+      fetchTenders(filtersFromUrl, pageFromUrl);
+    }
+  }, [searchParams, fetchTenders]);
 
   const handleSearch = useCallback(
     async (newFilters: { invoicing: number; place: string; activity: string; cpv_list: string[]; exact_place?: boolean }) => {
