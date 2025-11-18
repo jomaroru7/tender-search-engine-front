@@ -46,7 +46,7 @@ const CpvMultiSelect = ({
   };
 
   return (
-    <div className="min-w-[250px] flex-1">
+    <div className="min-w-[250px]">
       <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
         <label htmlFor={inputId} className="block text-sm font-medium ">{label}</label>
         {infoTooltip && (

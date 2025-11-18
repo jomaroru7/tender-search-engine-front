@@ -23,8 +23,8 @@ export const getSavedAlerts = () =>
   requestWithAuth("/user/search", { method: "GET" });
 
 export const deleteAlert = (search: saveSearchRequest) =>
-  requestWithAuth("/user/search", {
-    method: "DELETE",
+  requestWithAuth("/user/search/delete", {
+    method: "POST",
     body: JSON.stringify({
       invoicing: search.invoicing,
       place: search.place,
