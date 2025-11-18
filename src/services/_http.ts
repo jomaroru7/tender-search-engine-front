@@ -3,6 +3,7 @@ export type ApiResult<T> = { status: number; data?: T; errors?: any };
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 const ENV = import.meta.env;
+const isDevelopment = ENV.MODE === 'development';
 
 /**
  * Get authentication headers for requests.
@@ -53,8 +54,9 @@ export async function requestWithAuth<T = any>(path: string, init: RequestInit):
             parsed = rawText;
         }
 
-        // eslint-disable-next-line no-console
-        console.log("requestWithAuth", { url, method: init.method, status: response.status, parsed });
+        if (isDevelopment) {
+            console.log("requestWithAuth", { url, method: init.method, status: response.status, parsed });
+        }
 
         if (response.status === 200) {
             return { status: 200, data: parsed as T };
@@ -70,7 +72,6 @@ export async function requestWithAuth<T = any>(path: string, init: RequestInit):
 
         return { status: response.status, data: parsed as T };
     } catch (err: any) {
-        // eslint-disable-next-line no-console
         console.error("requestWithAuth exception", err);
         return { status: 0, errors: String(err?.message || err) };
     }
