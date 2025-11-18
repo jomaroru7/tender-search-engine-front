@@ -1,10 +1,12 @@
+'use client';
+
 import { GrMoney } from "react-icons/gr";
 import InfoPill from "../info-pill/InfoPill"
 import { LuCalendarClock } from "react-icons/lu";
 import { MdLocationPin } from "react-icons/md";
 import CpvPill from "../cpv-pill/CpvPill";
 import ScoreGraph from "../score-graph/ScoreGraph";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 type TenderCardProps = {
     id: string,
@@ -31,7 +33,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
     const slug = slugify(tenderName);
     const url = `/tender/${slug}-${hash}-${encodeURIComponent(id)}`;
     return (
-        <Link to={url} className="block h-full cursor-pointer">
+        <Link href={url} className="block h-full cursor-pointer">
             <article
                 data-testid="tender-card"
                 className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between overflow-visible"

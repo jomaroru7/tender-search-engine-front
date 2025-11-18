@@ -2,8 +2,7 @@ export type ApiResult<T> = { status: number; data?: T; errors?: any };
 
 import { fetchAuthSession } from 'aws-amplify/auth';
 
-const ENV = import.meta.env;
-const isDevelopment = ENV.MODE === 'development';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 /**
  * Get authentication headers for requests.
@@ -43,7 +42,7 @@ export async function requestWithAuth<T = any>(path: string, init: RequestInit):
             ...headers,
         };
 
-        const url = ENV.VITE_GET_TENDERS_URL + path;
+        const url = process.env.NEXT_PUBLIC_GET_TENDERS_URL + path;
         const response = await fetch(url, init);
 
         const rawText = await response.text().catch(() => "");

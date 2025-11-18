@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { deleteSearch } from "../../services/tenders/alertsService";

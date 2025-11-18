@@ -1,14 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useEffect } from 'react';
+import { useTour } from '@reactour/tour';
 import type { TourStep } from '../components/tour-guide/TourGuide';
-import type { CallBackProps } from 'react-joyride';
 
 export const useTendersTour = () => {
-  const [run, setRun] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
+  const { setIsOpen, setSteps, setCurrentStep } = useTour();
 
   const steps: TourStep[] = [
     {
-      target: '.tour-step-budget',
+      selector: '.tour-step-budget',
       content: (
         <div>
           <p className="text-base font-semibold mb-2">Mayor facturación anual</p>
@@ -18,11 +17,10 @@ export const useTendersTour = () => {
           </p>
         </div>
       ),
-      disableBeacon: true,
-      placement: 'auto',
+      position: 'bottom',
     },
     {
-      target: '.tour-step-location',
+      selector: '.tour-step-location',
       content: (
         <div>
           <p className="text-base font-semibold mb-2">Ubicación geográfica</p>
@@ -37,10 +35,10 @@ export const useTendersTour = () => {
           </div>
         </div>
       ),
-      placement: 'auto',
+      position: 'bottom',
     },
     {
-      target: '.tour-step-exact-place',
+      selector: '.tour-step-exact-place',
       content: (
         <div>
           <p className="text-sm">
@@ -49,15 +47,15 @@ export const useTendersTour = () => {
           </p>
         </div>
       ),
-      placement: 'bottom',
+      position: 'bottom',
     },
     {
-      target: '.tour-step-cpv',
+      selector: '.tour-step-cpv',
       content: (
         <div>
           <p className="text-base font-semibold mb-2">Códigos CPV</p>
           <p className="text-sm mb-2">
-            Este campo es <span className="italic text-blue-500">opcional</span>. Selecciona los códigos CPV que correspondan a tu actividad.
+            Este campo es <span className="italic">opcional</span>. Selecciona los códigos CPV que correspondan a tu actividad.
           </p>
           <div className="bg-red-50 border-l-4 border-red-400 p-2 text-xs">
             <p className="font-semibold text-red-800">⚠️ IMPORTANTE:</p>
@@ -67,17 +65,17 @@ export const useTendersTour = () => {
           </div>
         </div>
       ),
-      placement: 'auto',
+      position: 'bottom',
     },
     {
-      target: '.tour-step-description',
+      selector: '.tour-step-description',
       content: (
         <div>
           <p className="text-base font-semibold mb-2">Descripción de actividad</p>
           <p className="text-sm">
             Describe brevemente la actividad de tu empresa. 
-            <span className="block mt-1 font-bold text-green-600">
-              Este es el campo más importante
+            <span className="block mt-2 font-bold text-green-600">
+              ✨ Este es el campo más importante
             </span>
             <span className="block mt-1 text-xs text-gray-600">
               Permite al sistema identificar licitaciones realmente relevantes para ti.
@@ -85,52 +83,46 @@ export const useTendersTour = () => {
           </p>
         </div>
       ),
-      placement: 'auto',
+      position: 'bottom',
     },
     {
-      target: '.tour-step-submit',
+      selector: '.tour-step-submit',
       content: (
         <div className="text-center">
-          <p className="text-lg font-bold mb-2"> ¡Ya estás listo!</p>
+          <p className="text-lg font-bold mb-2">🎉 ¡Ya estás listo!</p>
           <p className="text-sm">
             Haz clic aquí para buscar licitaciones que se ajusten al perfil de tu empresa.
           </p>
         </div>
       ),
-      placement: 'auto',
+      position: 'bottom',
     },
   ];
 
-  const handleJoyrideCallback = useCallback((data: CallBackProps) => {
-    const { status, action, index, type } = data;
-
-    // Update stepIndex based on the actual index from joyride
-    if (type === 'step:after') {
-      setStepIndex(index + (action === 'next' ? 1 : action === 'prev' ? -1 : 0));
+  useEffect(() => {
+    if (setSteps) {
+      setSteps(steps);
     }
+  }, [setSteps]);
 
-    if (status === 'finished' || status === 'skipped') {
-      setRun(false);
-      setStepIndex(0);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tourShown = localStorage.getItem('tendersTourShown');
+      if (!tourShown) {
+        const timer = setTimeout(() => {
+          setIsOpen(true);
+        }, 500);
+        return () => clearTimeout(timer);
+      }
     }
-  }, []);
+  }, [setIsOpen]);
 
-  const startTour = useCallback(() => {
-    setStepIndex(0);
-    setRun(true);
-  }, []);
-
-  const stopTour = useCallback(() => {
-    setRun(false);
-    setStepIndex(0);
-  }, []);
+  const startTour = () => {
+    setCurrentStep(0);
+    setIsOpen(true);
+  };
 
   return {
-    run,
-    steps,
-    stepIndex,
     startTour,
-    stopTour,
-    handleJoyrideCallback,
   };
 };

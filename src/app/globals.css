@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Estilos de AWS Amplify UI */
+@import '@aws-amplify/ui-react/styles.css';
+
+/* Estilos de react-toastify */
+@import 'react-toastify/dist/ReactToastify.css';

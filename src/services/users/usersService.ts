@@ -1,12 +1,10 @@
 import type { setUserRequest, setUserResponse } from "../../models/UsersApi";
 import { requestWithAuth, getAuthHeaders } from "../_http";
 
-const ENV = import.meta.env;
-
 /**
  * Updates the user's information in the backend.
  *
- * - Sends a `POST` to `VITE_SET_USER_URL` with the provided form fields.
+ * - Sends a `POST` to the SET_USER_URL with the provided form fields.
  * - Adds authentication headers obtained from `getAuthHeaders`.
  * - Throws readable errors for 401/503 responses and for non-ok responses.
  *
@@ -23,7 +21,7 @@ export const setUser = async ({
 }: setUserRequest): Promise<setUserResponse> => {
   const headers = await getAuthHeaders();
 
-  return fetch(ENV.VITE_SET_USER_URL, {
+  return fetch(process.env.NEXT_PUBLIC_SET_USER_URL!, {
     method: "POST",
     headers,
     body: JSON.stringify({
@@ -58,7 +56,7 @@ export const setUser = async ({
  *   (which already adds the base URL and auth headers).
  * - Returns the backend JSON when the server responds with 200,
  *   for example `{ message: string, deleted: true }`.
- * - Throws clear errors for 401 and other error codes.
+ * - Throws clear errors for 401 and other server error codes.
  *
  * @returns Object containing `message` and `deleted` if the deletion succeeded.
  * @throws Error if the request is unauthorized or there is another server error.
