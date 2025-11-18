@@ -39,6 +39,7 @@ const SearchCard = ({ search, onRestore, onDeleted }: SearchCardProps) => {
         page_size: (search as any).page_size ?? 10,
         cpv_list: search.cpv_list ?? [],
         exact_place: !!search.exact_place,
+        timestamp: search.timestamp ?? "",
       };
       const res = await deleteSearch(payload);
       if (res.status === 200) {

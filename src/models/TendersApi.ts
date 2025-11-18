@@ -18,6 +18,10 @@ export type saveSearchRequest = {
     exact_place?: boolean
 }
 
+export type deleteSearchRequest = saveSearchRequest & {
+    timestamp: string
+}
+
 export type tendersResults = {
     Codigo_CPV: string[],
     Contratacion: string,
