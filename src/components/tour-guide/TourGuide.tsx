@@ -2,20 +2,15 @@
 
 import { TourProvider, useTour } from '@reactour/tour';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import type { ReactElement, ReactNode } from 'react';
-
-export interface TourStep {
-  selector: string;
-  content: string | ReactElement;
-  position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
-}
+import type { ReactNode } from 'react';
+import type { StepType } from '@reactour/tour';
 
 interface TourGuideProps {
-  steps: TourStep[];
-  children: ReactNode;
+  children?: ReactNode;
   showButton?: boolean;
   buttonPosition?: 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
   buttonText?: string;
+  steps?: StepType[]; // Ahora recibe los steps como prop
 }
 
 function TourButton({ 
@@ -25,7 +20,16 @@ function TourButton({
   buttonPosition?: string; 
   buttonText?: string;
 }) {
-  const { setIsOpen } = useTour();
+  const { setIsOpen, currentStep, steps } = useTour();
+
+  const handleClick = () => {
+    console.log('🔘 TourButton: Click detectado', { 
+      stepsLength: steps?.length || 0,
+      currentStep 
+    });
+    setIsOpen(true);
+    console.log('🔘 TourButton: setIsOpen(true) ejecutado');
+  };
 
   const positionClasses = {
     'top-right': 'top-4 right-4',
@@ -36,8 +40,8 @@ function TourButton({
 
   return (
     <button
-      onClick={() => setIsOpen(true)}
-      className={`fixed ${positionClasses[buttonPosition as keyof typeof positionClasses]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-105`}
+      onClick={handleClick}
+      className={`fixed ${positionClasses[buttonPosition as keyof typeof positionClasses]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-orange-700 transition-all hover:scale-105`}
       aria-label="Iniciar tutorial"
       title={buttonText}
     >
@@ -48,21 +52,15 @@ function TourButton({
 }
 
 const TourGuide = ({
-  steps,
   children,
   showButton = true,
   buttonPosition = 'bottom-right',
   buttonText = 'Ver tutorial',
+  steps = [],
 }: TourGuideProps) => {
-  const tourSteps = steps.map((step) => ({
-    selector: step.selector,
-    content: step.content,
-    position: step.position || 'bottom',
-  }));
-
   return (
     <TourProvider
-      steps={tourSteps}
+      steps={steps}
       styles={{
         popover: (base) => ({
           ...base,
@@ -126,3 +124,5 @@ const TourGuide = ({
 };
 
 export default TourGuide;
+
+<TourGuide showButton={true} buttonPosition="bottom-right" buttonText="Ver tutorial"></TourGuide>

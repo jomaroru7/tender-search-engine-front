@@ -7,6 +7,7 @@ import { MdLocationPin } from "react-icons/md";
 import CpvPill from "../cpv-pill/CpvPill";
 import ScoreGraph from "../score-graph/ScoreGraph";
 import Link from "next/link";
+import { MouseEvent } from "react";
 
 type TenderCardProps = {
     id: string,
@@ -28,12 +29,45 @@ function slugify(text: string) {
         .substring(0, 60);
 }
 
+// Generar un hash estable basado en el ID
+function generateStableHash(id: string): string {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+        const char = id.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convertir a entero de 32 bits
+    }
+    return Math.abs(hash).toString(36).substring(0, 6);
+}
+
 const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0 }: TenderCardProps) => {
-    const hash = Math.random().toString(36).substring(2, 8);
+    const hash = generateStableHash(id);
     const slug = slugify(tenderName);
     const url = `/tender/${slug}-${hash}-${encodeURIComponent(id)}`;
+    
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        // Si es clic con botón central, ctrl+clic, cmd+clic, o clic derecho
+        // dejamos que el navegador maneje el comportamiento nativo
+        if (e.button === 1 || e.ctrlKey || e.metaKey) {
+            return;
+        }
+    };
+
+    const handleAuxClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        // Botón central del ratón
+        if (e.button === 1) {
+            e.preventDefault();
+            window.open(url, '_blank');
+        }
+    };
+
     return (
-        <Link href={url} className="block h-full cursor-pointer">
+        <Link 
+            href={url} 
+            className="block h-full cursor-pointer"
+            onClick={handleClick}
+            onAuxClick={handleAuxClick}
+        >
             <article
                 data-testid="tender-card"
                 className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between overflow-visible"

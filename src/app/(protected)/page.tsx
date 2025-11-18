@@ -2,7 +2,6 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { useCallback, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import type { RootState, AppDispatch } from "@/store";
 import CardsGrid from "@/components/cards-grid/CardsGrid";
 import TendersSearchForm from "@/components/tenders-search-form/TendersSearchForm";
@@ -12,12 +11,11 @@ import { saveSearch } from "@/services/tenders/alertsService";
 import { setTendersData } from "@/store/slices/tenderSlice";
 import { toast } from "react-toastify";
 import TourGuide from '@/components/tour-guide/TourGuide';
-import { useTendersTour } from '@/hooks/useTendersTour';
+import { useTendersTour, getTourSteps } from '@/hooks/useTendersTour';
 import Layout from "@/layouts/Layout";
 
 export default function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
-  const searchParams = useSearchParams();
   const { tenders, totalResults, page, pageSize, filters } = useSelector((state: RootState) => state.tender);
 
   const [loading, setLoading] = useState(false);
@@ -25,6 +23,9 @@ export default function HomePage() {
   const [saving, setSaving] = useState(false);
 
   useTendersTour();
+  const tourSteps = getTourSteps();
+
+  console.log('📋 HomePage: Tour steps generados', { stepsLength: tourSteps.length });
 
   const fetchTenders = useCallback(
     async (
@@ -123,7 +124,7 @@ export default function HomePage() {
   }, [canSaveSearch, filters, page, pageSize]);
 
   return (
-    <TourGuide steps={[]} showButton={true} buttonPosition="bottom-right" buttonText="Ver tutorial">
+    <TourGuide steps={tourSteps} showButton={true} buttonPosition="bottom-right" buttonText="Ver tutorial">
       <Layout>
         <main className="flex flex-col">
           <TendersSearchForm 
