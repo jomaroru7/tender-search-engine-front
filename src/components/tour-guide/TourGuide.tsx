@@ -65,8 +65,9 @@ const TourGuide = ({
         disableScrolling={false}
         scrollOffset={120}
         spotlightPadding={10}
-        disableOverlayClose
+        disableOverlayClose={true}
         disableCloseOnEsc={false}
+        hideCloseButton={true}
         floaterProps={{
           disableAnimation: false,
         }}
