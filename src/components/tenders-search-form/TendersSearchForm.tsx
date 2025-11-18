@@ -33,7 +33,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
       )}
       <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-nowrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
         <div className="flex flex-col lg:flex-row gap-4">
-          <div>
+          <div className="tour-step-budget">
             <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
               <label htmlFor="input-budget" className="block text-sm font-medium ">Mayor facturación anual en los últimos tres años (€)</label>
               <InfoTooltip 
@@ -60,7 +60,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               required
             />
           </div>
-          <div>
+          <div className="tour-step-location">
             <div className=" ml-1 flex flex-row min-h-[40px] items-baseline">
               <label htmlFor="input-location" className="block text-sm font-medium ">Ámbito geográfico de actuación</label>
               <InfoTooltip
@@ -82,7 +82,7 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               required
             />
 
-            <label className="inline-flex items-center gap-2 mt-2 text-sm text-slate-200">
+            <label className="inline-flex items-center gap-2 mt-2 text-sm text-slate-200 tour-step-exact-place">
               <input
                 type="checkbox"
                 data-testid="checkbox-exact-place"
@@ -93,23 +93,25 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               <span>Búsqueda exacta</span>
             </label>
           </div>
-          <CpvMultiSelect
-            selectedCpvs={selectedCpvs}
-            setSelectedCpvs={setSelectedCpvs}
-            label="CPVs"
-            placeholder="Buscar CPV por código o descripción..."
-            infoTooltip={{
-              text: "Códigos CPV de las actividades de tu empresa. IMPORTANTE: Seleccionar uno o varios CPVs hacen que la búsqueda sea exclusiva, haciendo que solo muestre licitaciones en las que aparezcan estos códigos.",
-              iconColor: "text-orange-500",
-              iconBgColor: "fill-white",
-              tooltipTextColor: "text-black",
-              tooltipBgColor: "bg-white",
-            }}
-          />
+          <div className="tour-step-cpv">
+            <CpvMultiSelect
+              selectedCpvs={selectedCpvs}
+              setSelectedCpvs={setSelectedCpvs}
+              label="CPVs"
+              placeholder="Buscar CPV por código o descripción..."
+              infoTooltip={{
+                text: "Códigos CPV de las actividades de tu empresa. IMPORTANTE: Seleccionar uno o varios CPVs hacen que la búsqueda sea exclusiva, haciendo que solo muestre licitaciones en las que aparezcan estos códigos.",
+                iconColor: "text-orange-500",
+                iconBgColor: "fill-white",
+                tooltipTextColor: "text-black",
+                tooltipBgColor: "bg-white",
+              }}
+            />
+          </div>
         <div>
         </div>
         </div>
-          <div className="min-w-[250px] flex-1">
+          <div className="min-w-[250px] flex-1 tour-step-description">
             <label className="block text-sm font-medium mb-1 min-h-[40px]">Descripción de la actividad de la empresa</label>
             <textarea
               data-testid="textarea-description"
@@ -119,11 +121,11 @@ const TendersSearchForm = ({ onSearch, loading }: Props) => {
               className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
             />
           </div>
-        <div className="flex lg:justify-end">
+        <div className="flex lg:justify-end ">
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 flex-1 lg:flex-none text-white px-6 py-2 max-h-12 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-60"
+            className="bg-blue-600 flex-1 lg:flex-none text-white px-6 py-2 max-h-12 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-60 tour-step-submit"
           >
             {loading ? "Buscando..." : "Buscar licitaciones"}
           </button>
