@@ -25,7 +25,7 @@ export const useTendersTour = () => {
     },
     {
       target: '.tour-step-cpv',
-      content: 'Selecciona los códigos CPV que correspondan a la actividad de tu empresa. ⚠️ IMPORTANTE: Esta búsqueda es exclusiva, solo mostrará licitaciones que contengan estos códigos.',
+      content: 'Este campo es opcional. Selecciona los códigos CPV que correspondan a la actividad de tu empresa. ⚠️ IMPORTANTE: Esta búsqueda es exclusiva, solo mostrará licitaciones que contengan estos códigos.',
       placement: 'auto',
     },
     {
