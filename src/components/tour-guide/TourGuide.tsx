@@ -94,7 +94,7 @@ const TourGuide = ({
       {showButton && onStartTour && (
         <button
           onClick={onStartTour}
-          className={`fixed ${positionClasses[buttonPosition]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-105`}
+          className={`fixed ${positionClasses[buttonPosition]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-orange-700 transition-all hover:scale-105`}
           aria-label="Iniciar tutorial"
           title={buttonText}
         >
