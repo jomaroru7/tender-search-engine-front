@@ -20,15 +20,11 @@ function TourButton({
   buttonPosition?: string; 
   buttonText?: string;
 }) {
-  const { setIsOpen, currentStep, steps } = useTour();
+  const { setIsOpen } = useTour();
 
   const handleClick = () => {
-    console.log('🔘 TourButton: Click detectado', { 
-      stepsLength: steps?.length || 0,
-      currentStep 
-    });
+    
     setIsOpen(true);
-    console.log('🔘 TourButton: setIsOpen(true) ejecutado');
   };
 
   const positionClasses = {
@@ -124,5 +120,3 @@ const TourGuide = ({
 };
 
 export default TourGuide;
-
-<TourGuide showButton={true} buttonPosition="bottom-right" buttonText="Ver tutorial"></TourGuide>

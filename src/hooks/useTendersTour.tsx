@@ -8,10 +8,8 @@ export const useTendersTour = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const tourShown = localStorage.getItem('tendersTourShown');
-      console.log('🔍 useTendersTour: Verificando si mostrar tour auto', { tourShown });
       if (!tourShown) {
         const timer = setTimeout(() => {
-          console.log('🚀 useTendersTour: Iniciando tour automáticamente');
           setIsOpen(true);
         }, 500);
         return () => clearTimeout(timer);
@@ -20,7 +18,6 @@ export const useTendersTour = () => {
   }, [setIsOpen]);
 
   const startTour = () => {
-    console.log('🎬 useTendersTour: startTour llamado manualmente');
     setCurrentStep(0);
     setIsOpen(true);
   };
@@ -101,7 +98,7 @@ export const getTourSteps = (): StepType[] => [
         <p className="text-base font-semibold mb-2">Descripción de actividad</p>
         <p className="text-sm">
           Describe brevemente la actividad de tu empresa.
-          <span className="block mt-2 font-bold text-green-600">✨ Este es el campo más importante</span>
+          <span className="block mt-2 font-bold text-green-600">Este es el campo más importante</span>
           <span className="block mt-1 text-xs text-gray-600">
             Permite al sistema identificar licitaciones realmente relevantes para ti.
           </span>
@@ -114,7 +111,7 @@ export const getTourSteps = (): StepType[] => [
     selector: '.tour-step-submit',
     content: (
       <div className="text-center">
-        <p className="text-lg font-bold mb-2">🎉 ¡Ya estás listo!</p>
+        <p className="text-lg font-bold mb-2">¡Ya estás listo!</p>
         <p className="text-sm">
           Haz clic aquí para buscar licitaciones que se ajusten al perfil de tu empresa.
         </p>
