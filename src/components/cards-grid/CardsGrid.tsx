@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from "react"
 import type { CardData } from "../../models/TendersFront"
 import TenderCard from "../tender-card/TenderCard"
