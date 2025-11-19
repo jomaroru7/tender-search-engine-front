@@ -62,7 +62,7 @@ export const setUser = async ({
  * @throws Error if the request is unauthorized or there is another server error.
  */
 export const deleteUser = async (): Promise<{ message?: string; deleted?: boolean }> => {
-  const res = await requestWithAuth<{ message?: string; deleted?: boolean }>("/user/delete", {
+  const res = await requestWithAuth<{ message?: string; deleted?: boolean }>("/user", {
     method: "DELETE",
   });
 

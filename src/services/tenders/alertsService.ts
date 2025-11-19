@@ -1,4 +1,4 @@
-import type { saveSearchRequest } from "../../models/TendersApi";
+import type { deleteSearchRequest, saveSearchRequest } from "../../models/TendersApi";
 import { requestWithAuth } from "../_http";
 
 /**
@@ -22,9 +22,9 @@ export const saveAlert = (search: saveSearchRequest) =>
 export const getSavedAlerts = () =>
   requestWithAuth("/user/search", { method: "GET" });
 
-export const deleteAlert = (search: saveSearchRequest) =>
-  requestWithAuth("/user/search", {
-    method: "DELETE",
+export const deleteAlert = (search: deleteSearchRequest) =>
+  requestWithAuth("/user/search/delete", {
+    method: "POST",
     body: JSON.stringify({
       invoicing: search.invoicing,
       place: search.place,
