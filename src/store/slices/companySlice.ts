@@ -1,5 +1,4 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CompanyData {
   email: string;
@@ -7,19 +6,20 @@ export interface CompanyData {
   location: string;
   budget: number;
   description: string;
-  allowRegister: boolean; 
 }
 
 const initialState: CompanyData = (() => {
-  const stored = localStorage.getItem("companyData");
-  if (stored) return JSON.parse(stored);
+  // Solo acceder a localStorage en el cliente
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem("companyData");
+    if (stored) return JSON.parse(stored);
+  }
   return {
     email: '',
     name: '',
     location: '',
     budget: 0,
     description: '',
-    allowRegister: false,
   };
 })();
 
@@ -27,12 +27,22 @@ const companySlice = createSlice({
   name: 'company',
   initialState,
   reducers: {
-    setCompanyData(_state, action: PayloadAction<CompanyData>) {
-      localStorage.setItem("companyData", JSON.stringify(action.payload));
-      return action.payload;
+    setCompanyData: (state, action: PayloadAction<CompanyData>) => {
+      Object.assign(state, action.payload);
+      // Solo guardar en localStorage en el cliente
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('companyData', JSON.stringify(action.payload));
+      }
+    },
+    clearCompanyData: (state) => {
+      Object.assign(state, initialState);
+      // Solo limpiar localStorage en el cliente
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('companyData');
+      }
     },
   },
 });
 
-export const { setCompanyData } = companySlice.actions;
+export const { setCompanyData, clearCompanyData } = companySlice.actions;
 export default companySlice.reducer;

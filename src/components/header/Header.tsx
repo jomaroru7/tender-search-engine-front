@@ -1,10 +1,13 @@
+'use client';
+
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const Header = () => {
-    const location = useLocation();
-    const hideMenu = location.pathname === "/register" || location.pathname === "/login";
+    const pathname = usePathname();
+    const hideMenu = pathname === "/register" || pathname === "/login";
     const [open, setOpen] = useState(false);
     const { user } = useAuthenticator((context) => [context.user]);
 
@@ -17,7 +20,7 @@ const Header = () => {
             <div className="w-full px-4 lg:px-8 py-4 mx-auto max-w-7xl flex flex-row items-center">
                 <div className="flex flex-col lg:flex-row w-full justify-between items-center">
                     <div className="flex flex-row justify-between gap-4">
-                        <NavLink to="/" className="flex items-center">
+                        <Link href="/" className="flex items-center">
                             <div data-testid="logo" className="h-10 w-auto overflow-hidden flex items-center justify-center rounded">
                                 <img
                                     src="/logo_licico_blanco.png"
@@ -25,7 +28,7 @@ const Header = () => {
                                     className="h-25 w-auto object-cover object-center block"
                                 />
                             </div>
-                        </NavLink>
+                        </Link>
                         {!hideMenu && <button
                             className="lg:hidden text-white focus:outline-none"
                             onClick={() => setOpen(!open)}
@@ -50,40 +53,34 @@ const Header = () => {
                             lg:bg-transparent lg:border-0
                         `}
                         >
-                            <NavLink
-                                to="/"
+                            <Link
+                                href="/"
                                 onClick={handleLinkClick}
-                                className={({ isActive }) =>
-                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                                className={pathname === "/" ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                             >
                                 Buscador
-                            </NavLink>
+                            </Link>
                             <div className=" w-full border-2 border-white lg:hidden" />
 
-
-                            <NavLink
-                                to="/cpv-list"
+                            <Link
+                                href="/cpv-list"
                                 onClick={handleLinkClick}
-                                className={({ isActive }) =>
-                                    isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                                className={pathname === "/cpv-list" ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                             >
                                 Lista de CPVs
-                            </NavLink>
+                            </Link>
 
                             {user && (
                                 <>
                                     <div className=" w-full border-2 border-white lg:hidden" />
-                                    <NavLink
-                                        to="/user"
+                                    <Link
+                                        href="/user"
                                         onClick={handleLinkClick}
-                                        className={({ isActive }) =>
-                                            isActive ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                                        className={pathname === "/user" ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
                                     >
                                         Tu cuenta
-                                    </NavLink>
+                                    </Link>
                                     <div className=" w-full border-2 border-white lg:hidden" />
-                                    {/* Removed the extra account button — navigation to user page is available via the NavLink above.
-                                        The session / account actions are now on the User page itself. */}
                                 </>
                             )}
                         </nav>

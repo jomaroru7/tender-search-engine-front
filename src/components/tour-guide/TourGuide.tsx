@@ -1,48 +1,31 @@
-import type { CallBackProps, Step } from 'react-joyride';
-import Joyride from 'react-joyride';
+'use client';
+
+import { TourProvider, useTour } from '@reactour/tour';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import type { ReactNode } from 'react';
-
-export interface TourStep {
-  target: string;
-  content: string | ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'center' | 'auto';
-  disableBeacon?: boolean;
-}
+import type { StepType } from '@reactour/tour';
 
 interface TourGuideProps {
-  steps: TourStep[];
-  run: boolean;
-  stepIndex?: number;
-  onCallback?: (data: CallBackProps) => void;
-  onStartTour?: () => void;
-  continuous?: boolean;
-  showProgress?: boolean;
-  showSkipButton?: boolean;
+  children?: ReactNode;
   showButton?: boolean;
   buttonPosition?: 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
   buttonText?: string;
+  steps?: StepType[]; // Ahora recibe los steps como prop
 }
 
-const TourGuide = ({
-  steps,
-  run,
-  stepIndex = 0,
-  onCallback,
-  onStartTour,
-  continuous = true,
-  showProgress = true,
-  showSkipButton = true,
-  showButton = true,
-  buttonPosition = 'bottom-right',
-  buttonText = 'Ver tutorial',
-}: TourGuideProps) => {
-  const joyrideSteps: Step[] = steps.map((step) => ({
-    target: step.target,
-    content: step.content,
-    placement: step.placement || 'bottom',
-    disableBeacon: step.disableBeacon,
-  }));
+function TourButton({ 
+  buttonPosition = 'bottom-right', 
+  buttonText = 'Ver tutorial' 
+}: { 
+  buttonPosition?: string; 
+  buttonText?: string;
+}) {
+  const { setIsOpen } = useTour();
+
+  const handleClick = () => {
+    
+    setIsOpen(true);
+  };
 
   const positionClasses = {
     'top-right': 'top-4 right-4',
@@ -52,57 +35,87 @@ const TourGuide = ({
   };
 
   return (
-    <>
-      <Joyride
-        steps={joyrideSteps}
-        run={run}
-        stepIndex={stepIndex}
-        continuous={continuous}
-        showProgress={showProgress}
-        showSkipButton={showSkipButton}
-        callback={onCallback}
-        scrollToFirstStep
-        disableScrolling={false}
-        scrollOffset={120}
-        spotlightPadding={10}
-        disableOverlayClose={true}
-        disableCloseOnEsc={false}
-        hideCloseButton={true}
-        floaterProps={{
-          disableAnimation: false,
-        }}
-        styles={{
-          options: {
-            primaryColor: '#2563eb',
-            zIndex: 10000,
-          },
-          spotlight: {
-            borderRadius: 8,
-          },
-        }}
-        locale={{
-          back: 'Atrás',
-          close: 'Cerrar',
-          last: 'Finalizar',
-          next: 'Siguiente',
-          nextLabelWithProgress: 'Siguiente (Paso {step} de {steps})',
-          open: 'Abrir',
-          skip: 'Saltar',
-        }}
-      />
+    <button
+      onClick={handleClick}
+      className={`fixed ${positionClasses[buttonPosition as keyof typeof positionClasses]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-orange-700 transition-all hover:scale-105`}
+      aria-label="Iniciar tutorial"
+      title={buttonText}
+    >
+      <QuestionMarkCircleIcon className="w-5 h-5" />
+      <span className="inline">{buttonText}</span>
+    </button>
+  );
+}
 
-      {showButton && onStartTour && (
-        <button
-          onClick={onStartTour}
-          className={`fixed ${positionClasses[buttonPosition]} z-50 flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-orange-700 transition-all hover:scale-105`}
-          aria-label="Iniciar tutorial"
-          title={buttonText}
-        >
-          <QuestionMarkCircleIcon className="w-5 h-5" />
-          <span className="inline">{buttonText}</span>
-        </button>
+const TourGuide = ({
+  children,
+  showButton = true,
+  buttonPosition = 'bottom-right',
+  buttonText = 'Ver tutorial',
+  steps = [],
+}: TourGuideProps) => {
+  return (
+    <TourProvider
+      steps={steps}
+      styles={{
+        popover: (base) => ({
+          ...base,
+          borderRadius: 8,
+          padding: 20,
+        }),
+        badge: (base) => ({
+          ...base,
+          backgroundColor: '#2563eb',
+        }),
+        controls: (base) => ({
+          ...base,
+          marginTop: 20,
+        }),
+        close: (base) => ({
+          ...base,
+          display: 'none',
+        }),
+      }}
+      onClickMask={({ setIsOpen }) => setIsOpen(false)}
+      prevButton={({ currentStep, setCurrentStep }) => {
+        return currentStep > 0 ? (
+          <button
+            onClick={() => setCurrentStep(currentStep - 1)}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          >
+            Atrás
+          </button>
+        ) : null;
+      }}
+      nextButton={({ currentStep, stepsLength, setIsOpen, setCurrentStep }) => {
+        const isLast = currentStep === stepsLength - 1;
+        return (
+          <button
+            onClick={() => {
+              if (isLast) {
+                setIsOpen(false);
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('tendersTourShown', 'true');
+                }
+              } else {
+                setCurrentStep(currentStep + 1);
+              }
+            }}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          >
+            {isLast ? 'Finalizar' : 'Siguiente'}
+          </button>
+        );
+      }}
+      showBadge={true}
+      showCloseButton={false}
+      scrollSmooth
+    >
+      {children}
+      {showButton && (
+        <TourButton buttonPosition={buttonPosition} buttonText={buttonText} />
       )}
-    </>
+    </TourProvider>
   );
 };
 

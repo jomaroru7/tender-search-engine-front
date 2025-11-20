@@ -1,10 +1,13 @@
+'use client';
+
 import { GrMoney } from "react-icons/gr";
 import InfoPill from "../info-pill/InfoPill"
 import { LuCalendarClock } from "react-icons/lu";
 import { MdLocationPin } from "react-icons/md";
 import CpvPill from "../cpv-pill/CpvPill";
 import ScoreGraph from "../score-graph/ScoreGraph";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { MouseEvent } from "react";
 
 type TenderCardProps = {
     id: string,
@@ -17,21 +20,44 @@ type TenderCardProps = {
     score: number
 }
 
-function slugify(text: string) {
-    return text
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .substring(0, 60);
+// Generar un hash estable basado en el ID
+function generateStableHash(id: string): string {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+        const char = id.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convertir a entero de 32 bits
+    }
+    return Math.abs(hash).toString(36).substring(0, 6);
 }
 
 const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0 }: TenderCardProps) => {
-    const hash = Math.random().toString(36).substring(2, 8);
-    const slug = slugify(tenderName);
-    const url = `/tender/${slug}-${hash}-${encodeURIComponent(id)}`;
+    const hash = generateStableHash(id);
+    const url = `/tender/${hash}-${encodeURIComponent(id)}`;
+    
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        // Si es clic con botón central, ctrl+clic, cmd+clic, o clic derecho
+        // dejamos que el navegador maneje el comportamiento nativo
+        if (e.button === 1 || e.ctrlKey || e.metaKey) {
+            return;
+        }
+    };
+
+    const handleAuxClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        // Botón central del ratón
+        if (e.button === 1) {
+            e.preventDefault();
+            window.open(url, '_blank');
+        }
+    };
+
     return (
-        <Link to={url} className="block h-full cursor-pointer">
+        <Link 
+            href={url} 
+            className="block h-full cursor-pointer"
+            onClick={handleClick}
+            onAuxClick={handleAuxClick}
+        >
             <article
                 data-testid="tender-card"
                 className="h-full bg-white shadow-lg rounded-3xl p-6 mb-6 border border-gray-200 transition-transform hover:scale-105 hover:shadow-2xl flex flex-col justify-between overflow-visible"
@@ -49,7 +75,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
 
                 <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100 flex gap-4 items-center">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <p className="whitespace-nowrap flex-shrink-0">CPVs:</p>
+                        <p className="whitespace-nowrap shrink-0">CPVs:</p>
                         <div
                             className="flex gap-2 overflow-x-auto overflow-y-hidden min-w-0 pr-2"
                             aria-label="Lista de CPVs"
@@ -60,7 +86,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                             ))}
                         </div>
                     </div>
-                    <div data-testid="tender-score" className="flex items-center gap-1 ml-4 flex-shrink-0 min-w-[72px]">
+                    <div data-testid="tender-score" className="flex items-center gap-1 ml-4 shrink-0 min-w-[72px]">
                         <ScoreGraph score={score} max={5} />
                     </div>
                 </footer>

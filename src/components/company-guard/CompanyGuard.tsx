@@ -1,6 +1,9 @@
+'use client';
+
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
-import { Navigate, useLocation } from "react-router-dom";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 type CompanyGuardProps = {
   children: React.ReactNode;
@@ -8,16 +11,27 @@ type CompanyGuardProps = {
 
 const CompanyGuard = ({ children }: CompanyGuardProps) => {
   const company = useSelector((state: RootState) => state.company);
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const isRegistered = !!company?.name && !!company?.location && !!company?.budget && !!company?.description;
 
-  if (!isRegistered && location.pathname !== "/register") {
-    return <Navigate to="/register" replace />;
+  useEffect(() => {
+    if (!isRegistered && pathname !== "/register") {
+      router.replace("/register");
+    }
+
+    if (isRegistered && pathname === "/register") {
+      router.replace("/");
+    }
+  }, [isRegistered, pathname, router]);
+
+  if (!isRegistered && pathname !== "/register") {
+    return null;
   }
 
-  if (isRegistered && location.pathname === "/register") {
-    return <Navigate to="/" replace />;
+  if (isRegistered && pathname === "/register") {
+    return null;
   }
 
   return <>{children}</>;

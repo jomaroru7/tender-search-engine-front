@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
 import { useSelector } from "react-redux";
