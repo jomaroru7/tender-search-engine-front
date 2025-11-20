@@ -20,15 +20,6 @@ type TenderCardProps = {
     score: number
 }
 
-function slugify(text: string) {
-    return text
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .substring(0, 60);
-}
-
 // Generar un hash estable basado en el ID
 function generateStableHash(id: string): string {
     let hash = 0;
@@ -42,8 +33,7 @@ function generateStableHash(id: string): string {
 
 const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0 }: TenderCardProps) => {
     const hash = generateStableHash(id);
-    const slug = slugify(tenderName);
-    const url = `/tender/${slug}-${hash}-${encodeURIComponent(id)}`;
+    const url = `/tender/${hash}-${encodeURIComponent(id)}`;
     
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
         // Si es clic con botón central, ctrl+clic, cmd+clic, o clic derecho

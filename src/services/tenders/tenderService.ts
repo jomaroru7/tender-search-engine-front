@@ -1,12 +1,12 @@
 import type { getTenderRequest, getTenderResponse } from "../../models/TendersApi";
 import type { TenderDetailData } from "../../models/TendersFront";
-import { requestWithAuth } from "../_http";
+import { requestWithoutAuth } from "../_http";
 
 /**
- * Low-level call to /get-tender
+ * Low-level call to /get-tender (sin autenticación)
  */
 export const getTender = async ({ ID }: getTenderRequest): Promise<getTenderResponse> => {
-  const res = await requestWithAuth<getTenderResponse>("/get-tender", {
+  const res = await requestWithoutAuth<getTenderResponse>("/get-tender", {
     method: "POST",
     body: JSON.stringify({ ID }),
   });
