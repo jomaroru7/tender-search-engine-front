@@ -75,7 +75,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
 
                 <footer data-testid="tender-cpv-codes" className="pt-2 border-t border-gray-100 flex gap-4 items-center">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <p className="whitespace-nowrap flex-shrink-0">CPVs:</p>
+                        <p className="whitespace-nowrap shrink-0">CPVs:</p>
                         <div
                             className="flex gap-2 overflow-x-auto overflow-y-hidden min-w-0 pr-2"
                             aria-label="Lista de CPVs"
@@ -86,7 +86,7 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                             ))}
                         </div>
                     </div>
-                    <div data-testid="tender-score" className="flex items-center gap-1 ml-4 flex-shrink-0 min-w-[72px]">
+                    <div data-testid="tender-score" className="flex items-center gap-1 ml-4 shrink-0 min-w-[72px]">
                         <ScoreGraph score={score} max={5} />
                     </div>
                 </footer>
