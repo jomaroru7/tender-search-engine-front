@@ -4,13 +4,21 @@ frontend:
     preBuild:
       commands:
         - npm ci
+        # Debug: ver qué variables están disponibles
+        - echo "DEBUG - Environment variables:"
+        - env | grep NEXT_PUBLIC || echo "No NEXT_PUBLIC vars found"
     build:
       commands:
-        - echo "NEXT_PUBLIC_GET_TENDERS_URL=$NEXT_PUBLIC_GET_TENDERS_URL" >> .env.production
-        - echo "NEXT_PUBLIC_COGNITO_USER_POOL_ID=$NEXT_PUBLIC_COGNITO_USER_POOL_ID" >> .env.production
-        - echo "NEXT_PUBLIC_COGNITO_CLIENT_ID=$NEXT_PUBLIC_COGNITO_CLIENT_ID" >> .env.production
-        - echo "NEXT_PUBLIC_COGNITO_DOMAIN=$NEXT_PUBLIC_COGNITO_DOMAIN" >> .env.production
-        - echo "NEXT_PUBLIC_COGNITO_REDIRECT_URI=$NEXT_PUBLIC_COGNITO_REDIRECT_URI" >> .env.production
+        - |
+          cat > .env.production << EOL
+          NEXT_PUBLIC_GET_TENDERS_URL=${NEXT_PUBLIC_GET_TENDERS_URL}
+          NEXT_PUBLIC_COGNITO_USER_POOL_ID=${NEXT_PUBLIC_COGNITO_USER_POOL_ID}
+          NEXT_PUBLIC_COGNITO_CLIENT_ID=${NEXT_PUBLIC_COGNITO_CLIENT_ID}
+          NEXT_PUBLIC_COGNITO_DOMAIN=${NEXT_PUBLIC_COGNITO_DOMAIN}
+          NEXT_PUBLIC_COGNITO_REDIRECT_URI=${NEXT_PUBLIC_COGNITO_REDIRECT_URI}
+          EOL
+        - echo "DEBUG - .env.production contents:"
+        - cat .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
