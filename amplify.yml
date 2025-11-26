@@ -6,6 +6,7 @@ frontend:
         - npm ci
     build:
       commands:
+        - echo "DEBUG - NEXT_PUBLIC_GET_TENDERS_URL = $NEXT_PUBLIC_GET_TENDERS_URL"
         - npm run build
   artifacts:
     baseDirectory: .next
