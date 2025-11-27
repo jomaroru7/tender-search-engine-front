@@ -73,9 +73,7 @@ export default function HomePage() {
     const pageParam = searchParams.get('page');
 
     // Solo ejecutar si hay parámetros en la URL
-    if (invoicingParam || placeParam || activityParam) {
-      console.log('🔍 HomePage: Query params detectados, ejecutando búsqueda automática');
-      
+    if (invoicingParam || placeParam || activityParam) {      
       let cpvList: string[] = [];
       if (cpvListParam) {
         try {
@@ -148,7 +146,7 @@ export default function HomePage() {
         toast.error("Error de validación al guardar la búsqueda.");
         console.warn("saveSearch validation errors:", res.errors);
       } else {
-        toast.error(`Error al guardar la búsqueda (status ${res.status}).`);
+        toast.error(`Error al guardar la búsqueda.`);
         console.error("saveSearch error", res);
       }
     } catch (err: any) {

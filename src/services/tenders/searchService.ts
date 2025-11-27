@@ -1,4 +1,7 @@
-import type { getTendersRequest, getTendersResponse } from "../../models/TendersApi";
+import type {
+  getTendersRequest,
+  getTendersResponse,
+} from "../../models/TendersApi";
 import type { CardData } from "../../models/TendersFront";
 import { requestWithAuth } from "../_http";
 
@@ -22,7 +25,7 @@ export const getTenders = async ({
       activity,
       page,
       page_size,
-      cpv_list,
+      cpv_list: cpv_list || [],
       exact_place: !!exact_place,
     }),
   });
@@ -44,24 +47,29 @@ export const getTendersCardsData = async ({
   exact_place = false,
 }: getTendersRequest & { exact_place?: boolean }): Promise<{
   tenders: CardData[];
-  page: number;
-  pageSize: number;
   totalResults: number;
+  pageSize: number;
 }> => {
   const tendersResponse = await getTenders({ invoicing, place, activity, page, page_size, cpv_list, exact_place });
+  const cards: CardData[] = tendersResponse.results.map((t) => ({
+    id: t.ID,
+    tenderName: t.Contratacion,
+    endDate: t.Plazo_limite,
+    budget: t.Presupuesto_sin_IVA,
+    resume: t.Titulo,
+    location: t.Lugar_Ejecucion,
+    CPVCodes: t.Codigo_CPV,
+    score: t.score,
+    scoreBreakdown: {
+      score_activity: t.score_activity,
+      score_invoicing: t.score_invoicing,
+      score_place: t.score_place,
+    },
+  })) as CardData[];
+
   return {
-    tenders: tendersResponse.results.map((t) => ({
-      id: t.ID,
-      tenderName: t.Contratacion,
-      endDate: t.Plazo_limite,
-      budget: t.Presupuesto_sin_IVA,
-      resume: t.Titulo,
-      location: t.Lugar_Ejecucion,
-      CPVCodes: t.Codigo_CPV,
-      score: t.score,
-    })) as CardData[],
-    page: tendersResponse.page,
-    pageSize: tendersResponse.page_size,
-    totalResults: tendersResponse.total_results,
+    tenders: cards,
+    totalResults: tendersResponse.total_results || 0,
+    pageSize: tendersResponse.page_size || 10,
   };
 };
