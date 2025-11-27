@@ -10,7 +10,7 @@ interface TourGuideProps {
   showButton?: boolean;
   buttonPosition?: 'top-right' | 'bottom-right' | 'top-left' | 'bottom-left';
   buttonText?: string;
-  steps?: StepType[]; // Ahora recibe los steps como prop
+  steps?: StepType[];
 }
 
 function TourButton({ 
@@ -20,10 +20,10 @@ function TourButton({
   buttonPosition?: string; 
   buttonText?: string;
 }) {
-  const { setIsOpen } = useTour();
+  const { setIsOpen, setCurrentStep } = useTour();
 
   const handleClick = () => {
-    
+    setCurrentStep(0); // Volver al primer paso
     setIsOpen(true);
   };
 
@@ -94,6 +94,7 @@ const TourGuide = ({
             onClick={() => {
               if (isLast) {
                 setIsOpen(false);
+                setCurrentStep(0);
                 if (typeof window !== 'undefined') {
                   localStorage.setItem('tendersTourShown', 'true');
                 }
