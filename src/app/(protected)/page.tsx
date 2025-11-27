@@ -49,7 +49,13 @@ export default function HomePage() {
             totalResults: data.totalResults,
             page: pageToUse,
             pageSize: data.pageSize,
-            filters: filtersToUse,
+            filters: {
+              invoicing: filtersToUse.invoicing,
+              place: filtersToUse.place,
+              activity: filtersToUse.activity,
+              cpv_list: filtersToUse.cpv_list || [],
+              exact_place: filtersToUse.exact_place || false,
+            },
           })
         );
       } catch (error: any) {

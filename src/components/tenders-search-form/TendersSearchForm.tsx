@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import SpinnerOverlay from "../spinner-overlay/SpinnerOverlay";
@@ -18,11 +18,41 @@ const formatNumberWithDots = (num: number) =>
 
 const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
   const company = useSelector((state: RootState) => state.company);
-  const [invoicing, setInvoicing] = useState<number>(Number(company.budget) || 0);
-  const [place, setPlace] = useState<string>(company.location || "");
-  const [description, setDescription] = useState<string>(company.description || "");
-  const [selectedCpvs, setSelectedCpvs] = useState<string[]>([]);
-  const [exactPlace, setExactPlace] = useState<boolean>(false);
+  const savedFilters = useSelector((state: RootState) => state.tender.filters);
+  
+  // Usar los filtros guardados si existen, si no usar los datos de la empresa
+  const [invoicing, setInvoicing] = useState<number>(
+    savedFilters.invoicing > 0 ? savedFilters.invoicing : (Number(company.budget) || 0)
+  );
+  const [place, setPlace] = useState<string>(
+    savedFilters.place || company.location || ""
+  );
+  const [description, setDescription] = useState<string>(
+    savedFilters.activity || company.description || ""
+  );
+  const [selectedCpvs, setSelectedCpvs] = useState<string[]>(
+    savedFilters.cpv_list || []
+  );
+  const [exactPlace, setExactPlace] = useState<boolean>(
+    savedFilters.exact_place || false
+  );
+
+  // Sincronizar con los filtros guardados cuando cambien
+  useEffect(() => {
+    if (savedFilters.invoicing > 0) {
+      setInvoicing(savedFilters.invoicing);
+    }
+    if (savedFilters.place) {
+      setPlace(savedFilters.place);
+    }
+    if (savedFilters.activity) {
+      setDescription(savedFilters.activity);
+    }
+    if (savedFilters.cpv_list && savedFilters.cpv_list.length > 0) {
+      setSelectedCpvs(savedFilters.cpv_list);
+    }
+    setExactPlace(savedFilters.exact_place);
+  }, [savedFilters]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +67,7 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
       <form onSubmit={handleSubmit} className="mb-8 text-white flex flex-col gap-4 flex-nowrap bg-slate-800 backdrop-blur shadow-lg rounded-2xl px-8 py-10 border border-slate-200">
         <div className="flex flex-col lg:flex-row gap-4 ">
           <div className="tour-step-budget flex-2/6">
-            <div className="ml-1 flex flex-row min-h-[40px] items-baseline ">
+            <div className="ml-1 flex flex-row min-h-10 items-baseline ">
               <label htmlFor="input-budget" className="block text-sm font-medium ">Mayor facturación anual en los últimos tres años (€)</label>
               <InfoTooltip
                 text="Introduce la cifra más alta de facturación anual que ha tenido tu empresa en los últimos tres años."
@@ -64,7 +94,7 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
             />
           </div>
           <div className="tour-step-location flex-2/6">
-            <div className=" ml-1 flex flex-row min-h-[40px] items-baseline">
+            <div className=" ml-1 flex flex-row min-h-10 items-baseline">
               <label htmlFor="input-location" className="block text-sm font-medium ">Ámbito geográfico de actuación</label>
               <InfoTooltip
                 text="Introduce la provincia donde tu empresa presta sus servicios."
@@ -113,13 +143,13 @@ const TendersSearchForm = ({ onSearch, loading, loadingMessage }: Props) => {
           </div>
         </div>
         <div className="min-w-[250px] flex-1 tour-step-description">
-          <label className="block text-sm font-medium mb-1 min-h-[40px]">Descripción de la actividad de la empresa</label>
+          <label className="block text-sm font-medium mb-1 min-h-10">Descripción de la actividad de la empresa</label>
           <textarea
             data-testid="textarea-description"
             value={description}
             onChange={e => setDescription(e.target.value)}
             placeholder="Cuéntanos brevemente a qué se dedica tu empresa. Esta información nos permitirá recomendarte licitaciones ajustadas a tu perfil. Este será el campo más importante para identificar licitaciones relevantes."
-            className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-[80px]"
+            className="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-slate-400 transition w-full min-h-20"
           />
         </div>
         <div className="flex lg:justify-end ">
