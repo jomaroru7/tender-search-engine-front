@@ -7,6 +7,7 @@ import type { TenderDetailData } from "@/models/TendersFront";
 import Layout from "@/layouts/Layout";
 import LayoutNotLogged from "@/layouts/LayoutNotLogged";
 import { useAuthenticator } from "@aws-amplify/ui-react";
+import CpvPill from "@/components/cpv-pill/CpvPill";
 
 export default function TenderDetailPage() {
     const params = useParams();
@@ -69,7 +70,14 @@ export default function TenderDetailPage() {
                             <li data-testid="tender-contract-type"><span className="font-semibold">Tipo de contrato:</span> {tender.contractType}</li>
                             <li data-testid="tender-procedure-type"><span className="font-semibold">Tipo de procedimiento:</span> {tender.procedureType}</li>
                             <li data-testid="tender-lots-number"><span className="font-semibold">Nº de lotes:</span> {tender.lotsNumber}</li>
-                            <li data-testid="tender-cpvs"><span className="font-semibold">CPVs:</span> {tender.CPVCodes.join(", ")}</li>
+                            <li data-testid="tender-cpvs" className="flex flex-wrap gap-1 items-center">
+                                <span className="font-semibold">CPVs:</span>
+                                <div className="flex flex-wrap gap-1">
+                                    {[...new Set(tender.CPVCodes)].map((cpvCode) => (
+                                        <CpvPill key={cpvCode} cpvCode={cpvCode} />
+                                    ))}
+                                </div>
+                            </li>
                             <li data-testid="tender-warranty">
                                 <span className="font-semibold">Garantía:</span>{" "}
                                 {Array.isArray(tender.warrantyType)
