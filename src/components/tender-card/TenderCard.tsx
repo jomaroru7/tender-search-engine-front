@@ -37,7 +37,6 @@ function generateStableHash(id: string): string {
 }
 
 const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0, scoreBreakdown }: TenderCardProps) => {
-    console.log('🃏 TenderCard - scoreBreakdown:', scoreBreakdown);
     const hash = generateStableHash(id);
     const url = `/tender/${hash}-${encodeURIComponent(id)}`;
     
