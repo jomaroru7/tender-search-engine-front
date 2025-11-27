@@ -25,14 +25,27 @@ export type deleteSearchRequest = saveSearchRequest & {
 export type tendersResults = {
     Codigo_CPV: string[],
     Contratacion: string,
+    Expediente: string,
+    Fecha_inicio: string,
     Fecha_publicacion: string,
     ID: string,
     Importe_estimado: number,
+    Importe_total: number,
     Lugar_Ejecucion: string,
+    Número_lotes: number,
     Plazo_limite: string,
+    Pliego_admvo: string,
+    Pliego_prescripciones: string,
+    Presupuesto_sin_IVA: number,
+    Tipo_contrato: string,
+    Tipo_garantia: string[],
+    Tipo_procedimiento: string,
     Titulo: string,
     URL: string,
-    score: number
+    score: number,
+    score_activity: number,
+    score_invoicing: number,
+    score_place: number
 }
 
 export type getTendersResponse = {
