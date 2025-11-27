@@ -54,7 +54,7 @@ export const getTendersCardsData = async ({
       id: t.ID,
       tenderName: t.Contratacion,
       endDate: t.Plazo_limite,
-      budget: t.Importe_estimado,
+      budget: t.Presupuesto_sin_IVA,
       resume: t.Titulo,
       location: t.Lugar_Ejecucion,
       CPVCodes: t.Codigo_CPV,
