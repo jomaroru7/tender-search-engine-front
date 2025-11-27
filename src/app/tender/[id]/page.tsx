@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getTenderDetailData } from "@/services/tenders/tenderService";
 import type { TenderDetailData } from "@/models/TendersFront";
 import Layout from "@/layouts/Layout";
-import LayoutNotLogged from "@/layouts/LayoutNotLogged";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import CpvPill from "@/components/cpv-pill/CpvPill";
 
@@ -13,14 +12,10 @@ export default function TenderDetailPage() {
     const params = useParams();
     const router = useRouter();
     const id = params.id as string;
-    const { user, authStatus } = useAuthenticator((context) => [context.user, context.authStatus]);
+    const { authStatus } = useAuthenticator((context) => [context.user, context.authStatus]);
     const [tender, setTender] = useState<TenderDetailData | null>(null);
     const [loading, setLoading] = useState(true);
     const [hasHistory, setHasHistory] = useState(false);
-
-    // Determinar qué layout usar
-    const isAuthenticated = authStatus === 'authenticated' && user;
-    const LayoutComponent = isAuthenticated ? Layout : LayoutNotLogged;
 
     useEffect(() => {
         // Verificar si hay historial de navegación
@@ -44,22 +39,22 @@ export default function TenderDetailPage() {
 
     if (loading || authStatus === 'configuring') {
         return (
-            <LayoutComponent>
+            <Layout>
                 <div className="p-8 text-center">Cargando...</div>
-            </LayoutComponent>
+            </Layout>
         );
     }
 
     if (!tender) {
         return (
-            <LayoutComponent>
+            <Layout>
                 <div className="p-8 text-center">No se encontró la licitación.</div>
-            </LayoutComponent>
+            </Layout>
         );
     }
 
     return (
-        <LayoutComponent>
+        <Layout>
             <div className="max-w-3xl mx-auto p-6 bg-white/80 backdrop-blur shadow-lg rounded-2xl border border-slate-200 mt-10">
                 <h1 className="text-3xl font-bold mb-6 text-slate-800" data-testid="tender-name">{tender.tenderName}</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -169,6 +164,6 @@ export default function TenderDetailPage() {
                     </button>
                 )}
             </div>
-        </LayoutComponent>
+        </Layout>
     );
 }
