@@ -17,7 +17,12 @@ type TenderCardProps = {
     resume: string,
     location: string,
     CPVCodes: string[],
-    score: number
+    score: number,
+    scoreBreakdown?: {
+        score_activity?: number;
+        score_invoicing?: number;
+        score_place?: number;
+    }
 }
 
 // Generar un hash estable basado en el ID
@@ -31,7 +36,8 @@ function generateStableHash(id: string): string {
     return Math.abs(hash).toString(36).substring(0, 6);
 }
 
-const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0 }: TenderCardProps) => {
+const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCodes, score = 0, scoreBreakdown }: TenderCardProps) => {
+    console.log('🃏 TenderCard - scoreBreakdown:', scoreBreakdown);
     const hash = generateStableHash(id);
     const url = `/tender/${hash}-${encodeURIComponent(id)}`;
     
@@ -87,7 +93,11 @@ const TenderCard = ({ id, tenderName, endDate, budget, resume, location, CPVCode
                         </div>
                     </div>
                     <div data-testid="tender-score" className="flex items-center gap-1 ml-4 shrink-0 min-w-[72px]">
-                        <ScoreGraph score={score} max={5} />
+                        <ScoreGraph 
+                            score={score} 
+                            max={5} 
+                            scoreBreakdown={scoreBreakdown}
+                        />
                     </div>
                 </footer>
             </article>
