@@ -9,7 +9,9 @@ const Header = () => {
     const pathname = usePathname();
     const hideMenu = pathname === "/register" || pathname === "/login";
     const [open, setOpen] = useState(false);
-    const { user } = useAuthenticator((context) => [context.user]);
+    const { user, authStatus } = useAuthenticator((context) => [context.user, context.authStatus]);
+
+    const isAuthenticated = authStatus === 'authenticated' && user;
 
     const handleLinkClick = () => {
         setOpen(false);
@@ -29,7 +31,7 @@ const Header = () => {
                                 />
                             </div>
                         </Link>
-                        {!hideMenu && <button
+                        {!hideMenu && isAuthenticated && <button
                             className="lg:hidden text-white focus:outline-none"
                             onClick={() => setOpen(!open)}
                             aria-label="Toggle navigation"
@@ -41,8 +43,8 @@ const Header = () => {
                         }
                     </div>
 
-                    {
-                        !hideMenu &&
+                    {/* Navegación para usuarios autenticados */}
+                    {!hideMenu && isAuthenticated && (
                         <nav
                             className={`
                             flex flex-col gap-2 box-border rounded-3xl
@@ -70,21 +72,27 @@ const Header = () => {
                                 Lista de CPVs
                             </Link>
 
-                            {user && (
-                                <>
-                                    <div className=" w-full border-2 border-white lg:hidden" />
-                                    <Link
-                                        href="/user"
-                                        onClick={handleLinkClick}
-                                        className={pathname === "/user" ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
-                                    >
-                                        Tu cuenta
-                                    </Link>
-                                    <div className=" w-full border-2 border-white lg:hidden" />
-                                </>
-                            )}
+                            <div className=" w-full border-2 border-white lg:hidden" />
+                            <Link
+                                href="/user"
+                                onClick={handleLinkClick}
+                                className={pathname === "/user" ? 'text-orange-500 uppercase font-bold' : "text-white uppercase font-bold"}
+                            >
+                                Tu cuenta
+                            </Link>
+                            <div className=" w-full border-2 border-white lg:hidden" />
                         </nav>
-                    }
+                    )}
+
+                    {/* Botón de login para usuarios no autenticados */}
+                    {!hideMenu && !isAuthenticated && authStatus !== 'configuring' && (
+                        <Link
+                            href="/login"
+                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition"
+                        >
+                            Iniciar sesión
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>

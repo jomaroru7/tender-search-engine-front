@@ -6,7 +6,12 @@ export type CardData = {
     resume: string,
     location: string,
     CPVCodes: string[],
-    score: number
+    score: number,
+    scoreBreakdown?: {
+        score_activity?: number;
+        score_invoicing?: number;
+        score_place?: number;
+    }
 }
 
 export type getTenderResponse = {

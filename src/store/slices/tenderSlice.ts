@@ -6,6 +6,8 @@ type TenderFilters = {
   invoicing: number;
   place: string;
   activity: string;
+  cpv_list: string[];
+  exact_place: boolean;
 };
 
 interface TenderState {
@@ -21,7 +23,13 @@ const initialState: TenderState = {
   totalResults: 0,
   page: 1,
   pageSize: 10,
-  filters: { invoicing: 0, place: "", activity: "" },
+  filters: { 
+    invoicing: 0, 
+    place: "", 
+    activity: "",
+    cpv_list: [],
+    exact_place: false
+  },
 };
 
 const tenderSlice = createSlice({
@@ -35,7 +43,7 @@ const tenderSlice = createSlice({
         totalResults: number;
         page: number;
         pageSize: number;
-        filters: { invoicing: number; place: string; activity: string };
+        filters: TenderFilters;
       }>
     ) => {
       state.tenders = action.payload.tenders;
@@ -44,8 +52,21 @@ const tenderSlice = createSlice({
       state.pageSize = action.payload.pageSize;
       state.filters = action.payload.filters;
     },
+    clearTendersData: (state) => {
+      state.tenders = [];
+      state.totalResults = 0;
+      state.page = 1;
+      state.pageSize = 10;
+      state.filters = { 
+        invoicing: 0, 
+        place: "", 
+        activity: "",
+        cpv_list: [],
+        exact_place: false
+      };
+    },
   },
 });
 
-export const { setTendersData } = tenderSlice.actions;
+export const { setTendersData, clearTendersData } = tenderSlice.actions;
 export default tenderSlice.reducer;
