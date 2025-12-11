@@ -49,7 +49,7 @@ const CpvMultiSelect = ({
 
   return (
     <div className="min-w-[250px]">
-      <div className="ml-1 flex flex-row min-h-[40px] items-baseline">
+      <div className="ml-1 flex flex-row min-h-10 items-baseline">
         <label htmlFor={inputId} className="block text-sm font-medium ">{label}</label>
         {infoTooltip && (
           <InfoTooltip text={infoTooltip.text} iconColor={infoTooltip.iconColor} iconBgColor={infoTooltip.iconBgColor} tooltipTextColor={infoTooltip.tooltipTextColor} tooltipBgColor={infoTooltip.tooltipBgColor} />
