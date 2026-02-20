@@ -24,7 +24,7 @@ const Footer = () => {
                             </div>
                         </div>
                         <div className="flex flex-col" data-testid="footer-carlos">
-                            <h2>Carlos Perales Gonzales</h2>
+                            <h2>Carlos Perales Gonzalez</h2>
                             <div className="flex space-x-4 mt-2 justify-center">
                                 <a
                                     data-testid="carlos-linkedin"
